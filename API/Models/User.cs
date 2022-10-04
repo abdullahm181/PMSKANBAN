@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Repositories.Interface;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
-    public class User
+    public class User:IEntity
     {
         public virtual Employees Employees { get; set; }
 

@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Repositories.Interface;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
-    public class UserRole
+    public class UserRole : IEntity
     {
         [Key]
         public int Id { get; set; }

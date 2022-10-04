@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using API.Repositories.Interface;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
-    public class Role
+    public class Role : IEntity
     {
         [Key]
         public int Id { get; set; }

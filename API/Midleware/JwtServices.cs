@@ -40,7 +40,7 @@ namespace API.Midleware
                     new Claim(ClaimTypes.Name, account.FullName),
                     new Claim(ClaimTypes.Role, account.Role)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
