@@ -7,8 +7,6 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Base\" />
-    <Folder Include="Context\" />
-    <Folder Include="Midleware\" />
     <Folder Include="Repositories\Data\" />
     <Folder Include="Repositories\Interface\" />
   </ItemGroup>
@@ -20,6 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.29" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.29">
       <PrivateAssets>all</PrivateAssets>
