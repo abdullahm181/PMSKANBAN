@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>WinExe</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Base\" />
     <Folder Include="Repositories\Data\" />
-    <Folder Include="Repositories\Interface\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Context
@@ -15,7 +16,13 @@ namespace API.Context
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseLazyLoadingProxies();
         }
+        public DbSet<Departments> Departments { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
+        public DbSet<Employees> Employees { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<Level> Level { get; set; }
 
-        
     }
 }
