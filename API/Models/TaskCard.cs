@@ -16,6 +16,7 @@ namespace API.Models
         public virtual Card Card { get; set; }
         [ForeignKey("Card")]
         public int Card_Id { get; set; }
+        public bool Status { get; set; }
 
     }
 }

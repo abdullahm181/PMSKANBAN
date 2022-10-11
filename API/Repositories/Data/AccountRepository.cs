@@ -105,18 +105,7 @@ namespace API.Repositories.Data
             }
             return 0;
         }
-        public int ChangePassword(User userParam)
-        {
-            var user = myContext.User.SingleOrDefault(x => x.UserName == userParam.UserName);
-            if (user == null)
-                return -1;
-            if (!string.IsNullOrWhiteSpace(userParam.Password) && userParam.Password != user.Password)
-            {
-                user.Password = userParam.Password;
-            }
-            var result = myContext.SaveChanges();
-            return result;
-        }
+        
         public int Update(User userParam)
         {
             var user = myContext.User.Find(userParam.Id);
@@ -143,27 +132,6 @@ namespace API.Repositories.Data
             var result = myContext.SaveChanges();
             return result;
         }
-        public int ForgotPassword(string Email)
-        {
-            var data = myContext.Employees.SingleOrDefault(x => x.Email.Equals(Email));
-            if (data == null)
-            {
-                return -1;
-            }
-            /* if (!string.IsNullOrWhiteSpace(Password))
-             {
-                 user.Password = userParam.Password;
-             }
-             var result = myContext.SaveChanges();*/
-            return 1;
-
-        }
-        public UserRole GetRoleById(int UserId)
-        {
-            var user = myContext.UserRole.FirstOrDefault(x => x.User_Id == UserId);
-
-            return user;
-
-        }
+        
     }
 }

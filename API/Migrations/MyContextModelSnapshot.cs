@@ -358,6 +358,9 @@ namespace API.Migrations
                     b.Property<int>("Card_Id")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 

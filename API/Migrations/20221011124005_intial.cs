@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class initial : Migration
+    public partial class intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -358,7 +358,8 @@ namespace API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(nullable: true),
-                    Card_Id = table.Column<int>(nullable: false)
+                    Card_Id = table.Column<int>(nullable: false),
+                    Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
