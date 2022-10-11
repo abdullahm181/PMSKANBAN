@@ -14,13 +14,7 @@ namespace API.Models
         public int Id { get; set; }
         public DateTime InvitedDate { get; set; }
 
-        public Status status { get; set; }
-        public enum Status
-        {
-            Accept,
-            Reject
-        }
-
+        public bool Status { get; set; }
         public virtual Boards Boards { get; set; }
         [ForeignKey("Board")]
         public int Board_Id { get; set; }

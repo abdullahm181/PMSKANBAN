@@ -1,4 +1,6 @@
 using API.Context;
+using API.Midleware;
+using API.Repositories.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,26 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connection")));
+            services.AddScoped<AccountRepository>();
+            services.AddScoped<ActivitiesRepository>();
+            services.AddScoped<BoardsRepository>();
+            services.AddScoped<CardRepository>();
+            services.AddScoped<CommentsRepository>();
+            services.AddScoped<InvitedMembersRepository>();
+            services.AddScoped<ListRepository>();
+            services.AddScoped<MemberBoardRepository>();
+            services.AddScoped<MemberCardRepository>();
+            services.AddScoped<TaskCardRepository>();
+            services.AddScoped<DepartmentsRepository>();
+            services.AddScoped<JobsRepository>();
+            services.AddScoped<EmployeesRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<RoleRepository>();
+            services.AddScoped<UserRoleRepository>();
+            services.AddScoped<AccountRepository>();
             services.AddControllers();
+
+            services.JwtConfigure(Configuration);
             services.AddSwaggerGen(config =>
             {
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
