@@ -11,11 +11,10 @@ namespace API.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        [ForeignKey("LevelId")]
-        public virtual Level Level { get; set; }
-        public int LevelId { get; set; }
+       public virtual Level Level { get; set; }
+        [ForeignKey("Level")]
+        public int Level_Id { get; set; }
 
-        public virtual List<User> Users { get; set; }
 
     }
 }

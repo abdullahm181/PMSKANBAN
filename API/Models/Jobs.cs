@@ -10,5 +10,6 @@ namespace API.Models
         public string JobTitle { get; set; }
         public int MinSalary { get; set; }
         public int MaxSalary { get; set; }
+
     }
 }
