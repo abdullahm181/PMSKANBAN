@@ -13,10 +13,10 @@ namespace API.Models
         [Key]
         public int Id { get; set; }
         public string Text { get; set; }  
-
         public virtual Card Card { get; set; }
         [ForeignKey("Card")]
         public int Card_Id { get; set; }
+        public bool Status { get; set; }
 
     }
 }

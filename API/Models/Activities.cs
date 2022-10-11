@@ -18,5 +18,6 @@ namespace API.Models
         public virtual Boards Boards { get; set; }
         [ForeignKey("Boards")]
         public int Board_Id { get; set; }
+
     } 
 }

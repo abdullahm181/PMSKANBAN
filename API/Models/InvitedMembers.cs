@@ -22,6 +22,5 @@ namespace API.Models
         public virtual User User { get; set; }
         [ForeignKey("User")]
         public int User_Id { get; set; }
-        
-    }
+       }
 }

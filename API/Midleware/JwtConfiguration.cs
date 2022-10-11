@@ -3,13 +3,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace API.Midleware
+namespace API.Middleware
 {
     public static class JwtConfiguration
     {
-        public static void JwtConfigure(this IServiceCollection self, IConfiguration Configuration)
+        public static void JWTConfigure(this IServiceCollection self, IConfiguration Configuration)
         {
 
             self.AddAuthentication(x =>
@@ -34,7 +37,7 @@ namespace API.Midleware
                 };
 
             });
-            self.AddSingleton<IJWTHandler>(new JwtServices(Configuration));
+            self.AddSingleton<IJWTHandler>(new JwtService(Configuration));
         }
     }
 }

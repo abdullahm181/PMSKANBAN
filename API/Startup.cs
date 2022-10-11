@@ -1,14 +1,27 @@
-using API.Context;
-using API.Midleware;
-using API.Repositories.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using API.Models;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using API.Context;
+using Microsoft.OpenApi.Models;
+using API.Repositories.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+using Microsoft.AspNetCore.Http;
+using API.Middleware;
+//using Microsoft.AspNetCore.Authentication;
 
 namespace API
 {
@@ -30,21 +43,21 @@ namespace API
             services.AddScoped<BoardsRepository>();
             services.AddScoped<CardRepository>();
             services.AddScoped<CommentsRepository>();
+            services.AddScoped<DepartmentsRepository>();
+            services.AddScoped<EmployeesRepository>();
             services.AddScoped<InvitedMembersRepository>();
+            services.AddScoped<JobsRepository>();
+            services.AddScoped<LevelRepository>();
             services.AddScoped<ListRepository>();
             services.AddScoped<MemberBoardRepository>();
             services.AddScoped<MemberCardRepository>();
-            services.AddScoped<TaskCardRepository>();
-            services.AddScoped<DepartmentsRepository>();
-            services.AddScoped<JobsRepository>();
-            services.AddScoped<EmployeesRepository>();
-            services.AddScoped<UserRepository>();
             services.AddScoped<RoleRepository>();
+            services.AddScoped<TaskCardRepository>();
+            services.AddScoped<UserRepository>();
             services.AddScoped<UserRoleRepository>();
-            services.AddScoped<AccountRepository>();
             services.AddControllers();
 
-            services.JwtConfigure(Configuration);
+
             services.AddSwaggerGen(config =>
             {
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -58,7 +71,7 @@ namespace API
                     BearerFormat = "JWT"
                 });
 
-
+                services.JWTConfigure(Configuration);
                 config.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -92,13 +105,9 @@ namespace API
 
 
             });
-            //services.AddSession();
-            /*services.AddCors(option => option.AddPolicy("DefaultPolicy", builder => {
-                builder.WithOrigins("https://localhost:44305", "http://127.0.0.1:5500").WithMethods("GET", "POST", "PUT", "DELETE");
-            }));
-            services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );*/
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,26 +118,22 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
+            app.UseHttpsRedirection();
+            app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseHttpsRedirection();
+            app.UseRouting();
 
             //app.UseCors("DefaultPolicy");
 
-            app.UseRouting();
+            //app.UseSession();
 
-            app.UseAuthentication(); // This need to be added	
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
