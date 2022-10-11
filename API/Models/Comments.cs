@@ -13,8 +13,6 @@ namespace API.Models
         [Key]
         public int Id { get; set; }
         public string Text { get; set; }
-
-
         public virtual Card Card { get; set; }
         [ForeignKey("Card ")]
         public int Card_Id { get; set; }
@@ -24,3 +22,4 @@ namespace API.Models
         public int User_Id { get; set; }
     }
 }
+

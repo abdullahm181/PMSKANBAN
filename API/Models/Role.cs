@@ -10,8 +10,7 @@ namespace API.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-
-       public virtual Level Level { get; set; }
+        public virtual Level Level { get; set; }
         [ForeignKey("Level")]
         public int Level_Id { get; set; }
 

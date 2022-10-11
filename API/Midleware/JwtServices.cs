@@ -2,27 +2,36 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace API.Midleware
+namespace API.Middleware
 {
     public interface IJWTHandler
     {
         string GenerateToken(Account account);
         string GetName(string token);
         string GetEmail(string token);
-        string GetRole(string token);
     }
-    public class JwtServices : IJWTHandler
+    public class JwtService : IJWTHandler
     {
+
         private readonly IConfiguration iconfiguration;
-        public JwtServices(IConfiguration iconfiguration)
+        public JwtService(IConfiguration iconfiguration)
         {
             this.iconfiguration = iconfiguration;
         }
+
+
+        internal object GenerateSecurityToken(int v1, string v2, string v3, string v4)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GenerateToken(Account account)
         {
             if (account == null)
@@ -40,7 +49,7 @@ namespace API.Midleware
                     new Claim(ClaimTypes.Name, account.FullName),
                     new Claim(ClaimTypes.Role, account.Role)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -63,12 +72,5 @@ namespace API.Midleware
             return result.Claims.FirstOrDefault(claim => claim.Type.Equals("email")).Value;
         }
 
-        public string GetRole(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken result = tokenHandler.ReadJwtToken(token);
-
-            return result.Claims.FirstOrDefault(claim => claim.Type.Equals("email")).Value;
-        }
     }
 }

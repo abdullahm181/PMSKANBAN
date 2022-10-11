@@ -30,6 +30,5 @@ namespace API.Models
         [ForeignKey("Jobs")]
         public int Job_Id { get; set; }
   
-  
-    }
+      }
 }
