@@ -32,10 +32,10 @@ namespace API.Controllers
         public IActionResult Login(Login login)
         {
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
-                return BadRequest(new { message = "Username or password is blank" });
+                return BadRequest(new { result = 400, message = "Username or password is blank" , Token = ""});
             var result = accountRepository.Login(login.Username, login.Password);
             if (result == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { result = 400, message = "Username or password is incorrect", Token = "" });
             var userRole = accountRepository.GetRoleById(result.Id);
             var jwt = new JwtService(iconfiguration);
             Account account = new Account
@@ -61,7 +61,7 @@ namespace API.Controllers
                 else if (result == -2)
                     return BadRequest(new { result = 400, message = "UserName sudah digunakan" });
             }
-            return BadRequest();
+            return BadRequest(new { result = 400, message = "Error" });
         }
 
     }

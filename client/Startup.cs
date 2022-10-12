@@ -1,3 +1,4 @@
+using client.Repositories.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +25,24 @@ namespace client
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddControllersWithViews();
+            services.AddScoped<ActivitiesRepository>();
+            services.AddScoped<AuthRepository>();
+            services.AddScoped<BoardsRepository>();
+            services.AddScoped<CardRepository>();
+            services.AddScoped<CommentsRepository>();
+            services.AddScoped<DepartmentsRepository>();
+            services.AddScoped<EmployeesRepository>();
+            services.AddScoped<InvitedMembersRepository>();
+            services.AddScoped<JobsRepository>();
+            services.AddScoped<LevelRepository>();
+            services.AddScoped<ListRepository>();
+            services.AddScoped<MemberBoardRepository>();
+            services.AddScoped<MemberCardRepository>();
+            services.AddScoped<RoleRepository>();
+            services.AddScoped<TaskCardRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,207 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/login.css">
+
+    <link rel="stylesheet" href="./lib/bootstrap5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css'>
+</head>
+<body>
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                         class="img-fluid" alt="Sample image">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <div class="card border border-0">
+                        <!-- Pills navs -->
+                        <ul class="nav nav-pills nav-justified mb-3 opacity-75" id="ex1" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active " id="tab-login" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab"
+                                   aria-controls="pills-login" aria-selected="true">Login</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="tab-register" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab"
+                                   aria-controls="pills-register" aria-selected="false">Register</a>
+                            </li>
+                        </ul>
+                        <!-- Pills navs -->
+                        <!-- Pills content -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                                <form id="LoginUser" method="POST" action="javascript:void(0);">
+                                    <!-- username input -->
+                                    <div class="form-outline mb-4">
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="loginName" class="form-control" placeholder="Username" aria-label="Username" name="Username" aria-describedby="UserIcon" />
+                                            <span class="input-group-text" id="UserIcon"><i class="fas fa-solid fa-user"></i></span>
+                                        </div>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        <div class="input-group mb-3">
+                                            <input type="password" id="loginPassword" class="form-control" placeholder="Password" aria-label="Password" name="Password" aria-describedby="PassIcon" />
+                                            <span class="input-group-text" id="UserIcon"><i class="fas fa-solid fa-key"></i></span>
+                                        </div>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <!-- Submit button -->
+                                        <button type="submit" class="btn btn-primary mb-4 opacity-75">Sign in</button>
+                                    </div>
+
+
+                                    <!-- Register buttons -->
+                                    <div class="text-center">
+                                        <p>Not a member? <a id="GoResgiter" href="#!">Register</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+                                <form id="RegisterUser" method="POST" action="javascript:void(0);">
+                                    <div class="text-center mb-3">
+                                        <!-- Name input -->
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <input type="text" class="form-control" placeholder="First Name" aria-label="FirstName" name="FirstName" />
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <input type="text" class="form-control" placeholder="Last Name" aria-label="LastName" name="LastName" />
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" placeholder="PhoneNumber" aria-label="PhoneNumber" name="PhoneNumber">
+                                                        <span class="input-group-text"><i class="fas fa-solid fa-phone"></i></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <div class="input-group date mb-3" id="datepicker">
+                                                        <input type="text" class="form-control" placeholder="HireDate" aria-label="HireDate" name="HireDate">
+                                                        <span class="input-group-append">
+                                                        </span>
+                                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" placeholder="Email" aria-label="Email" name="Email">
+                                                        <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-outline mb-4">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" placeholder="Salary" aria-label="Salary" name="Salary">
+                                                        <span class="input-group-text"><i class="far fa-money-bill-alt"></i></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please fill out this field.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <div class="input-group mb-3">
+                                                <select class="form-select" placeholder="Jobs" name="Job_Id" id="JobRegister">
+                                                    <option selected>Please select jobs</option>
+                                                </select>
+                                                <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                                            </div>
+                                            <div class="invalid-feedback">Please chosee.</div>
+                                        </div>
+                                        <div class="form-outline mb-4">
+                                            <div class="input-group mb-3">
+                                                <select class="form-select" placeholder="Departments" name="Department_Id" id="DepartmentsRegister">
+                                                    <option selected>Please select departments</option>
+                                                </select>
+                                                <span class="input-group-text"><i class="fas fa-building"></i></i></span>
+                                            </div>
+                                            <div class="invalid-feedback">Please chosee.</div>
+                                        </div>
+
+
+                                        <!-- username input -->
+                                        <div class="form-outline mb-4">
+                                            <div class="input-group mb-3">
+                                                <input type="text" id="loginName" class="form-control" placeholder="UserName" aria-label="UserName" name="UserName" aria-describedby="UserIcon" />
+                                                <span class="input-group-text" id="UserIcon"><i class="fas fa-solid fa-user"></i></span>
+                                            </div>
+                                            <div class="valid-feedback">Valid.</div>
+                                            <div class="invalid-feedback">Please fill out this field.</div>
+                                        </div>
+
+                                        <!-- Password input -->
+                                        <div class="form-outline mb-4">
+                                            <div class="input-group mb-3">
+                                                <input type="password" id="loginPassword" class="form-control" placeholder="Password" aria-label="Password" name="Password" aria-describedby="PassIcon" />
+                                                <span class="input-group-text" id="UserIcon"><i class="fas fa-solid fa-key"></i></span>
+                                            </div>
+                                            <div class="valid-feedback">Valid.</div>
+                                            <div class="invalid-feedback">Please fill out this field.</div>
+                                        </div>
+
+                                        <!-- Checkbox -->
+                                        <div class="form-check d-flex justify-content-center mb-4">
+                                            <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck"
+                                                   aria-describedby="registerCheckHelpText" />
+                                            <label class="form-check-label" for="registerCheck">
+                                                I have read and agree to the terms
+                                            </label>
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-primary btn-block mb-3 opacity-75">Sign in</button>
+                                        </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Pills content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="./lib/jquery/dist/jquery.min.js"></script>
+    <script src="./lib/bootstrap5/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/login.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datepicker').datepicker();
+        });
+    </script>
+</body>
+</html>
