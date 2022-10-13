@@ -1,4 +1,5 @@
 ﻿using client.Models;
+using client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +13,23 @@ namespace client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        BoardsRepository boardsRepository;
+        public HomeController(ILogger<HomeController> logger, BoardsRepository boardsRepository)
         {
             _logger = logger;
+            this.boardsRepository = boardsRepository;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetAll(int id)
+        {
+            var result = boardsRepository.Get(id);
+            return Json(result);
         }
 
         public IActionResult Privacy()

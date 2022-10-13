@@ -13,12 +13,7 @@ namespace API.Models
         [Key]
         public int Id { get; set; }
 
-        public Status status { get; set; }
-        public enum Status
-        {
-            Owner,
-            Colaborator
-        }
+        public string Status { get; set; }
 
         public virtual User User { get; set; }
         [ForeignKey("User")]
