@@ -1,4 +1,5 @@
-﻿const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+﻿// ------- Enable Popover-----
+const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
 list.map((el) => {
     let opts = {
         animation: false,
@@ -9,12 +10,23 @@ list.map((el) => {
     }
     new bootstrap.Popover(el, opts);
 });
-// const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-// const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 // ------- Enable tooltip-----
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
+/*===== Sidebar navigation enable =====*/
+const linkColor = document.querySelectorAll(".sidebar__inner li a");
+console.log(linkColor);
+function colorLink() {
+    if (linkColor) {
+        linkColor.forEach((l) => l.classList.remove("active"));
+        this.classList.add("active");
+        console.log(window.location);
+        window.location = this.dataset.link;
+    }
+}
+linkColor.forEach((l) => l.addEventListener("click", colorLink));
 $(document).ready(function () {
     $.ajax({
         type: 'GET',

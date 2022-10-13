@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace client.Controllers
 {
+    [Route("Auth")]
     public class AuthController : Controller
     {
         AuthRepository authRepository;
@@ -43,12 +44,13 @@ namespace client.Controllers
             var result = authRepository.Register(register);
             return Json(result);
         }
+
         [Route("logout")]
+        [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("Token");
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Index");
         }
     }
 }

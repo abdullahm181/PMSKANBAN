@@ -27,6 +27,18 @@ namespace client.Controllers
         {
             return View();
         }
+        public IActionResult Forbidden()
+        {
+            return View("forbidden");
+        }
+        public IActionResult Unauth()
+        {
+            return View("Unauth");
+        }
+        public IActionResult NotFound404()
+        {
+            return View("NotFound404");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
