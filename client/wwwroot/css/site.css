@@ -246,6 +246,20 @@
     cursor: pointer;
 }
 
+#profileImageDashboard {
+    background: var(--text-grey-color);
+    font-size: 20px;
+    color: var(--white);
+    text-align: center;
+}
+
+#ListOfBoardUser .board-card {
+    flex: 0 0 280px;
+    margin-right: 20px;
+    height: 150px;
+    overflow: auto;
+}
+
 #main__kanban__info > img {
     border-radius: 50%;
     margin: 20px 0px;
