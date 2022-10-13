@@ -1,71 +1,414 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+:root {
+    --white: #fff;
+    --purple: #311f7d;
+    --pink: #df8395;
+    --orange: #fe9734;
+    --yellow: #ffd169;
+    --grey: #e8ecf2;
+    --light-grey: #f5f7fa;
+    --dark-grey: #b3bac3;
+    --text-grey-color: #606263;
+    --navy: #055C9D;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Roboto Condensed", sans-serif;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+
+.wrapper {
+    width: 100%;
+    height: 100%;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+/*------------------Top NAV BAR--------------------*/
+.top_navbar {
+    background: var(--white);
+    height: 60px;
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+    .top_navbar .hamburger {
+        width: 50px;
+        background: var(--white);
+        position: relative;
+        font-size: 28px;
+    }
+
+        .top_navbar .hamburger .hamburger__inner {
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%,-50%);
+            cursor: pointer;
+            width: 40px;
+            height: 20px;
+        }
+
+    .top_navbar .hamburger__inner > div {
+        width: 30px;
+        height: 2px;
+        background: var(--dark-grey);
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .top_navbar .hamburger div.two {
+        top: 10px;
+        width: 40px;
+    }
+
+    .top_navbar .hamburger div.three {
+        top: 20px;
+    }
+
+    .top_navbar .menu {
+        width: calc(100% - 50px);
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+        .top_navbar .menu .logo {
+            color: var(--text-grey-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .top_navbar .menu .right_menu ul {
+            display: flex;
+            margin-bottom: 0;
+        }
+
+            .top_navbar .menu .right_menu ul li {
+                position: relative;
+            }
+
+
+/*------------------Side BAR--------------------*/
+.main_container .sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 225px;
+    height: 100%;
+    background: var(--white);
+    transition: all 0.3s ease;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    .main_container .sidebar .sidebar__inner {
+        position: relative;
+    }
+
+
+.main_container .main_content {
+    background: var(--light-grey);
+    height: 761px;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+    .main_container .main_content .content {
+        width: calc(100% - 225px);
+        margin-top: 60px;
+        margin-left: 225px;
+        padding: 0px 20px;
+        transition: all 0.3s ease;
+    }
+
+        .main_container .main_content .content .item {
+            background: #fff;
+            border: 1px solid #E0F2F1;
+            margin-bottom: 30px;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+.main_container .sidebar ul {
+    padding: 0;
+}
+
+    .main_container .sidebar ul li .divider {
+        width: 205px;
+        height: 2px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        background-color: var(--dark-grey);
+        transition: all 0.3s ease;
+    }
+
+    .main_container .sidebar ul li a {
+        color: var(--dark-grey);
+        background-color: var(--white);
+        font-size: 14px;
+        padding: 10px 0px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+        .main_container .sidebar ul li a .icon {
+            margin-left: 15px;
+            font-size: 20px;
+        }
+
+        .main_container .sidebar ul li a .title {
+            margin-left: 15px;
+            font-size: 14px;
+        }
+
+        .main_container .sidebar ul li a span {
+            display: inline-block;
+        }
+
+        .main_container .sidebar ul li a:hover {
+            color: var(--purple);
+        }
+
+        .main_container .sidebar ul li a.active {
+            color: var(--pink);
+        }
+
+            .main_container .sidebar ul li a.active::after {
+                content: "";
+                height: 8px;
+                width: 8px;
+                background: var(--pink);
+                position: absolute;
+                border-radius: 50%;
+                right: -4px;
+                border: 1px solid var(--white);
+            }
+
+
+/* after adding active class */
+.wrapper.active .sidebar {
+    width: 50px;
+}
+
+    .wrapper.active .sidebar ul li a span.title,
+    .wrapper.active .profile_info {
+        display: none;
+    }
+
+.wrapper.active .main_container .sidebar ul li .divider {
+    width: 30px;
+    height: 2px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.wrapper.active .main_container .main_content .content {
+    width: calc(100% - 50px);
+    margin-left: 50px;
+}
+
+#profileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 20px;
+    color: var(--white);
+    text-align: center;
+    line-height: 40px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+#profileImageMember {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 20px;
+    color: var(--white);
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+#main__kanban__info > img {
+    border-radius: 50%;
+    margin: 20px 0px;
+}
+
+#main__kanban__info > button {
+    color: var(--text-grey-color);
+    border: 0px;
+    outline: 0px;
+    cursor: pointer;
+    background: var(--grey);
+    padding: 6px 15px;
+    border-radius: 18px;
+    border: 1px solid var(--grey);
+    transition: all 0.3s ease-in-out;
+}
+
+    #main__kanban__info > button:first-of-type {
+        margin-right: auto;
+        margin-left: 10px;
+    }
+
+    #main__kanban__info > button:hover {
+        background: var(--white);
+        border-color: var(--text-grey-color);
+    }
+
+#main__kanban__info > .logo {
+    color: var(--white);
+    background-color: var(--dark-grey);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#main__kanban {
+    background: var(--light-grey);
+    height: 100%;
+    scrollbar-width: none;
+}
+
+    #main__kanban .board {
+        flex: 0 0 280px;
+        margin-right: 20px;
+        height: 100%;
+    }
+
+    #main__kanban .board__conatiner {
+        /* min-height: calc(100% - 120px); */
+        max-height: 550px;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+        #main__kanban .board__conatiner::-webkit-scrollbar {
+            width: 0px;
+            /* Remove scrollbar space */
+            background: transparent;
+            /* Optional: just make scrollbar invisible */
+        }
+
+    #main__kanban .board__header {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin-bottom: 30px;
+        padding: 0px 15px;
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+        #main__kanban .board__header > span {
+            margin-right: auto;
+            margin-left: 10px;
+            color: var(--text-grey-color);
+        }
+
+        #main__kanban .board__header > i {
+            font-size: 9px;
+            color: var(--text-grey-color);
+        }
+
+        #main__kanban .board__header .fa-ellipsis-h {
+            cursor: pointer;
+        }
+
+    #main__kanban .board__boxes {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin-bottom: 15px;
+        cursor: move;
+        padding: 20px;
+    }
+
+        #main__kanban .board__boxes > .image-wrapper {
+            margin: -20px -20px 10px -20px;
+        }
+
+        #main__kanban .board__boxes p {
+            font-size: 14px;
+            color: var(--text-grey-color);
+            margin-bottom: 10px;
+            line-height: 28px;
+        }
+
+        #main__kanban .board__boxes ul li a i {
+            color: var(--dark-grey);
+            cursor: pointer;
+        }
+
+    #main__kanban .board__boxes__info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+        #main__kanban .board__boxes__info i,
+        #main__kanban .board__boxes__info span {
+            color: var(--dark-grey);
+            font-size: 12px;
+        }
+
+        #main__kanban .board__boxes__info span {
+            margin-left: 10px;
+            margin-right: 20px;
+        }
+
+        #main__kanban .board__boxes__info > span:last-of-type {
+            margin-right: auto;
+            margin-left: 10px;
+        }
+
+        #main__kanban .board__boxes__info img {
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+    #main__kanban .board .add__card {
+        background: transparent;
+        cursor: pointer;
+        border: 0;
+        outline: 0;
+        color: var(--text-grey-color);
+        margin-top: 10px;
+    }
+
+    #main__kanban .board__style {
+        background: var(--white);
+        width: 100%;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+.kanban__dropzone {
+    height: 10px;
+    transition: background 0.15s, height 0.15s;
+}
+
+.kanban__dropzone--active {
+    height: 20px;
+    background: rgba(0, 0, 0, 0.25);
 }
