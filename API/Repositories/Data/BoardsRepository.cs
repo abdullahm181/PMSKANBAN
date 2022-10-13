@@ -15,6 +15,21 @@ namespace API.Repositories.Data
         {
             this.myContext = myContext;
         }
+        public List<Boards> GetbyOwner (int OwnerId){
+            var data = myContext.Boards.Where(a => a.Owner_Id == OwnerId).ToList();
+            return data;
+        }
+        public List<Boards> GetbyMember(int MemberId)
+        {
+            List<Boards> boards= new List<Boards>();
+            var data = myContext.MemberBoard.Where(a => (a.User_Id == MemberId&&a.Status=="member")).ToList();
+            foreach (var memberBoard in data)
+            {
+                var board = myContext.Boards.FirstOrDefault(a => (a.Id== memberBoard.Board_Id));
+                boards.Add(board);
+            }
+            return boards;
+        }
         public int Create(CreateBoard createBoard) 
         {
             //check if Name already exist in user scope 

@@ -35,22 +35,30 @@ namespace API.Controllers
             return BadRequest(new { result = 400, message = "Error" });
 
         }
-        [HttpGet("GetbyUserId")]
-        public IActionResult GetbyUserId(int UserId)
+        [HttpGet("GetbyOwner")]
+        public IActionResult GetbyUserId(int OwnerId)
         {
-            if (string.IsNullOrWhiteSpace(UserId.ToString()))
+            if (string.IsNullOrWhiteSpace(OwnerId.ToString()))
             {
                 return BadRequest();
             }
 
-            var data = boardsRepository.Get().FindAll(a => a.Owner_Id == UserId);
-
-            if (data == null)
-            {
-                return NotFound();
-            }
+            var data = boardsRepository.GetbyOwner(OwnerId);
 
             return Ok(new { result=200,data=data});
+
+        }
+        [HttpGet("GetbyMember")]
+        public IActionResult GetbyMember(int MemberId)
+        {
+            if (string.IsNullOrWhiteSpace(MemberId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = boardsRepository.GetbyMember(MemberId);
+
+            return Ok(new { result = 200, data = data });
 
         }
     }
