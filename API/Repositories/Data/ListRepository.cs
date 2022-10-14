@@ -17,7 +17,7 @@ namespace API.Repositories.Data
 
         public List<List> GetByBoardId(int BoardId)
         {
-            var data = myContext.List.Where(a => a.Board_Id == BoardId).ToList();
+            var data = myContext.List.Where(a => a.Board_Id == BoardId).OrderBy(a => a.Order).ToList();
             return data;
         }
     }

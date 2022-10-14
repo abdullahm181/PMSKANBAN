@@ -13,9 +13,11 @@ namespace client.Controllers
     public class ListController : BaseController<List, ListRepository>
     {
         ListRepository listRepository;
-        public ListController(ListRepository listRepository):base(listRepository)
+        CardRepository cardRepository;
+        public ListController(ListRepository listRepository, CardRepository cardRepository) :base(listRepository)
         {
             this.listRepository = listRepository;
+            this.cardRepository = cardRepository;
         }
         public IActionResult Index()
         {
@@ -25,6 +27,12 @@ namespace client.Controllers
         public JsonResult GetByBoardId(int BoardId)
         {
             var result = listRepository.GetByBoardId(BoardId);
+            return Json(result);
+        }
+        [HttpGet]
+        public JsonResult GetCardByListId(int ListId)
+        {
+            var result = cardRepository.GetByListId(ListId);
             return Json(result);
         }
     }

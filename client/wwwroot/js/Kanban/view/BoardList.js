@@ -26,12 +26,22 @@ export default class BoardList {
 		this.root = root;
 		var data = {};
 		data["BoardId"] = BoardId;
-		const kanbanlist = await KanbanAPI.Methode("GET", "list/GetByBoardId", data);
-		kanbanlist.forEach(list => {
+		KanbanAPI.Methode("GET", "list/GetByBoardId", data, function (d) {
+			//processing the data
+			console.log(d);
+			d.forEach(list => {
+				console.log(list);
+				const ListView = new List(list.id, list.name, list.board_Id);
+
+				root.appendChild(ListView.elements.root);
+			});
+		});
+		/*kanbanlist.forEach(list => {
+			console.log(list);
 			const ListView = new List(list.id, list.name, list.board_Id);
 
 			this.root.appendChild(ListView.elements.root);
-		});
+		});*/
 	}
 
 	renderList(data) {

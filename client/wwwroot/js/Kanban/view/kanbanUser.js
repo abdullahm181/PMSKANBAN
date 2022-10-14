@@ -29,12 +29,16 @@ export default class kanbanUser {
 		this.root = root;
 		var data = {};
 		data["OwnerId"] = UserId;
-		const kanbanlist = await KanbanAPI.Methode("GET", "home/GetbyOwner", data);
-		kanbanlist.forEach(board => {
-			const boardView = new Dashboard(board.id, board.name, board.description);
+		KanbanAPI.Methode("GET", "home/GetbyOwner", data, function (d) {
+			//processing the data
+			console.log(d);
+			d.forEach(board => {
+				const boardView = new Dashboard(board.id, board.name, board.description);
 
-			this.root.appendChild(boardView.elements.root);
+				root.appendChild(boardView.elements.root);
+			});
 		});
+		
 
 	}
 

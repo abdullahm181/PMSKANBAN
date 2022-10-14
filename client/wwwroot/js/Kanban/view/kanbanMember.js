@@ -15,13 +15,15 @@ export default class kanbanMember {
 		this.root = root;
 		var data = {};
 		data["MemberId"] = UserId;
-		const kanbanlist = await KanbanAPI.Methode("GET", "home/GetbyMember", data);
-		kanbanlist.forEach(board => {
-			const boardView = new Dashboard(board.id, board.name, board.description);
+		KanbanAPI.Methode("GET", "home/GetbyMember", data, function (d) {
+			//processing the data
+			console.log(d);
+			d.forEach(board => {
+				const boardView = new Dashboard(board.id, board.name, board.description);
 
-			this.root.appendChild(boardView.elements.root);
+				root.appendChild(boardView.elements.root);
+			});
 		});
-
 	}
 
 	renderBoard(data) {

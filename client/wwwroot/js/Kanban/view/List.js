@@ -1,22 +1,24 @@
 ﻿import KanbanAPI from "../api/KanbanApi.js";
 import DropZone from "./DropZone.js";
+import Card from "./Card.js";
 
 export default class List {
-	constructor(id, Name,Board_Id) {
+	constructor(id, Name, Board_Id) {
 		const topDropZone = DropZone.createDropZone();
 
 		this.elements = {};
 		this.elements.root = List.createRoot();
 		this.elements.title = this.elements.root.querySelector("#ColumnTitle");
-		this.elements.items = this.elements.root.querySelector("#ColumnCard");
+		this.elements.cards = this.elements.root.querySelector("#ColumnCard");
 		this.elements.addItem = this.elements.root.querySelector("#ColumnAddCard");
 
 		this.elements.root.dataset.id = id;
 		this.elements.root.dataset.board_id = Board_Id;
 		console.log(this.elements.root.dataset)
 		this.elements.title.textContent = Name;
-		this.elements.items.appendChild(topDropZone);
-
+		this.elements.cards.appendChild(topDropZone);
+		console.log(id);
+		List.Cards(this.elements.cards,id);
 		/*this.elements.addItem.addEventListener("click", () => {
 			const newItem = KanbanAPI.insertItem(id, "");
 
@@ -25,6 +27,32 @@ export default class List {
 
 		/*KanbanAPI.getItems(id).forEach(item => {
 			this.renderItem(item);
+		});*/
+	}
+	static async Cards(root, ListId) {
+		this.root = root;
+		var data = {};
+		data["ListId"] = ListId;
+		KanbanAPI.Methode("GET", "list/GetCardByListId", data, function (d) {
+			//processing the data
+			console.log(d);
+			d.forEach(card => {
+				//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
+				console.log(card);
+				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
+
+				root.appendChild(cardView.elements.root);
+
+			});
+		});
+		/*console.log(cards);
+		cards.forEach(card => {
+			//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
+			console.log(card);
+			const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
+
+			this.root.appendChild(cardView.elements.root);
+
 		});*/
 	}
 
@@ -47,9 +75,10 @@ export default class List {
 		`).children[0];
 	}
 
-	renderItem(data) {
-		const item = new Item(data.id, data.content);
+	renderItem(root, card) {
+		this.root = root;
+		const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
 
-		this.elements.items.appendChild(item.elements.root);
+		this.root.appendChild(cardView.elements.root);
 	}
 }
