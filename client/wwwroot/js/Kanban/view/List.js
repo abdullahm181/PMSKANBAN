@@ -12,9 +12,8 @@ export default class List {
 		this.elements.cards = this.elements.root.querySelector("#ColumnCard");
 		this.elements.addItem = this.elements.root.querySelector("#ColumnAddCard");
 
-		this.elements.root.dataset.id = id;
+		this.elements.root.dataset.list_id = id;
 		this.elements.root.dataset.board_id = Board_Id;
-		console.log(this.elements.root.dataset)
 		this.elements.title.textContent = Name;
 		this.elements.cards.appendChild(topDropZone);
 		console.log(id);

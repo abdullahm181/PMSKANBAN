@@ -1,4 +1,4 @@
-﻿import KanbanAPI from "../api/KanbanApi.js";
+﻿import KanbanAPI from "../api/KanbanAPI.js";
 
 export default class DropZone {
 	static createDropZone() {
@@ -11,6 +11,7 @@ export default class DropZone {
 		`).children[0];
 
 		dropZone.addEventListener("dragover", e => {
+
 			e.preventDefault();
 			dropZone.classList.add("kanban__dropzone--active");
 		});
@@ -23,14 +24,14 @@ export default class DropZone {
 			e.preventDefault();
 			dropZone.classList.remove("kanban__dropzone--active");
 
-			const columnElement = dropZone.closest(".kanban__column");
-			const columnId = Number(columnElement.dataset.id);
+			const columnElement = dropZone.closest(".board");
+			const columnId = Number(columnElement.dataset.list_id);
 			const dropZonesInColumn = Array.from(columnElement.querySelectorAll(".kanban__dropzone"));
 			const droppedIndex = dropZonesInColumn.indexOf(dropZone);
 			const itemId = Number(e.dataTransfer.getData("text/plain"));
-			const droppedItemElement = document.querySelector(`[data-id="${itemId}"]`);
-			const insertAfter = dropZone.parentElement.classList.contains("kanban__item") ? dropZone.parentElement : dropZone;
-
+			const droppedItemElement = document.querySelector(`[data-card_id="${itemId}"]`);
+			const insertAfter = dropZone.parentElement.classList.contains("kanban__dropzone") ? dropZone.parentElement : dropZone;
+			console.log(itemId);
 			if (droppedItemElement.contains(dropZone)) {
 				return;
 			}

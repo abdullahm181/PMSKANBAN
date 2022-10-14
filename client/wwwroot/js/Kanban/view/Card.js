@@ -1,5 +1,4 @@
 ﻿import DropZone from "./DropZone.js";
-import KanbanAPI from "../api/KanbanAPI.js";
 
 export default class Item {
 	constructor(id, name, numberTaskItem, numbercomment, personIncharge) {
@@ -12,7 +11,7 @@ export default class Item {
 		this.elements.comment = this.elements.root.querySelector("#CardComment");
 		this.elements.person = this.elements.root.querySelector("#CardPerson");
 
-		this.elements.root.dataset.id = id;
+		this.elements.root.dataset.card_id = id;
 		this.elements.title.textContent = name;
 		this.elements.taskItem.textContent = numberTaskItem;
 		this.elements.comment.textContent = numbercomment;
@@ -21,24 +20,13 @@ export default class Item {
 		this.elements.root.appendChild(bottomDropZone);
 
 
-		this.elements.root.addEventListener("dblclick", () => {
-			const check = confirm("Are you sure you want to delete this item?");
-
-			if (check) {
-				KanbanAPI.deleteItem(id);
-
-				this.elements.input.removeEventListener("blur", onBlur);
-				this.elements.root.parentElement.removeChild(this.elements.root);
-			}
-		});
-
-		/*this.elements.root.addEventListener("dragstart", e => {
+		this.elements.root.addEventListener("dragstart", e => {
 			e.dataTransfer.setData("text/plain", id);
 		});
 
-		this.elements.input.addEventListener("drop", e => {
+		this.elements.title.addEventListener("drop", e => {
 			e.preventDefault();
-		});*/
+		});
 	}
 
 	static createRoot() {
