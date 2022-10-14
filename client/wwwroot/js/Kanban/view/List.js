@@ -16,7 +16,6 @@ export default class List {
 		this.elements.root.dataset.board_id = Board_Id;
 		this.elements.title.textContent = Name;
 		this.elements.cards.appendChild(topDropZone);
-		console.log(id);
 		List.Cards(this.elements.cards,id);
 		/*this.elements.addItem.addEventListener("click", () => {
 			const newItem = KanbanAPI.insertItem(id, "");

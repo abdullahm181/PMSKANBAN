@@ -35,5 +35,18 @@ namespace client.Controllers
             var result = cardRepository.GetByListId(ListId);
             return Json(result);
         }
+
+        [HttpGet]
+        public JsonResult GetCard(int CardId)
+        {
+            var result = cardRepository.Get(CardId);
+            return Json(result);
+        }
+        [HttpPut]
+        public JsonResult EditCard(Card card)
+        {
+            var result = cardRepository.Put(card);
+            return Json(result);
+        }
     }
 }

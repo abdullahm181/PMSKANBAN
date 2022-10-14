@@ -24,19 +24,21 @@ export default class DropZone {
 			e.preventDefault();
 			dropZone.classList.remove("kanban__dropzone--active");
 
+
 			const columnElement = dropZone.closest(".board");
 			const columnId = Number(columnElement.dataset.list_id);
 			const dropZonesInColumn = Array.from(columnElement.querySelectorAll(".kanban__dropzone"));
 			const droppedIndex = dropZonesInColumn.indexOf(dropZone);
 			const itemId = Number(e.dataTransfer.getData("text/plain"));
 			const droppedItemElement = document.querySelector(`[data-card_id="${itemId}"]`);
-			const insertAfter = dropZone.parentElement.classList.contains("kanban__dropzone") ? dropZone.parentElement : dropZone;
+			const insertAfter = dropZone.parentElement.classList.contains("board__boxes") ? dropZone.parentElement : dropZone;
 			console.log(itemId);
 			if (droppedItemElement.contains(dropZone)) {
 				return;
 			}
 
 			insertAfter.after(droppedItemElement);
+			//columnt id itu id dari list, item id itu id dari card, position isinya ->
 			KanbanAPI.updateItem(itemId, {
 				columnId,
 				position: droppedIndex
