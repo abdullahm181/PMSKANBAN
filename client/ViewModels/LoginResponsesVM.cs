@@ -1,6 +1,6 @@
 ﻿namespace client.ViewModels
 {
-    public class LoginResponses
+    public class LoginResponsesVM
     {
         public int result { get; set; }
         public string message { get; set; }

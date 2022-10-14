@@ -1,31 +1,30 @@
-﻿import KanbanAPI from "../api/KanbanAPI.js";
-import DropZone from "./DropZone.js";
-import Item from "./Item.js";
+﻿import KanbanAPI from "../api/KanbanApi.js";
 
 export default class Dashboard {
-	constructor(id, title) {
-		const topDropZone = DropZone.createDropZone();
+	constructor(id, title, description) {
 
 		this.elements = {};
-		this.elements.root = Column.createRoot();
-		this.elements.title = this.elements.root.querySelector("#ColumnTitle");
-		this.elements.items = this.elements.root.querySelector("#ColumnCard");
-		this.elements.addItem = this.elements.root.querySelector("#ColumnAddCard");
+		this.elements.root = Dashboard.createRoot();
+		this.elements.title = this.elements.root.querySelector("#BoardTitle");
+		this.elements.description = this.elements.root.querySelector("#BoardDescription");
+
 
 		this.elements.root.dataset.id = id;
-		console.log(this.elements.root.dataset)
 		this.elements.title.textContent = title;
-		this.elements.items.appendChild(topDropZone);
+		this.elements.description.textContent = description;
 
-		this.elements.addItem.addEventListener("click", () => {
-			const newItem = KanbanAPI.insertItem(id, "");
-
-			this.renderItem(newItem);
+		this.elements.root.addEventListener("click", () => {
+			//window.location = "/home/KanbanBoard?BoardId=" + id;
+			//+ "?BoardId =" + sessionStorage.getItem("CurrentBoardId")
+			var boardChossen = null;
+			console.log(sessionStorage.getItem("CurrentBoardId"));
+			sessionStorage.setItem("CurrentBoardId", id);
+			boardChossen = document.querySelector("#GoToBoard");
+			boardChossen.setAttribute('data-link', `/list`)
+			GoToUri(boardChossen.dataset.link);
+			
 		});
 
-		KanbanAPI.getItems(id).forEach(item => {
-			this.renderItem(item);
-		});
 	}
 
 	static createRoot() {
@@ -34,22 +33,13 @@ export default class Dashboard {
 		range.selectNode(document.body);
 
 		return range.createContextualFragment(`
-		<div class="board">
-			<div class="board__header board__style">
-				<i class="fas fa-dot-circle"></i>
-				<span id="ColumnTitle"></span>
-				<i class="fas fa-ellipsis-h"></i>
-			</div>
-			<div class="board__conatiner" id="ColumnCard">
-			</div>
-			<button class="add__card" id="ColumnAddCard"> <i class="fas fa-plus"></i> Add Card</button>
-		</div>
+		<div class="board-card p-2 bg-white rounded border border-1 shadow-sm" >
+			<div class="card-body px-2">
+				<h5 id="BoardTitle" class="py-2 m-0">Card title</h5>
+				<p id="BoardDescription" class="pb-1">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
 		`).children[0];
 	}
 
-	renderItem(data) {
-		const item = new Item(data.id, data.content);
-
-		this.elements.items.appendChild(item.elements.root);
-	}
 }

@@ -259,6 +259,12 @@
     height: 150px;
     overflow: auto;
 }
+#ListOfBoardColab .board-card {
+    flex: 0 0 280px;
+    margin-right: 20px;
+    height: 150px;
+    overflow: auto;
+}
 
 #main__kanban__info > img {
     border-radius: 50%;

@@ -24,7 +24,7 @@ namespace client.Repositories.Data
                 BaseAddress = new Uri(address)
             };
         }
-        public LoginResponses Auth(Login login)
+        public LoginResponsesVM Auth(LoginVM login)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             var postTask = httpClient.PostAsync(address + request + "Login", content);
@@ -33,10 +33,10 @@ namespace client.Repositories.Data
             var ResultJsonString = result.Content.ReadAsStringAsync();
             ResultJsonString.Wait();
             JObject rss = JObject.Parse(ResultJsonString.Result);
-            var response = JsonConvert.DeserializeObject<LoginResponses>(rss.Value<string>());
+            var response = JsonConvert.DeserializeObject<LoginResponsesVM>(rss.Value<string>());
             return response;
         }
-        public RegisterResponses Register(Register register)
+        public RegisterResponsesVM Register(RegisterVM register)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(register), Encoding.UTF8, "application/json");
             var postTask = httpClient.PostAsync(address + request + "Register", content);
@@ -45,7 +45,7 @@ namespace client.Repositories.Data
             var ResultJsonString = result.Content.ReadAsStringAsync();
             ResultJsonString.Wait();
             JObject rss = JObject.Parse(ResultJsonString.Result);
-            var response = JsonConvert.DeserializeObject<RegisterResponses>(rss.Value<string>());
+            var response = JsonConvert.DeserializeObject<RegisterResponsesVM>(rss.Value<string>());
             return response;
         }
     }

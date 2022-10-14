@@ -31,7 +31,7 @@ namespace API.Repositories.Data
             // authentication successful
             return user;
         }
-        public int Register(Register register)
+        public int Register(RegisterVM register)
         {
             //preparation default role(get the lowest role)
             var LevelMin = myContext.Level.Min(x => x.Value);

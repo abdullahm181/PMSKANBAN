@@ -13,7 +13,7 @@ namespace API.Middleware
 {
     public interface IJWTHandler
     {
-        string GenerateToken(Account account);
+        string GenerateToken(AccountVM account);
         string GetName(string token);
         string GetEmail(string token);
     }
@@ -32,7 +32,7 @@ namespace API.Middleware
             throw new NotImplementedException();
         }
 
-        public string GenerateToken(Account account)
+        public string GenerateToken(AccountVM account)
         {
             if (account == null)
             {

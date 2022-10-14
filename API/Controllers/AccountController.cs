@@ -29,7 +29,7 @@ namespace API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("Login")]
-        public IActionResult Login(Login login)
+        public IActionResult Login(LoginVM login)
         {
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
                 return BadRequest(new { result = 400, message = "Username or password is blank" , Token = ""});
@@ -38,7 +38,7 @@ namespace API.Controllers
                 return BadRequest(new { result = 400, message = "Username or password is incorrect", Token = "" });
             var userRole = accountRepository.GetRoleById(result.Id);
             var jwt = new JwtService(iconfiguration);
-            Account account = new Account
+            AccountVM account = new AccountVM
             {
                 Id = result.Id,
                 FullName = result.Employees.FirstName + " " + result.Employees.LastName,
@@ -51,7 +51,7 @@ namespace API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("Register")]
-        public IActionResult Register([FromBody] Register register)
+        public IActionResult Register([FromBody] RegisterVM register)
         {
             if (ModelState.IsValid)
             {

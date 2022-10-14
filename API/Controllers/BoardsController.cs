@@ -10,15 +10,13 @@ namespace API.Controllers
     public class BoardsController : BaseController<Boards,BoardsRepository>
     {
         BoardsRepository boardsRepository;
-        MemberBoardRepository memberBoardRepository;
-        public BoardsController(BoardsRepository boardsRepository, MemberBoardRepository memberBoardRepository) : base(boardsRepository)
+        public BoardsController(BoardsRepository boardsRepository) : base(boardsRepository)
         {
             this.boardsRepository = boardsRepository;
-            this.memberBoardRepository = memberBoardRepository;
 
         }
         [HttpPost("Create")]
-        public IActionResult Create(CreateBoard createBoard)
+        public IActionResult Create(CreateBoardVM createBoard)
         {
             if (ModelState.IsValid)
             {
@@ -36,7 +34,7 @@ namespace API.Controllers
 
         }
         [HttpGet("GetbyOwner")]
-        public IActionResult GetbyUserId(int OwnerId)
+        public IActionResult GetbyOwner(int OwnerId)
         {
             if (string.IsNullOrWhiteSpace(OwnerId.ToString()))
             {

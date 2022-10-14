@@ -1,5 +1,6 @@
 ﻿using client.Models;
 using client.Repositories.Data;
+using client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,10 +26,29 @@ namespace client.Controllers
             return View();
         }
 
-        [HttpGet]
-        public JsonResult GetAll(int id)
+        public IActionResult KanbanBoard(int BoardId)
         {
-            var result = boardsRepository.Get(id);
+            ViewBag.SomeScript = "alert('Anda memilih board id: "+ BoardId.ToString() + "');";
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Create(CreateBoardVM createBoardVM)
+        {
+            var result = boardsRepository.Create(createBoardVM);
+            return Json(result);
+        }
+
+        [HttpGet]
+        public JsonResult GetbyOwner(int OwnerId)
+        {
+            var result = boardsRepository.GetbyOwner(OwnerId);
+            return Json(result);
+        }
+        [HttpGet]
+        public JsonResult GetbyMember(int MemberId)
+        {
+            var result = boardsRepository.GetbyMember(MemberId);
             return Json(result);
         }
 

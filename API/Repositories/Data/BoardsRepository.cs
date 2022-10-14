@@ -30,7 +30,7 @@ namespace API.Repositories.Data
             }
             return boards;
         }
-        public int Create(CreateBoard createBoard) 
+        public int Create(CreateBoardVM createBoard) 
         {
             //check if Name already exist in user scope 
             if (myContext.Boards.Any(x => (x.Name == createBoard.Name && x.Owner_Id == createBoard.User_Id)))
