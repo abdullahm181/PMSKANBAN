@@ -28,5 +28,21 @@ namespace API.Controllers
 
             return Ok(new { result = 200, data = data });
         }
+        [HttpGet("GetCard")]
+        public IActionResult GetCard(int CardId)
+        {
+            if (string.IsNullOrWhiteSpace(CardId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = cardRepository.GetCard(CardId);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Ok(new { result = 200, data = data });
+        }
+        
     }
 }

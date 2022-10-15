@@ -28,12 +28,9 @@ export default class List {
 				KanbanAPI.DeleteList(id);
 			});
 		}
-		
-		/*this.elements.addItem.addEventListener("click", () => {
-			const newItem = KanbanAPI.insertItem(id, "");
-
-			this.renderItem(newItem);
-		});*/
+		this.elements.addItem.addEventListener("click", () => {
+			KanbanAPI.addCard(id, Board_Id);
+		});
 
 		/*KanbanAPI.getItems(id).forEach(item => {
 			this.renderItem(item);

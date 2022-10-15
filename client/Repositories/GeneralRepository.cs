@@ -91,14 +91,28 @@ namespace client.Repositories
 
         }
 
-        public HttpStatusCode Post(Entity entity)
+        public Entity Post(Entity entity)
         {
             //HTTP POST
+            Entity newEntity = null;
             var postTask = httpClient.PostAsJsonAsync<Entity>(request, entity);
             postTask.Wait();
 
             var result = postTask.Result;
-            return result.StatusCode;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                newEntity = JsonConvert.DeserializeObject<Entity>(JsonConvert.SerializeObject(data));
+            }
+            else //web api sent error response 
+            {
+                newEntity = null;
+            }
+            return newEntity;
         }
 
         public HttpStatusCode Put(Entity entity)

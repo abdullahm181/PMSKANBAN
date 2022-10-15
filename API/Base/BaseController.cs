@@ -64,8 +64,8 @@ namespace API.Base
             {
 
                 var result = repository.Post(objectName);
-                if (result > 0)
-                    return Ok(new { result = 200, message = "successfully inserted" });
+                if (result != null)
+                    return Ok(new { result = 200, data = result });
             }
             return BadRequest();
 

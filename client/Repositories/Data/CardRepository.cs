@@ -51,5 +51,31 @@ namespace client.Repositories.Data
             }
             return card;
         }
+        public CardDisplayVM GetCard(int CardId)
+        {
+            CardDisplayVM cardDisplayVM = null;
+
+            var responseTask = httpClient.GetAsync(request + "GetCard?CardId=" + CardId.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                cardDisplayVM = JsonConvert.DeserializeObject<CardDisplayVM>(JsonConvert.SerializeObject(data));
+            }
+            else //web api sent error response 
+            {
+                cardDisplayVM = null;
+            }
+
+            return cardDisplayVM;
+
+        }
+
     }
 }

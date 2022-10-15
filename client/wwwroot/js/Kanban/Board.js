@@ -3,3 +3,4 @@
 new BoardList(
 	document.querySelector("#main__kanban"), sessionStorage.getItem("CurrentBoardId")
 );
+

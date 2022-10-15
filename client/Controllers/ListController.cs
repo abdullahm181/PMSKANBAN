@@ -56,13 +56,19 @@ namespace client.Controllers
         [HttpGet]
         public JsonResult GetCard(int CardId)
         {
-            var result = cardRepository.Get(CardId);
+            var result = cardRepository.GetCard(CardId);
             return Json(result);
         }
         [HttpPut]
         public JsonResult EditCard(Card card)
         {
             var result = cardRepository.Put(card);
+            return Json(result);
+        }
+        [HttpPost]
+        public JsonResult CreateCard(Card card)
+        {
+            var result = cardRepository.Post(card);
             return Json(result);
         }
     }

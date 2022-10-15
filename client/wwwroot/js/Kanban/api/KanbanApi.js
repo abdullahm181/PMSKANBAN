@@ -1,4 +1,6 @@
-﻿export default class KanbanAPI {
+﻿import Card from "../view/Card.js";
+
+export default class KanbanAPI {
     static Methode(TypeMethode, requestUri, BodyData = null, callback) {
         var data;
         const Get = $.ajax({
@@ -19,7 +21,7 @@
         var data = {};
         data["CardId"] = itemId;
         this.Methode("GET", "list/GetCard", data, function (d) {
-
+            console.log(d);
             const currentColumn = document.querySelector(`[data-list_id="${d.list_Id}"]`);
 
             const AllcardCC = currentColumn.getElementsByClassName("board__boxes");
@@ -35,15 +37,17 @@
                         //processing the data
                         console.log(d);
                         d.order = index;
-                        KanbanAPI.Methode("PUT", "list/EditCard", {
-                            "id": d.id,
-                            "name": d.name,
-                            "order": d.order,
-                            "description": d.description,
-                            "deadLine": d.deadLine,
-                            "list_Id": d.list_Id,
-                            "personInCharge": d.personInCharge
-                        }, function (d) {
+                        var newCard = {
+                            "Id": d.id,
+                            "Name": d.name,
+                            "Order": d.order,
+                            "Description": d.description,
+                            "DeadLine": d.deadLine,
+                            "List_Id": d.list_Id,
+                            "personIncharge": d.personIncharge
+                        };
+                        console.log(newCard);
+                        KanbanAPI.Methode("PUT", "list/EditCard", newCard, function (d) {
                             //processing the data
                             console.log(d);
                         });
@@ -69,15 +73,17 @@
                         };
                         d.order = index;
                         console.log(d);
-                        KanbanAPI.Methode("PUT", "list/EditCard", {
-                            "id": d.id,
-                            "name": d.name,
-                            "order": d.order,
-                            "description": d.description,
-                            "deadLine": d.deadLine,
-                            "list_Id": d.list_Id,
-                            "personInCharge": d.personInCharge
-                        }, function (d) {
+                        var newCard = {
+                            "Id": d.id,
+                            "Name": d.name,
+                            "Order": d.order,
+                            "Description": d.description,
+                            "DeadLine": d.deadLine,
+                            "List_Id": d.list_Id,
+                            "personIncharge": d.personIncharge
+                        };
+                        console.log(newCard);
+                        KanbanAPI.Methode("PUT", "list/EditCard", newCard, function (d) {
                             //processing the data
                             console.log(d);
                         });
@@ -108,5 +114,41 @@
             }
         });
         //alert("You want to delete list Id : " + ListId);
+    }
+    static addCard(ListId, boardId) {
+        $('#addCardModal').modal('show');
+        var dataMember = {};
+        dataMember["BoardId"] = boardId;
+        KanbanAPI.Methode("GET", "memberBoard/getbyboardid", dataMember, function (d) {
+            $.each(d, function () {
+                $("#PersonCardCreate").append($("<option />").val(this.id).text(`${this.user.employees.firstName} ${this.user.employees.lastName} --- ${this.user.employees.jobs.jobTitle}`));
+
+            });
+        });
+
+        $("#AddCardKanban").on("submit", () => {
+            var root = document.querySelector(`[data-list_id="${ListId}"]`);
+            var rootCardContainer = root.querySelector(".board__conatiner");
+            const cardContainer = Array.from(root.querySelectorAll(".board__boxes"));
+            console.log(cardContainer.length);
+            var data = {};
+            data["Order"] = cardContainer.length;
+            data["List_Id"] = ListId
+            $('#AddCardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
+            data["PersonInCharge"] = parseInt(data["PersonInCharge"]);
+            console.log(data);
+            KanbanAPI.Methode("POST", "list/CreateCard", data, function (d) {
+                var newData = {};
+                console.log(d);
+                newData["CardId"] = d.id;
+                KanbanAPI.Methode("GET", "list/GetCard", newData, function (d) {
+                    const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge);
+                    rootCardContainer.appendChild(cardView.elements.root);
+                    $('#addCardModal').modal('hide');
+                });
+            });
+            event.preventDefault();
+        });
+        //Name,Order,Description,DeadLine,List_Id,PersonInCharge
     }
 }

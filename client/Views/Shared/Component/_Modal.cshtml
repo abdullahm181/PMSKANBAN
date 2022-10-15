@@ -9,7 +9,50 @@
                 <form id="AddColumnKanban" method="POST" action="javascript:void(0);">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Title:</label>
-                        <input type="text" class="form-control" id="NameList" name="Name">
+                        <input type="text" class="form-control" id="NameList" name="Name"required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" >New Card - task</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddCardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group date " id="datepicker">
+                            <input type="text" class="form-control" placeholder="DeadLine" aria-label="DeadLine" name="DeadLine" required>
+                            <span class="input-group-append">
+                            </span>
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="PersonInCharge" name="PersonInCharge" id="PersonCardCreate" required>
+                                <option value="0" selected>Please select Person</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
                     </div>
                     <div class="mb-3">
                         <input type="submit" value="Save" class="btn btn-primary" />
