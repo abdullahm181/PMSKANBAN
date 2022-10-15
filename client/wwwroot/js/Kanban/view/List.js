@@ -45,10 +45,8 @@ export default class List {
 		data["ListId"] = ListId;
 		KanbanAPI.Methode("GET", "list/GetCardByListId", data, function (d) {
 			//processing the data
-			console.log(d);
 			d.forEach(card => {
 				//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
-				console.log(card);
 				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
 
 				root.appendChild(cardView.elements.root);
@@ -88,7 +86,7 @@ export default class List {
 			<div class="board__header board__style">
 				<i class="fas fa-dot-circle"></i>
 				<span id="ColumnTitle"></span>
-				<a id="menuList" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
+				<i id="menuList" data-bs-toggle="dropdown" aria-expanded="false" class="fas fa-ellipsis-h"></i>
                   <ul class="dropdown-menu">
                     <li><a id="DeleteList" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
                     <li><a id="EditList" class="dropdown-item" href="javascript:void(0)">Edit</a></li>

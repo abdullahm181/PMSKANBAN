@@ -91,6 +91,22 @@
         alert("You want to edit list Id : " + ListId);
     }
     static DeleteList(ListId) {
-        alert("You want to delete list Id : " + ListId);
+        KanbanAPI.Methode("DELETE", "list/DeleteEntity", { "id": ListId }, function (d) {
+            const ListElements = document.getElementsByClassName("board");
+            const listContainer = document.querySelector("#main__kanban");
+            listContainer.removeChild(document.querySelector(`[data-list_id="${ListId}"]`));
+            for (let index = 0; index < ListElements.length; index++) {
+                console.log(ListElements[index].dataset.list_id);
+                var data = {};
+                data["id"] = ListElements[index].dataset.list_id;
+                KanbanAPI.Methode("GET", "list/Get", data, function (d) {
+                    d.order = index;
+                    KanbanAPI.Methode("PUT", "list/Put", d, function (d) {
+
+                    });
+                });
+            }
+        });
+        //alert("You want to delete list Id : " + ListId);
     }
 }

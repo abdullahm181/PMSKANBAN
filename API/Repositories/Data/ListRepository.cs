@@ -34,7 +34,7 @@ namespace API.Repositories.Data
             var ListDonePut = GetByName("Done",list.Board_Id);
             ListDonePut.Order = list.Order + 1;
             var resultListDonePut = Put(ListDonePut.Id,ListDonePut);
-            if (resultListDonePut > 0) {
+            if (resultListDonePut > -1) {
                 var lists = GetByBoardId(list.Board_Id);
                 if (lists.Any(x => x.Name == list.Name))
                     return -2;
