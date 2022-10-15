@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 
 namespace client.Repositories.Data
@@ -49,6 +50,41 @@ namespace client.Repositories.Data
                 list = Enumerable.Empty<List>();
             }
             return list;
+        }
+
+        public List GetByName(string ListName, int BoardId)
+        {
+            List list = null;
+    
+            var responseTask = httpClient.GetAsync(request + "GetByName" + "?ListName=" + ListName+ "&BoardId="+BoardId.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                list = JsonConvert.DeserializeObject<List>(JsonConvert.SerializeObject(data));
+            }
+            else //web api sent error response 
+            {
+                list = null;
+            }
+
+            return list;
+
+        }
+        public HttpStatusCode Create(List list)
+        {
+            //HTTP POST
+            var postTask = httpClient.PostAsJsonAsync<List>(request + "Create", list);
+            postTask.Wait();
+
+            var result = postTask.Result;
+            return result.StatusCode;
         }
     }
 }

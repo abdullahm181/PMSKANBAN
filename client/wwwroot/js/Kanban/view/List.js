@@ -3,20 +3,32 @@ import DropZone from "./DropZone.js";
 import Card from "./Card.js";
 
 export default class List {
-	constructor(id, Name, Board_Id) {
+	constructor(id, Name, Board_Id ) {
 		const topDropZone = DropZone.createDropZone();
 
 		this.elements = {};
-		this.elements.root = List.createRoot();
+		this.elements.root = List.createRoot(Name);
 		this.elements.title = this.elements.root.querySelector("#ColumnTitle");
 		this.elements.cards = this.elements.root.querySelector("#ColumnCard");
 		this.elements.addItem = this.elements.root.querySelector("#ColumnAddCard");
+		this.elements.EditList = this.elements.root.querySelector("#EditList");
+		this.elements.DeleteList = this.elements.root.querySelector("#DeleteList");
 
 		this.elements.root.dataset.list_id = id;
 		this.elements.root.dataset.board_id = Board_Id;
 		this.elements.title.textContent = Name;
 		this.elements.cards.appendChild(topDropZone);
-		List.Cards(this.elements.cards,id);
+		List.Cards(this.elements.cards, id);
+
+		if (Name != "To-do" && Name != "Done") {
+			this.elements.EditList.addEventListener("click", () => {
+				KanbanAPI.EditList(id);
+			});
+			this.elements.DeleteList.addEventListener("click", () => {
+				KanbanAPI.DeleteList(id);
+			});
+		}
+		
 		/*this.elements.addItem.addEventListener("click", () => {
 			const newItem = KanbanAPI.insertItem(id, "");
 
@@ -54,17 +66,33 @@ export default class List {
 		});*/
 	}
 
-	static createRoot() {
+	static createRoot(Name) {
 		const range = document.createRange();
 
 		range.selectNode(document.body);
-
+		if (Name == "To-do" || Name == "Done") {
+			return range.createContextualFragment(`
+			<div class="board">
+				<div class="board__header board__style">
+					<i class="fas fa-dot-circle"></i>
+					<span id="ColumnTitle"></span>
+				</div>
+				<div class="board__conatiner" id="ColumnCard">
+				</div>
+				<button class="add__card" id="ColumnAddCard"> <i class="fas fa-plus"></i> Add Card</button>
+			</div>
+			`).children[0];
+		}
 		return range.createContextualFragment(`
 		<div class="board">
 			<div class="board__header board__style">
 				<i class="fas fa-dot-circle"></i>
 				<span id="ColumnTitle"></span>
-				<i class="fas fa-ellipsis-h"></i>
+				<a id="menuList" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a id="DeleteList" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
+                    <li><a id="EditList" class="dropdown-item" href="javascript:void(0)">Edit</a></li>
+                  </ul>
 			</div>
 			<div class="board__conatiner" id="ColumnCard">
 			</div>

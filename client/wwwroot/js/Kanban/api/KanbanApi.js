@@ -87,4 +87,10 @@
             }
         });
     }
+    static EditList(ListId) {
+        alert("You want to edit list Id : " + ListId);
+    }
+    static DeleteList(ListId) {
+        alert("You want to delete list Id : " + ListId);
+    }
 }

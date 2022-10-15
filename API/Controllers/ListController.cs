@@ -40,6 +40,35 @@ namespace API.Controllers
             return Ok(new { result = 200, data = data });
         }
 
+        [HttpGet("GetByName")]
+        public IActionResult GetByName(string ListName, int BoardId)
+        {
+            if (string.IsNullOrWhiteSpace(ListName))
+            {
+                return BadRequest();
+            }
+
+            var data = listRepository.GetByName(ListName,BoardId);
+
+            return Ok(new { result = 200, data = data });
+        }
+
+        [HttpPost("Create")]
+        public IActionResult Create(List list)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var result = listRepository.Create(list);
+                if (result > 0)
+                    return Ok(new { result = 200, message = "successfully inserted" });
+                else if(result==-2)
+                    return BadRequest(new { result = 400, message = "title already exist in this board" });
+            }
+            return BadRequest();
+
+        }
+
 
     }
 }

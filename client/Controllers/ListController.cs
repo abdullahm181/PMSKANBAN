@@ -23,12 +23,29 @@ namespace client.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public JsonResult Create(List list)
+        {
+            var result = listRepository.Create(list);
+            return Json(result);
+        }
+
         [HttpGet]
         public JsonResult GetByBoardId(int BoardId)
         {
             var result = listRepository.GetByBoardId(BoardId);
             return Json(result);
         }
+
+
+        [HttpGet]
+        public JsonResult GetByName(string ListName, int BoardId)
+        {
+            var result = listRepository.GetByName(ListName,BoardId);
+            return Json(result);
+        }
+
         [HttpGet]
         public JsonResult GetCardByListId(int ListId)
         {

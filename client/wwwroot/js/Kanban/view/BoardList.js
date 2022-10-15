@@ -5,20 +5,31 @@ export default class BoardList {
 		this.BoardId = BoardId;
 		this.root = root;
 		//on Submit new list
-		/*$("#AddColumnKanban").on("submit", () => {
+		$("#AddColumnKanban").on("submit", () => {
+			const ListContainer = Array.from(document.querySelectorAll(".board"));
+			console.log(ListContainer.length);
 			var data = {};
 			$('#AddColumnKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
-			data["items"] = [];
-			const newColumn = KanbanAPI.insertColumn(data);
-
-
-			if (newColumn) {
-				this.renderColumn(newColumn);
-				$('#addColumnModal').modal('hide');
-			}
+			data["Order"] = ListContainer.length-1;
+			data["Board_Id"] = BoardId;
+			//kalau pake create data order donenya langsung berubah
+			KanbanAPI.Methode("POST", "list/Create", data, function (d) {
+				var getdata = {};
+				getdata["ListName"] = data.Name;
+				getdata["BoardId"] = data.Board_Id;
+				console.log(getdata);
+				$('#addListModal').modal('hide');
+				KanbanAPI.Methode("Get", "list/GetByName", getdata, function (d) {
+					console.log(d);
+					const addListView = new List(d.id, d.name, d.board_Id);
+					root.insertBefore(addListView.elements.root, ListContainer[ListContainer.length - 1]);
+					
+				});
+			});
+			
 			event.preventDefault();
 
-		});*/
+		});
 		BoardList.Lists(this.root, this.BoardId);
 	}
 	
