@@ -21,9 +21,9 @@ export default class List {
 		List.Cards(this.elements.cards, id, Board_Id);
 
 		if (Name != "To-do" && Name != "Done") {
-			/*this.elements.EditList.addEventListener("click", () => {
-				EditList(id);
-			});*/
+			this.elements.EditList.addEventListener("click", () => {
+				KanbanAPI.EditList(id);
+			});
 			this.elements.DeleteList.addEventListener("click", () => {
 				KanbanAPI.DeleteList(id);
 			});
@@ -86,12 +86,12 @@ export default class List {
 				<i id="menuList" data-bs-toggle="dropdown" aria-expanded="false" class="fas fa-ellipsis-h"></i>
                   <ul class="dropdown-menu">
                     <li><a id="DeleteList" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
-                    <li><a id="EditList" class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#EditListModal" onclick="EditList(${id})">Edit</a></li>
+                    <li><a id="EditList" class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#ModalData">Edit</a></li>
                   </ul>
 			</div>
 			<div class="board__conatiner" id="ColumnCard">
 			</div>
-			<button class="add__card" id="ColumnAddCard"> <i class="fas fa-plus"></i> Add Card</button>
+			<button class="add__card" id="ColumnAddCard" data-bs-toggle="modal" data-bs-target="#ModalData" > <i class="fas fa-plus"></i> Add Card</button>
 		</div>
 		`).children[0];
 	}

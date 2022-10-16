@@ -94,6 +94,19 @@ $(document).ready(function () {
 function EditList(ListId) {
     var data = {};
     data["id"] = ListId;
+    let text = "";
+    text = `<form id="EditColumnKanban" method="POST" action="javascript:void(0);">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="NameList" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+    $("#ModalTitle").text("Edit");
+    $("#ModalBody").html(text);
+
     //$('#EditListModal').modal('show');
     document.getElementById("EditColumnKanban").reset();
     $("#EditColumnKanban").on("submit", function(){
@@ -107,7 +120,7 @@ function EditList(ListId) {
             Methode("PUT", "list/Put", newList, function (d) {
                 //processing the data
                 UpdateList(newList);
-                $('#EditListModal').modal('hide');
+                $('#ModalData').modal('hide');
             });
         });
     });

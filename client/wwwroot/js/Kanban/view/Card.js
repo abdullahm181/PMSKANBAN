@@ -47,8 +47,8 @@ export default class Item {
                   <a data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
                   <ul class="dropdown-menu">
                     <li><a id="CardLinkDelete" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
-                    <li><a id="CardLinkEdit" class="dropdown-item" href="javascript:void(0)">Edit</a></li>
-                    <li><a id="CardLinkDetail" class="dropdown-item" href="javascript:void(0)">Detail</a></li>
+                    <li><a id="CardLinkEdit" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#ModalData">Edit</a></li>
+                    <li><a id="CardLinkDetail" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#ModalData">Detail</a></li>
                   </ul>
                 </li>
               </ul>

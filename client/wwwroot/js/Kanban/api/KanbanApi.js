@@ -113,25 +113,39 @@ export default class KanbanAPI {
     static EditList(ListId) {
         var data = {};
         data["id"] = ListId;
-        $('#EditListModal').modal('show');
+        let text = "";
+        text = `<form id="EditColumnKanban" method="POST" action="javascript:void(0);">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="NameList" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Edit List");
+        $("#ModalBody").html(text);
+
+        //$('#EditListModal').modal('show');
+       
         document.getElementById("EditColumnKanban").reset();
-        $("#EditColumnKanban").on("submit", () => {
-            KanbanAPI.Methode("GET", "list/Get", data, function (d) {
-                var newList = {
-                    "Id": d.id,
-                    "Board_Id": d.board_Id,
-                    "Order": d.order
-                };
+        KanbanAPI.Methode("GET", "list/Get", data, function (d) {
+            document.getElementById("NameList").value = d.name;
+            var newList = {
+                "Id": d.id,
+                "Board_Id": d.board_Id,
+                "Order": d.order
+            };
+            $("#EditColumnKanban").on("submit", function () {
                 $('#EditColumnKanban').serializeArray().map(function (x) { newList[x.name] = x.value; });
                 KanbanAPI.Methode("PUT", "list/Put", newList, function (d) {
                     //processing the data
                     KanbanAPI.UpdateList(newList);
-                    $('#EditListModal').modal('hide');
+                    $('#ModalData').modal('hide');
                 });
             });
         });
         
-        alert("You want to edit list Id : " + ListId);
     }
     static DeleteList(ListId) {
         const targetColumn = document.querySelector(`[data-list_id="${ListId}"]`);
@@ -166,7 +180,45 @@ export default class KanbanAPI {
         //alert("You want to delete list Id : " + ListId);
     }
     static addCard(ListId, boardId) {
-        $('#addCardModal').modal('show');
+        //$('#addCardModal').modal('show');
+        let text = "";
+        text = `<form id="AddCardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group date " id="datepicker">
+                            <input type="text" class="form-control" placeholder="DeadLine" aria-label="DeadLine" name="DeadLine" required>
+                            <span class="input-group-append">
+                            </span>
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="PersonInCharge" name="PersonInCharge" id="PersonCardCreate" required>
+                                <option value="0" selected>Please select Person</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Add Card");
+        $("#ModalBody").html(text);
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+        document.getElementById("AddCardKanban").reset();
         var dataMember = {};
         dataMember["BoardId"] = boardId;
         KanbanAPI.Methode("GET", "memberBoard/getbyboardid", dataMember, function (d) {
@@ -177,7 +229,7 @@ export default class KanbanAPI {
             });
         });
 
-        $("#AddCardKanban").on("submit", () => {
+        $("#AddCardKanban").on("submit", function () {
             var root = document.querySelector(`[data-list_id="${ListId}"]`);
             var rootCardContainer = root.querySelector(".board__conatiner");
             const cardContainer = Array.from(root.querySelectorAll(".board__boxes"));
@@ -195,7 +247,7 @@ export default class KanbanAPI {
                 KanbanAPI.Methode("GET", "list/GetCard", newData, function (d) {
                     const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge, d.list_Id, boardId);
                     rootCardContainer.appendChild(cardView.elements.root);
-                    $('#addCardModal').modal('hide');
+                    $('#ModalData').modal('hide');
                 });
             });
             event.preventDefault();
@@ -204,8 +256,44 @@ export default class KanbanAPI {
     }
     static editCard(CardId, ListId, BoardId) {
         console.log(CardId, ListId, BoardId);
-        const EditCard = $('#EditCardModal');
-        EditCard.modal('show');
+        let text = "";
+        text = `<form id="EditCardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" id="NameCard" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Description" aria-label="Description" id="DescriptionCard" name="Description" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group date " id="datepickerEditCard">
+                            <input type="text" class="form-control" placeholder="DeadLine" aria-label="DeadLine" id="DeadLineCard" name="DeadLine" required>
+                            <span class="input-group-append">
+                            </span>
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="PersonInCharge" name="PersonInCharge" id="PersonCardEdit" required>
+                                <option value="0" selected>Please select Person</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Edit Card");
+        $("#ModalBody").html(text);
+        $('#datepickerEditCard').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+        document.getElementById("EditCardKanban").reset();
         var data = {};
         data["id"] = CardId;
         KanbanAPI.Methode("GET", "card/Get", data, function (d) {
@@ -234,7 +322,7 @@ export default class KanbanAPI {
                     KanbanAPI.Methode("PUT", "card/Put", data, function (d) {
                         //processing the data
                         KanbanAPI.UpdateCard(data);
-                        EditCard.modal('hide');
+                        $('#ModalData').modal('hide');
                     });
                 });
             });
