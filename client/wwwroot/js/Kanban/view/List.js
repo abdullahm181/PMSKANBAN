@@ -44,7 +44,7 @@ export default class List {
 			//processing the data
 			d.forEach(card => {
 				//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
-				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
+				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge, card.list_Id);
 
 				root.appendChild(cardView.elements.root);
 
@@ -54,7 +54,7 @@ export default class List {
 		cards.forEach(card => {
 			//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
 			console.log(card);
-			const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
+			const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge,card.list_Id);
 
 			this.root.appendChild(cardView.elements.root);
 
@@ -98,7 +98,7 @@ export default class List {
 
 	renderItem(root, card) {
 		this.root = root;
-		const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge);
+		const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge, card.list_Id);
 
 		this.root.appendChild(cardView.elements.root);
 	}

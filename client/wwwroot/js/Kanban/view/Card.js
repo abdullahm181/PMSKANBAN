@@ -1,7 +1,7 @@
 ﻿import DropZone from "./DropZone.js";
-
+import KanbanAPI from "../api/KanbanApi.js";
 export default class Item {
-	constructor(id, name, numberTaskItem, numbercomment, personIncharge) {
+	constructor(id, name, numberTaskItem, numbercomment, personIncharge, ListId) {
 		const bottomDropZone = DropZone.createDropZone();
 
 		this.elements = {};
@@ -19,6 +19,9 @@ export default class Item {
 
 		this.elements.root.appendChild(bottomDropZone);
 
+		this.elements.root.querySelector("#CardLinkDelete").addEventListener("click", () => {
+			KanbanAPI.deleteCard(id, ListId);
+		});
 
 		this.elements.root.addEventListener("dragstart", e => {
 			e.dataTransfer.setData("text/plain", id);
@@ -40,9 +43,9 @@ export default class Item {
                 <li>
                   <a data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                    <li><a class="dropdown-item" href="#">Detail</a></li>
+                    <li><a id="CardLinkDelete" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
+                    <li><a id="CardLinkEdit" class="dropdown-item" href="javascript:void(0)">Edit</a></li>
+                    <li><a id="CardLinkDetail" class="dropdown-item" href="javascript:void(0)">Detail</a></li>
                   </ul>
                 </li>
               </ul>

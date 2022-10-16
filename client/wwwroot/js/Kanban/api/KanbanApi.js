@@ -142,11 +142,11 @@ export default class KanbanAPI {
                 }
             });
         } else {
-            swal(
+            Swal.fire(
                 'Error!',
                 'This list contain cards, Please empty this list if you want to delete it!',
                 'error'
-            )
+            );
         }
         
         //alert("You want to delete list Id : " + ListId);
@@ -178,7 +178,7 @@ export default class KanbanAPI {
                 console.log(d);
                 newData["CardId"] = d.id;
                 KanbanAPI.Methode("GET", "list/GetCard", newData, function (d) {
-                    const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge);
+                    const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge, d.list_Id);
                     rootCardContainer.appendChild(cardView.elements.root);
                     $('#addCardModal').modal('hide');
                 });
@@ -189,5 +189,47 @@ export default class KanbanAPI {
     }
     static deleteCard(CardId, ListId) {
 
+        console.log(CardId, "---", ListId);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure delete this card?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = {};
+                data["id"] = CardId;
+                KanbanAPI.Methode("DELETE", "card/DeleteEntity", data, function (d) {
+                    const listContainer = document.querySelector(`[data-list_id="${ListId}"]`);
+                    var CardContainer = listContainer.querySelector(".board__conatiner");
+                    CardContainer.removeChild(CardContainer.querySelector(`[data-card_id="${CardId}"]`));
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        'Your card has been deleted.',
+                        'success'
+                    )
+                });
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your card is safe :)',
+                    'error'
+                )
+            }
+        })
     }
 }
