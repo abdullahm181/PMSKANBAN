@@ -97,10 +97,24 @@ export default class KanbanAPI {
         const targetColumn = document.querySelector(`[data-list_id="${newList.Id}"]`);
         targetColumn.querySelector("#ColumnTitle").textContent = newList.Name;
     }
+    static UpdateCard(newCard) {
+        const targetCard = document.querySelector(`[data-card_id="${newCard.Id}"]`);
+        console.log(newCard);
+        console.log(targetCard);
+        var data = {};
+        data["CardId"] = newCard.Id;
+        KanbanAPI.Methode("GET", "list/GetCard", data, function (d) {
+            targetCard.querySelector("#CardTitle").textContent = newCard.Name;
+            targetCard.querySelector("#CardTaskItem").textContent = d.numberTaskItem;
+            targetCard.querySelector("#CardComment").textContent = d.numbercomment;
+            targetCard.querySelector("#CardPerson").textContent = newCard.PersonInCharge;
+        });
+    }
     static EditList(ListId) {
         var data = {};
         data["id"] = ListId;
         $('#EditListModal').modal('show');
+        document.getElementById("EditColumnKanban").reset();
         $("#EditColumnKanban").on("submit", () => {
             KanbanAPI.Methode("GET", "list/Get", data, function (d) {
                 var newList = {
@@ -156,6 +170,7 @@ export default class KanbanAPI {
         var dataMember = {};
         dataMember["BoardId"] = boardId;
         KanbanAPI.Methode("GET", "memberBoard/getbyboardid", dataMember, function (d) {
+            $("#PersonCardCreate").empty()
             $.each(d, function () {
                 $("#PersonCardCreate").append($("<option />").val(this.id).text(`${this.user.employees.firstName} ${this.user.employees.lastName} --- ${this.user.employees.jobs.jobTitle}`));
 
@@ -169,7 +184,7 @@ export default class KanbanAPI {
             console.log(cardContainer.length);
             var data = {};
             data["Order"] = cardContainer.length;
-            data["List_Id"] = ListId
+            data["List_Id"] = ListId;
             $('#AddCardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
             data["PersonInCharge"] = parseInt(data["PersonInCharge"]);
             console.log(data);
@@ -178,7 +193,7 @@ export default class KanbanAPI {
                 console.log(d);
                 newData["CardId"] = d.id;
                 KanbanAPI.Methode("GET", "list/GetCard", newData, function (d) {
-                    const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge, d.list_Id);
+                    const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge, d.list_Id, boardId);
                     rootCardContainer.appendChild(cardView.elements.root);
                     $('#addCardModal').modal('hide');
                 });
@@ -186,6 +201,44 @@ export default class KanbanAPI {
             event.preventDefault();
         });
         //Name,Order,Description,DeadLine,List_Id,PersonInCharge
+    }
+    static editCard(CardId, ListId, BoardId) {
+        console.log(CardId, ListId, BoardId);
+        const EditCard = $('#EditCardModal');
+        EditCard.modal('show');
+        var data = {};
+        data["id"] = CardId;
+        KanbanAPI.Methode("GET", "card/Get", data, function (d) {
+            var Card = d;
+            var dataMember = {};
+            dataMember["BoardId"] = BoardId;
+            KanbanAPI.Methode("GET", "memberBoard/getbyboardid", dataMember, function (d) {
+                document.getElementById("NameCard").value = Card.name;
+                document.getElementById("DescriptionCard").value = Card.description;
+                document.getElementById("DeadLineCard").value = Card.deadLine;
+                $("#PersonCardEdit").empty()
+                $.each(d, function () {
+                    if (this.id == Card.personInCharge)
+                        $("#PersonCardEdit").append($("<option selected='selected'/>").val(this.id).text(`${this.user.employees.firstName} ${this.user.employees.lastName} --- ${this.user.employees.jobs.jobTitle}`));
+                    else
+                        $("#PersonCardEdit").append($("<option />").val(this.id).text(`${this.user.employees.firstName} ${this.user.employees.lastName} --- ${this.user.employees.jobs.jobTitle}`));
+                });
+                $("#EditCardKanban").on("submit", () => {
+                    var data = {};
+                    data["Id"] = Card.id;
+                    data["Order"] = Card.order;
+                    data["List_Id"] = Card.list_Id;
+                    $('#EditCardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
+                    data["PersonInCharge"] = parseInt(data["PersonInCharge"]);
+                    console.log(data);
+                    KanbanAPI.Methode("PUT", "card/Put", data, function (d) {
+                        //processing the data
+                        KanbanAPI.UpdateCard(data);
+                        EditCard.modal('hide');
+                    });
+                });
+            });
+        });
     }
     static deleteCard(CardId, ListId) {
 

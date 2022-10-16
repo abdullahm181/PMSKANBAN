@@ -7,7 +7,7 @@ export default class List {
 		const topDropZone = DropZone.createDropZone();
 
 		this.elements = {};
-		this.elements.root = List.createRoot(Name);
+		this.elements.root = List.createRoot(Name, id);
 		this.elements.title = this.elements.root.querySelector("#ColumnTitle");
 		this.elements.cards = this.elements.root.querySelector("#ColumnCard");
 		this.elements.addItem = this.elements.root.querySelector("#ColumnAddCard");
@@ -18,12 +18,12 @@ export default class List {
 		this.elements.root.dataset.board_id = Board_Id;
 		this.elements.title.textContent = Name;
 		this.elements.cards.appendChild(topDropZone);
-		List.Cards(this.elements.cards, id);
+		List.Cards(this.elements.cards, id, Board_Id);
 
 		if (Name != "To-do" && Name != "Done") {
-			this.elements.EditList.addEventListener("click", () => {
-				KanbanAPI.EditList(id);
-			});
+			/*this.elements.EditList.addEventListener("click", () => {
+				EditList(id);
+			});*/
 			this.elements.DeleteList.addEventListener("click", () => {
 				KanbanAPI.DeleteList(id);
 			});
@@ -36,7 +36,7 @@ export default class List {
 			this.renderItem(item);
 		});*/
 	}
-	static async Cards(root, ListId) {
+	static async Cards(root, ListId, Board_Id) {
 		this.root = root;
 		var data = {};
 		data["ListId"] = ListId;
@@ -44,7 +44,7 @@ export default class List {
 			//processing the data
 			d.forEach(card => {
 				//id,name, jumlahTaskItem,jumlahcomment, personInchargeName
-				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge, card.list_Id);
+				const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge, card.list_Id, Board_Id);
 
 				root.appendChild(cardView.elements.root);
 
@@ -61,7 +61,7 @@ export default class List {
 		});*/
 	}
 
-	static createRoot(Name) {
+	static createRoot(Name,id) {
 		const range = document.createRange();
 
 		range.selectNode(document.body);
@@ -86,7 +86,7 @@ export default class List {
 				<i id="menuList" data-bs-toggle="dropdown" aria-expanded="false" class="fas fa-ellipsis-h"></i>
                   <ul class="dropdown-menu">
                     <li><a id="DeleteList" class="dropdown-item" href="javascript:void(0)">Delete</a></li>
-                    <li><a id="EditList" class="dropdown-item" href="javascript:void(0)">Edit</a></li>
+                    <li><a id="EditList" class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#EditListModal" onclick="EditList(${id})">Edit</a></li>
                   </ul>
 			</div>
 			<div class="board__conatiner" id="ColumnCard">
@@ -96,7 +96,7 @@ export default class List {
 		`).children[0];
 	}
 
-	renderItem(root, card) {
+	renderItem(root, card, Board_Id) {
 		this.root = root;
 		const cardView = new Card(card.id, card.name, card.numberTaskItem, card.numbercomment, card.personIncharge, card.list_Id);
 

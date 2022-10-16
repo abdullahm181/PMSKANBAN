@@ -34,10 +34,15 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
             <script type="text/javascript">
                 $(function () {
-                    $('#datepicker').datepicker();
+                    $('#datepicker').datepicker({
+                        format: 'yyyy-mm-dd'
+                    });
+                    $('#datepickerEditCard').datepicker({
+                        format: 'yyyy-mm-dd'
+                    });
                 });
             </script>
-            <script src="~/js/site.js"></script>
+            <script  src="~/js/site.js"></script>
             @RenderSection("Scripts", required: false)
 </body>
 </html>
