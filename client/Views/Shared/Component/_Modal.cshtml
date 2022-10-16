@@ -19,6 +19,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="EditListModal" tabindex="-1" aria-labelledby="EditListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addListModalLabel">Edit List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="EditColumnKanban" method="POST" action="javascript:void(0);">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="NameList" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

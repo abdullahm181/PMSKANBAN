@@ -93,26 +93,62 @@ export default class KanbanAPI {
             }
         });
     }
+    static UpdateList(newList) {
+        const targetColumn = document.querySelector(`[data-list_id="${newList.Id}"]`);
+        targetColumn.querySelector("#ColumnTitle").textContent = newList.Name;
+    }
     static EditList(ListId) {
+        var data = {};
+        data["id"] = ListId;
+        $('#EditListModal').modal('show');
+        $("#EditColumnKanban").on("submit", () => {
+            KanbanAPI.Methode("GET", "list/Get", data, function (d) {
+                var newList = {
+                    "Id": d.id,
+                    "Board_Id": d.board_Id,
+                    "Order": d.order
+                };
+                $('#EditColumnKanban').serializeArray().map(function (x) { newList[x.name] = x.value; });
+                KanbanAPI.Methode("PUT", "list/Put", newList, function (d) {
+                    //processing the data
+                    KanbanAPI.UpdateList(newList);
+                    $('#EditListModal').modal('hide');
+                });
+            });
+        });
+        
         alert("You want to edit list Id : " + ListId);
     }
     static DeleteList(ListId) {
-        KanbanAPI.Methode("DELETE", "list/DeleteEntity", { "id": ListId }, function (d) {
-            const ListElements = document.getElementsByClassName("board");
-            const listContainer = document.querySelector("#main__kanban");
-            listContainer.removeChild(document.querySelector(`[data-list_id="${ListId}"]`));
-            for (let index = 0; index < ListElements.length; index++) {
-                console.log(ListElements[index].dataset.list_id);
-                var data = {};
-                data["id"] = ListElements[index].dataset.list_id;
-                KanbanAPI.Methode("GET", "list/Get", data, function (d) {
-                    d.order = index;
-                    KanbanAPI.Methode("PUT", "list/Put", d, function (d) {
+        const targetColumn = document.querySelector(`[data-list_id="${ListId}"]`);
+        const AllcardTC = targetColumn.getElementsByClassName("board__boxes");
+        
+        console.log(AllcardTC);
+        if (AllcardTC.length == 0) {
+            KanbanAPI.Methode("DELETE", "list/DeleteEntity", { "id": ListId }, function (d) {
+                const ListElements = document.getElementsByClassName("board");
+                const listContainer = document.querySelector("#main__kanban");
+                listContainer.removeChild(document.querySelector(`[data-list_id="${ListId}"]`));
+                for (let index = 0; index < ListElements.length; index++) {
+                    console.log(ListElements[index].dataset.list_id);
+                    var data = {};
+                    data["id"] = ListElements[index].dataset.list_id;
+                    KanbanAPI.Methode("GET", "list/Get", data, function (d) {
+                        d.order = index;
+                        KanbanAPI.Methode("PUT", "list/Put", d, function (d) {
 
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        } else {
+            swal(
+                'Error!',
+                'This list contain cards, Please empty this list if you want to delete it!',
+                'error'
+            )
+        }
+        
         //alert("You want to delete list Id : " + ListId);
     }
     static addCard(ListId, boardId) {
@@ -150,5 +186,8 @@ export default class KanbanAPI {
             event.preventDefault();
         });
         //Name,Order,Description,DeadLine,List_Id,PersonInCharge
+    }
+    static deleteCard(CardId, ListId) {
+
     }
 }
