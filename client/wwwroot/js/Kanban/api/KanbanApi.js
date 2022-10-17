@@ -1,4 +1,5 @@
 ﻿import Card from "../view/Card.js";
+import Comment from "../view/Comment.js";
 
 export default class KanbanAPI {
     static Methode(TypeMethode, requestUri, BodyData = null, callback) {
@@ -14,7 +15,6 @@ export default class KanbanAPI {
         }).fail((error) => {
             console.log(error);
         });
-        console.log(Get)
         return data;
     }
     static updateItem(itemId, newProps) {
@@ -371,6 +371,157 @@ export default class KanbanAPI {
                     'error'
                 )
             }
-        })
+        });
+    }
+    static detailCard(CardId, ListId, BoardId) {
+        let text = "";
+        text = `<div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <h5 class="border-bottom border-3 border-warning" >Person in  Charge:</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <h6 id="PersonCard"></h6>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <h5 class="border-bottom border-3 border-warning" >DeadLine :</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <h6 id="DeadLineCard">Deadline</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <h5 class="border-bottom border-3 border-warning" >Description :</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <h6  id="DescriptionCard">Test</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="actionBox">
+              <ul class="commentList" data-card_id_comment=${CardId}>
+              </ul>
+              <form class="form-inline item" role="form" id="AddComment" method="POST" action="javascript:void(0);">
+                   <div class="hstack gap-3">
+                      <textarea class="form-control me-auto"  type="text" placeholder="Your comments ...." name="Text"></textarea>
+                      <button type="submit" class="btn btn-secondary">Add Comment</button>
+                    </div>
+              </form>
+          </div>
+          </div>
+        </div>`;
+        var data = {};
+        data["id"] = CardId;
+        KanbanAPI.Methode("GET", "card/Get", data, function (d) {
+            $("#ModalTitle").text(d.name);
+            $("#ModalBody").html(text);
+            $("#PersonCard").text(d.personInCharge);
+            $("#DeadLineCard").text(d.deadLine);
+            $("#DescriptionCard").text(d.description);
+            const CommentContainer = document.querySelector(`[data-card_id_comment="${CardId}"]`);
+            console.log(CommentContainer);
+            var dataComments = {};
+            dataComments["CardId"] = CardId;
+            KanbanAPI.Methode("GET", "comments/GetByCardId", dataComments, function (d) {
+                console.log(d,data);
+                d.forEach(comments => {
+
+                    KanbanAPI.renderComment(CommentContainer, comments);
+
+                });
+                $("#AddComment").on("submit", () => {
+                    var dataPost = {};
+                    $('#AddComment').serializeArray().map(function (x) { dataPost[x.name] = x.value; });
+                    dataPost["Card_Id"] = CardId;
+                    dataPost["User_Id"] = 2;//"SesisonUser sakrang";
+                    console.log(dataPost);
+                    KanbanAPI.Methode("POST", "comments/Post", dataPost, function (d) {
+                        KanbanAPI.renderComment(CommentContainer, d);
+                        document.getElementById("AddComment").reset();
+                    });
+                    event.preventDefault();
+
+                });
+            });
+        });
+    }
+    static renderComment(root, objNewComment) {
+        console.log(objNewComment);
+        const commentView = new Comment(objNewComment.id, objNewComment.text, objNewComment.user_Id, objNewComment.card_Id);
+
+        root.appendChild(commentView.elements.root);
+    }
+    static deleteComment(id, CardId, UserId) {
+        console.log(id, "---", CardId, "---", UserId);
+        //CurrenntLoginUserId = sessionStorage.getItem("CurrentUserId");
+        const CurrenntLoginUserId = 2;
+        if (UserId == CurrenntLoginUserId) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure delete this comments?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var data = {};
+                    data["id"] = id;
+                    KanbanAPI.Methode("DELETE", "comments/DeleteEntity", data, function (d) {
+                        const CommentContainer = document.querySelector(`[data-card_id_comment="${CardId}"]`);
+                        CommentContainer.removeChild(CommentContainer.querySelector(`[data-comment_id="${id}"]`));
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Your card has been deleted.',
+                            'success'
+                        )
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your card is safe :)',
+                        'error'
+                    )
+                }
+            });
+        } else {
+            Swal.fire(
+                'Error!',
+                'you are not the creator of this comment!',
+                'error'
+            );
+        }
+        
     }
 }

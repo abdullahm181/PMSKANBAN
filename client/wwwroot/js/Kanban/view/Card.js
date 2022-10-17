@@ -25,7 +25,10 @@ export default class Item {
 		this.elements.root.querySelector("#CardLinkEdit").addEventListener("click", () => {
 			KanbanAPI.editCard(id, ListId, BoardId);
 		});
-
+		
+		this.elements.root.querySelector("#CardLinkDetail").addEventListener("click", () => {
+			KanbanAPI.detailCard(id, ListId, BoardId);
+		});
 		this.elements.root.addEventListener("dragstart", e => {
 			e.dataTransfer.setData("text/plain", id);
 		});
