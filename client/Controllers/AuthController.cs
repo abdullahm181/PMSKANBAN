@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace client.Controllers
 {
+    [Route("Auth")]
     public class AuthController : Controller
     {
         AuthRepository authRepository;
@@ -20,7 +21,7 @@ namespace client.Controllers
         }
         [Route("login")]
         [HttpPost]
-        public JsonResult Login(Login login)
+        public JsonResult Login(LoginVM login)
         {
             var result = authRepository.Auth(login);
             if (result.result == 200) {
@@ -38,17 +39,18 @@ namespace client.Controllers
         }
         [Route("register")]
         [HttpPost]
-        public JsonResult Register(Register register)
+        public JsonResult Register(RegisterVM register)
         {
             var result = authRepository.Register(register);
             return Json(result);
         }
+
         [Route("logout")]
+        [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("Token");
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Index");
         }
     }
 }

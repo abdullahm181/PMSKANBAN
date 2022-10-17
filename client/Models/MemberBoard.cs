@@ -9,13 +9,7 @@ namespace client.Models
         [Key]
         public int Id { get; set; }
 
-        public Status status { get; set; }
-        public enum Status
-        {
-            Owner,
-            Colaborator
-        }
-
+        public string status { get; set; }
         public virtual User User { get; set; }
         [ForeignKey("User")]
         public int User_Id { get; set; }

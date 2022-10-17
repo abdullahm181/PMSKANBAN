@@ -8,7 +8,7 @@ namespace API.Repositories.Interface
 
         ObjectName Get(int id);
 
-        int Post(ObjectName objectName);
+        ObjectName Post(ObjectName objectName);
 
         int Put(int id, ObjectName objectName);
 
