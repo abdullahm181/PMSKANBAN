@@ -2,10 +2,10 @@
 import KanbanMember from "./view/kanbanMember.js";
 
 new kanbanUser(
-	document.querySelector("#ListOfBoardUser"), 2
+	document.querySelector("#ListOfBoardUser"), parseInt(sessionStorage.getItem("LoginUserId"))
 );
 
 new KanbanMember(
-	document.querySelector("#ListOfBoardColab"), 2
+	document.querySelector("#ListOfBoardColab"), parseInt(sessionStorage.getItem("LoginUserId"))
 );
 

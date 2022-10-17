@@ -1,6 +1,37 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var token = @HttpContextAccessor.HttpContext.Session.GetString("Token");
+    var LoginUserId = @HttpContextAccessor.HttpContext.Session.GetString("Id");
+    var LoginRole = @HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var LoginName = @HttpContextAccessor.HttpContext.Session.GetString("Name");
+    if (token == null)
+    {
+        token = "Logout";
+    }
+    //
+
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        let Token = "";
+        Token = Token + "@token";
+        //console.log(Token);
+        //console.log(window.location.pathname);
+        if (window.location.pathname != "/Auth/register" && window.location.pathname != "/Auth") {
+            if (Token == "Logout") {
+                SessionEnd();
+            }
+        }
+        function SessionEnd() {
+            window.location = "/Auth/Logout";
+        }
+        sessionStorage.setItem("LoginUserId","@LoginUserId");
+        sessionStorage.setItem("LoginRole", "@LoginRole");
+        sessionStorage.setItem("LoginName","@LoginName" );
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +75,7 @@
                     });
                 });
             </script>
-            <script  src="~/js/site.js"></script>
+            <script src="~/js/site.js"></script>
             @RenderSection("Scripts", required: false)
 </body>
 </html>

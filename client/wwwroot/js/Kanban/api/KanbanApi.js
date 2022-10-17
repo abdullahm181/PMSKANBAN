@@ -531,8 +531,8 @@ export default class KanbanAPI {
     }
     static deleteComment(id, CardId, UserId) {
         //console.log(id, "---", CardId, "---", UserId);
-        //CurrenntLoginUserId = sessionStorage.getItem("CurrentUserId");
-        const CurrenntLoginUserId = 2;
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        //const CurrenntLoginUserId = 2;
         if (UserId == CurrenntLoginUserId) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace client.Repositories.Data
 {
@@ -25,7 +26,7 @@ namespace client.Repositories.Data
                 BaseAddress = new Uri(address)
             };
 
-            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
         }
         public IEnumerable<TaskCard> GetByCardId(int CardId)
         {
