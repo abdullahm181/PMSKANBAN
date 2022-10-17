@@ -1,16 +1,6 @@
 ﻿
 // ------- Enable Popover-----
-const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-list.map((el) => {
-    let opts = {
-        animation: false,
-    }
-    if (el.hasAttribute('data-bs-content-id')) {
-        opts.content = document.getElementById(el.getAttribute('data-bs-content-id')).innerHTML;
-        opts.html = true;
-    }
-    new bootstrap.Popover(el, opts);
-});
+
 
 // ------- Enable tooltip-----
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
@@ -53,6 +43,17 @@ linkColor.forEach((l) => l.addEventListener("click", function () {
 
 
 $(document).ready(function () {
+    const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    list.map((el) => {
+        let opts = {
+            animation: false,
+        }
+        if (el.hasAttribute('data-bs-content-id')) {
+            opts.content = document.getElementById(el.getAttribute('data-bs-content-id')).innerHTML;
+            opts.html = true;
+        }
+        new bootstrap.Popover(el, opts);
+    });
     console.log(window.location.pathname);
     if (window.location.pathname =="/list") {
         boardChossen = document.querySelector("#GoToBoard");
@@ -89,63 +90,3 @@ $(document).ready(function () {
     });
 })
 
-
-//CRUD
-function EditList(ListId) {
-    var data = {};
-    data["id"] = ListId;
-    let text = "";
-    text = `<form id="EditColumnKanban" method="POST" action="javascript:void(0);">
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Title:</label>
-                        <input type="text" class="form-control" id="NameList" name="Name" required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                </form>`;
-    $("#ModalTitle").text("Edit");
-    $("#ModalBody").html(text);
-
-    //$('#EditListModal').modal('show');
-    document.getElementById("EditColumnKanban").reset();
-    $("#EditColumnKanban").on("submit", function(){
-        Methode("GET", "list/Get", data, function (d) {
-            var newList = {
-                "Id": d.id,
-                "Board_Id": d.board_Id,
-                "Order": d.order
-            };
-            $('#EditColumnKanban').serializeArray().map(function (x) { newList[x.name] = x.value; });
-            Methode("PUT", "list/Put", newList, function (d) {
-                //processing the data
-                UpdateList(newList);
-                $('#ModalData').modal('hide');
-            });
-        });
-    });
-
-    alert("You want to edit list Id : " + ListId);
-}
-
-function Methode(TypeMethode, requestUri, BodyData = null, callback) {
-    var data;
-    const Get = $.ajax({
-        type: `${TypeMethode}`,
-        url: `/${requestUri}`,
-        data: BodyData ? BodyData : null,
-
-        success: function (resp) {
-            data = resp;
-            callback(data);
-        }
-    }).fail((error) => {
-        console.log(error);
-    });
-    console.log(Get)
-    return data;
-}
-function UpdateList(newList) {
-    const targetColumn = document.querySelector(`[data-list_id="${newList.Id}"]`);
-    targetColumn.querySelector("#ColumnTitle").textContent = newList.Name;
-}

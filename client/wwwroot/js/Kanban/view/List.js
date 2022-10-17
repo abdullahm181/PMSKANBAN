@@ -74,7 +74,7 @@ export default class List {
 				</div>
 				<div class="board__conatiner" id="ColumnCard">
 				</div>
-				<button class="add__card" id="ColumnAddCard"> <i class="fas fa-plus"></i> Add Card</button>
+				<button class="add__card" id="ColumnAddCard" data-bs-toggle="modal" data-bs-target="#ModalData" > <i class="fas fa-plus"></i> Add Card</button>
 			</div>
 			`).children[0];
 		}

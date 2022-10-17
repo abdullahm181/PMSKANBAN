@@ -2,29 +2,29 @@
 {
     <script>@Html.Raw(ViewBag.SomeScript)</script>
 }
-<div id="main__kanban__info" class="d-flex flex-row align-items-center">
+<div id="main__kanban__info" class="d-flex flex-row align-items-center py-4">
     <div class="logo rounded p-2 me-3">
         Your Board
     </div>
-
-    <img id="example" src="https://source.unsplash.com/YTg9850sIsc" height="40" width="40" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content-id="popover-content-userPeek">
-    <div id="profileImageMember" class="" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content-id="popover-content-userPeek"></div>
-    <button> <i class="fas fa-user-plus"></i> Invite People</button>
+    <div id="MemberBoard" class="d-flex flex-row align-items-center">
+    </div>
+    <button id="AddMemberBoard" type="button" data-bs-toggle="modal" data-bs-target="#ModalData" > <i class="fas fa-user-plus"></i> Invite People</button>
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addListModal"> <i class="fas fa-plus"></i> Create</button>
-    <div class="collapse container" id="popover-content-userPeek">
-        <div class="row ">
-            <div class="col-md-auto mx-auto my-auto">
-                <img class="rounded-circle" src="https://source.unsplash.com/kbjIOft9Dbg" height="60" width="60">
-            </div>
-            <div class="col-md-auto mx-auto my-auto">
-                <h5 id="ProfilName" class="pb-2 m-0 border-bottom border-danger">Ashley Allow</h5>
-                <p class="m-0">Visual Designer</p>
-            </div>
-        </div>
-    </div>
+    
 </div>
 <div id="main__kanban" class="d-flex flex-row align-items-start justify-content-start overflow-auto">
+</div>
+<div class="collapse container" id="popover-content-userPeek">
+    <div class="row ">
+        <div class="col-md-auto mx-auto my-auto">
+            <div id="PeekProfileImage"></div>
+        </div>
+        <div class="col-md-auto mx-auto my-auto">
+            <h5 id="PeekProfilName" class="pb-2 m-0 border-bottom border-danger"></h5>
+            <p class="m-0" id="PeekProfilJob"></p>
+        </div>
+    </div>
 </div>
 @section Scripts
 {

@@ -233,6 +233,18 @@
     margin: 20px 0;
     cursor: pointer;
 }
+#PeekProfileImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 25px;
+    color: var(--white);
+    text-align: center;
+    line-height: 60px;
+    margin: 20px 0;
+    cursor: pointer;
+}
 
 #profileImageMember {
     width: 40px;
@@ -243,6 +255,17 @@
     color: var(--white);
     text-align: center;
     line-height: 40px;
+    cursor: pointer;
+}
+#CardPersonImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 15px;
+    color: var(--white);
+    text-align: center;
+    line-height: 30px;
     cursor: pointer;
 }
 
@@ -473,6 +496,15 @@
 }
 
 .commentList {
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow: auto;
+}
+.todo-done {
+    text-decoration: line-through;
+}
+#task-container {
     padding: 0;
     list-style: none;
     max-height: 200px;

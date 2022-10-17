@@ -9,15 +9,26 @@ export default class Item {
 		this.elements.title = this.elements.root.querySelector("#CardTitle");
 		this.elements.taskItem = this.elements.root.querySelector("#CardTaskItem");
 		this.elements.comment = this.elements.root.querySelector("#CardComment");
-		this.elements.person = this.elements.root.querySelector("#CardPerson");
+		this.elements.profilImage = this.elements.root.querySelector("#CardPersonImg");
 
 		this.elements.root.dataset.card_id = id;
 		this.elements.title.textContent = name;
 		this.elements.taskItem.textContent = numberTaskItem;
 		this.elements.comment.textContent = numbercomment;
-		this.elements.person.textContent = personIncharge;
-
+		this.elements.profilImage.dataset.user_profile_id = personIncharge;
+		//memberBoard/getbyboardid?BoardId=3
+		const containerProfilImage = this.elements.profilImage
+		var data = {};
+		data["id"] = personIncharge;
+		KanbanAPI.Methode("GET", "memberBoard/Get", data, function (d) {
+			//processing the data
+			var imageProfileInitial = KanbanAPI.putImageName(d.user.employees.firstName + " " + d.user.employees.lastName);
+			containerProfilImage.textContent = imageProfileInitial;
+		});
+		
 		this.elements.root.appendChild(bottomDropZone);
+		
+		//$(`[data-user_profile_id="${personIncharge}"]`).text(imageProfileInitial);
 
 		this.elements.root.querySelector("#CardLinkDelete").addEventListener("click", () => {
 			KanbanAPI.deleteCard(id, ListId);
@@ -61,7 +72,7 @@ export default class Item {
                 <span id="CardTaskItem">3</span>
                 <i class="fas fa-comment-dots"></i>
                 <span id="CardComment">3</span>
-				<div id="CardPerson"></div>
+				<div id="CardPersonImg" class="" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content-id="popover-content-userPeek" ></div>
               </div>
             </div>
 		`).children[0];
