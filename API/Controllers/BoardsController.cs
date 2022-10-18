@@ -17,6 +17,22 @@ namespace API.Controllers
             this.boardsRepository = boardsRepository;
 
         }
+        [HttpDelete("DeleteBoard")]
+        public IActionResult DeleteBoard(int BoardId)
+        {
+
+            if (!string.IsNullOrWhiteSpace(BoardId.ToString()))
+            {
+                var result = boardsRepository.DeleteBoard(BoardId);
+                if (result > 0)
+                    return Ok(new { result = 200, message = "successfully Deleted" });
+                else if (result == -1)
+                    return NotFound();
+            }
+
+            return BadRequest();
+
+        }
         [HttpPost("Create")]
         public IActionResult Create(CreateBoardVM createBoard)
         {

@@ -11,6 +11,53 @@ namespace API.Repositories.Data
     public class BoardsRepository : GeneralRepository<Boards, MyContext>
     {
         MyContext myContext;
+        public int DeleteBoard(int BoardId)
+        {
+            var data = Get(BoardId);
+            if (data == null)
+                return -1;
+            //delete board, list yg boardidnya==id, card yg list idnya == id, comment, task, member,invitedmember
+            var dataList = myContext.List.Where(a => a.Board_Id == BoardId).ToList();
+            var dataMember = myContext.MemberBoard.Where(a => a.Board_Id == BoardId).ToList();
+            var dataIvitedMember = myContext.InvitedMembers.Where(a => a.Board_Id == BoardId).ToList();
+            foreach (var list in dataList)
+            {
+                //delete this list + save
+                //colect card in this list
+                var dataCard= myContext.Card.Where(a => a.List_Id == list.Id).ToList();
+                foreach (var card in dataCard)
+                {
+                    var dataComment = myContext.Comments.Where(a => a.Card_Id == card.Id).ToList();
+                    var dataTask = myContext.TaskCard.Where(a => a.Card_Id == card.Id).ToList();
+                    foreach (var comments in dataComment) {
+                        myContext.Comments.Remove(comments);
+                        myContext.SaveChanges();
+                    }
+                    foreach (var task in dataTask) {
+                        myContext.TaskCard.Remove(task);
+                        myContext.SaveChanges();
+                    }
+                    myContext.Card.Remove(card);
+                    myContext.SaveChanges();
+                }
+                myContext.List.Remove(list);
+                myContext.SaveChanges();
+            }
+            foreach (var member in dataMember)
+            {
+                myContext.MemberBoard.Remove(member);
+                myContext.SaveChanges();
+            }
+            foreach (var invitedMember in dataIvitedMember)
+            {
+                myContext.InvitedMembers.Remove(invitedMember);
+                myContext.SaveChanges();
+            }
+
+            myContext.Boards.Remove(data);
+            var result = myContext.SaveChanges();
+            return result;
+        }
         public BoardsRepository(MyContext myContext) : base(myContext)
         {
             this.myContext = myContext;

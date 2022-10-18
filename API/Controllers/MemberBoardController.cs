@@ -24,5 +24,17 @@ namespace API.Controllers
 
             return Ok(new { result = 200, data = data });
         }
+        [HttpGet("GetOwnerByBoardId")]
+        public IActionResult GetOwnerByBoardId(int BoardId)
+        {
+            if (string.IsNullOrWhiteSpace(BoardId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = memberBoardRepository.GetOwnerByBoardId(BoardId);
+
+            return Ok(new { result = 200, data = data });
+        }
     }
 }

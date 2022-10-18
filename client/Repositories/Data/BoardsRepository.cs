@@ -30,6 +30,11 @@ namespace client.Repositories.Data
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
         }
+        public HttpStatusCode DeleteBoard(int BoardId)
+        {
+            var result = httpClient.DeleteAsync(request+ "DeleteBoard" + "?BoardId=" + BoardId).Result;
+            return result.StatusCode;
+        }
         public CreateBoardResponses Create(CreateBoardVM createBoardVM)
         {
             //HTTP POST

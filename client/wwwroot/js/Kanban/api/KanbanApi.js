@@ -711,7 +711,7 @@ export default class KanbanAPI {
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </form>`;
-        $("#ModalTitle").text("Add Card");
+        $("#ModalTitle").text("Add Board");
         $("#ModalBody").html(text);
         document.getElementById("AddBoardKanban").reset();
         $("#AddBoardKanban").on("submit", function () {
@@ -749,5 +749,111 @@ export default class KanbanAPI {
             });
             event.preventDefault();
         });
+    }
+    static deleteBoard(id) {
+        //console.log(id, "---", CardId, "---", UserId);
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        var data = {};
+        data["BoardId"] = id;
+        //dapetin owner
+        KanbanAPI.Methode("GET", "memberboard/GetOwnerByBoardId", data, function (d) {
+            console.log(d, " ", CurrenntLoginUserId)
+            if (d.user_Id == CurrenntLoginUserId) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure delete this Board?',
+                    text: "You won't be able to revert this, and data that related to this board will be delete too!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var data = {};
+                        data["BoardId"] = id;
+                        KanbanAPI.Methode("DELETE", "home/DeleteBoard", data, function (d) {
+                            const boardUserContainer = document.querySelector("#ListOfBoardUser");
+                            boardUserContainer.removeChild(boardUserContainer.querySelector(`[data-board_id="${id}"]`));
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                'Your Board has been deleted.',
+                                'success'
+                            )
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your Board is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'you are not the creator of this Board!',
+                    'error'
+                );
+            }
+        });
+        //const CurrenntLoginUserId = 2;
+        
+
+    }
+    static EditBoard(BoardId) {
+        var data = {};
+        data["id"] = BoardId;
+        let text = "";
+        text = `<form id="EditBoardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input id="NameBoard" type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea id="DescriptionBoard" type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required></textarea>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Edit List");
+        $("#ModalBody").html(text);
+
+        //$('#EditListModal').modal('show');
+
+        document.getElementById("EditBoardKanban").reset();
+        KanbanAPI.Methode("GET", "home/Get", data, function (d) {
+            console.log(d)
+            document.getElementById("NameBoard").value = d.name;
+            document.getElementById("DescriptionBoard").value = d.description;
+            var newBoard = {
+                "Id": d.id,
+                "Owner_Id": d.owner_Id
+            };
+            $("#EditBoardKanban").on("submit", function () {
+                $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
+                console.log(newBoard);
+                KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
+                    console.log(d);
+                    const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
+                    targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
+                    targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
+                    $('#ModalData').modal('hide');
+                });
+            });
+        });
+
     }
 }
