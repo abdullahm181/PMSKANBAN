@@ -1,5 +1,20 @@
-﻿
-// ------- Enable Popover-----
+﻿function putImageName(Name) {
+    var ProfilName = Name;
+    const myArray = ProfilName.split(" ");
+    var intials = "";
+    if (myArray.length > 2) {
+        for (let index = 0; index < 2; index++) {
+            intials += myArray[index].charAt(0);
+
+        }
+    } else {
+        myArray.forEach(element => {
+            intials += element.charAt(0);
+
+        });
+    }
+    return intials;
+}
 
 
 // ------- Enable tooltip-----
@@ -49,6 +64,7 @@ linkColor.forEach((l) => l.addEventListener("click", function () {
 
 
 $(document).ready(function () {
+    document.querySelector("#profileImageTopNav").textContent = putImageName(sessionStorage.getItem("LoginName"));
     const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     list.map((el) => {
         let opts = {
@@ -66,6 +82,11 @@ $(document).ready(function () {
         boardChossen.setAttribute('data-link', `/list`)
         colorLink(boardChossen);
     }
+    /*if (window.location.pathname == "/invitedmembers" || window.location.pathname == "/invitedmembers/index") {
+        boardChossen = document.querySelector("#GoToInvitation");
+        boardChossen.setAttribute('data-link', `/invitedmembers/index`)
+        colorLink(boardChossen);
+    }*/
    
     // ------- popover-----
 

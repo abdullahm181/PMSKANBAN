@@ -10,10 +10,17 @@ export default class KanbanAPI {
             type: `${TypeMethode}`,
             url: `/${requestUri}`,
             data: BodyData ? BodyData : null,
+            beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+                $('#loader').removeClass('hidden')
+            },
             success: function (resp) {
                 data = resp;
                 callback(data);
-            }
+            },
+            complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+                setTimeout(function () { $('#loader').addClass('hidden') }, 300)
+                
+            },
         }).fail((error) => {
             console.log(error);
         });
