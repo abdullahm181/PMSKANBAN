@@ -22,11 +22,17 @@ namespace API.Repositories.Data
         public List<User> GetUserLeftByBoardId(int BoardId)
         {
             var dataMember = myContext.MemberBoard.Where(a => a.Board_Id == BoardId).ToList();
+            var dataPendingMember = myContext.InvitedMembers.Where(a => a.Board_Id == BoardId).ToList();
             var data = myContext.User.ToList();
             foreach (var member in dataMember)
             {
                 var userMember = myContext.User.FirstOrDefault(x => x.Id == member.User_Id);
                 data.Remove(userMember);
+            }
+            foreach (var pendingMember in dataPendingMember)
+            {
+                var UserPendingMember = myContext.User.FirstOrDefault(x => x.Id == pendingMember.User_Id);
+                data.Remove(UserPendingMember);
             }
             return data;
         }
