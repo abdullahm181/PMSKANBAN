@@ -16,8 +16,14 @@ namespace API.Repositories.Data
         }
         public List<MemberBoard> GetByBoardId(int BoardId)
         {
-            List<MemberBoard> memberBoards = new List<MemberBoard>();
+
             var data = myContext.MemberBoard.Where(a => a.Board_Id == BoardId).ToList();
+            return data;
+        }
+        public MemberBoard GetOwnerByBoardId(int BoardId)
+        {
+
+            var data = myContext.MemberBoard.FirstOrDefault(a => a.Board_Id == BoardId&&a.Status== "owner");
             return data;
         }
     }

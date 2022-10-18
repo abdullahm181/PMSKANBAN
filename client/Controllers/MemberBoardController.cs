@@ -26,5 +26,11 @@ namespace client.Controllers
             var result = memberBoardRepository.GetByBoardId(BoardId);
             return Json(result);
         }
+        [HttpGet]
+        public JsonResult GetOwnerByBoardId(int BoardId)
+        {
+            var result = memberBoardRepository.GetOwnerByBoardId(BoardId);
+            return Json(result);
+        }
     }
 }

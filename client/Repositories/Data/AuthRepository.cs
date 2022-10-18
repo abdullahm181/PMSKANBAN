@@ -32,8 +32,8 @@ namespace client.Repositories.Data
             var result = postTask.Result;
             var ResultJsonString = result.Content.ReadAsStringAsync();
             ResultJsonString.Wait();
-            JObject rss = JObject.Parse(ResultJsonString.Result);
-            var response = JsonConvert.DeserializeObject<LoginResponsesVM>(rss.Value<string>());
+            /*JObject rss = JObject.Parse(ResultJsonString.Result);*/
+            var response = JsonConvert.DeserializeObject<LoginResponsesVM>(ResultJsonString.Result);
             return response;
         }
         public RegisterResponsesVM Register(RegisterVM register)
@@ -44,8 +44,8 @@ namespace client.Repositories.Data
             var result = postTask.Result;
             var ResultJsonString = result.Content.ReadAsStringAsync();
             ResultJsonString.Wait();
-            JObject rss = JObject.Parse(ResultJsonString.Result);
-            var response = JsonConvert.DeserializeObject<RegisterResponsesVM>(rss.Value<string>());
+            //JObject rss = JObject.Parse(ResultJsonString.Result);
+            var response = JsonConvert.DeserializeObject<RegisterResponsesVM>(ResultJsonString.Result);
             return response;
         }
     }

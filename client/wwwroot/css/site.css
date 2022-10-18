@@ -233,6 +233,18 @@
     margin: 20px 0;
     cursor: pointer;
 }
+#PeekProfileImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 25px;
+    color: var(--white);
+    text-align: center;
+    line-height: 60px;
+    margin: 20px 0;
+    cursor: pointer;
+}
 
 #profileImageMember {
     width: 40px;
@@ -243,6 +255,17 @@
     color: var(--white);
     text-align: center;
     line-height: 40px;
+    cursor: pointer;
+}
+#CardPersonImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 15px;
+    color: var(--white);
+    text-align: center;
+    line-height: 30px;
     cursor: pointer;
 }
 
@@ -271,6 +294,21 @@
     margin: 20px 0px;
 }
 
+#CreateBoardBtn {
+    color: var(--text-grey-color);
+    border: 0px;
+    outline: 0px;
+    cursor: pointer;
+    background: var(--grey);
+    padding: 6px 15px;
+    border-radius: 18px;
+    border: 1px solid var(--grey);
+    transition: all 0.3s ease-in-out;
+}
+    #CreateBoardBtn:hover {
+        background: var(--white);
+        border-color: var(--text-grey-color);
+    }
 #main__kanban__info > button {
     color: var(--text-grey-color);
     border: 0px;
@@ -473,6 +511,15 @@
 }
 
 .commentList {
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow: auto;
+}
+.todo-done {
+    text-decoration: line-through;
+}
+#task-container {
     padding: 0;
     list-style: none;
     max-height: 200px;

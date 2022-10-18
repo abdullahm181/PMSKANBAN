@@ -1,16 +1,49 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var token = @HttpContextAccessor.HttpContext.Session.GetString("Token");
+    var LoginUserId = @HttpContextAccessor.HttpContext.Session.GetString("Id");
+    var LoginRole = @HttpContextAccessor.HttpContext.Session.GetString("Role");
+    var LoginName = @HttpContextAccessor.HttpContext.Session.GetString("Name");
+    if (token == null)
+    {
+        token = "Logout";
+    }
+    //
+
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        let Token = "";
+        Token = Token + "@token";
+        //console.log(Token);
+        //console.log(window.location.pathname);
+        if (window.location.pathname != "/Auth/register" && window.location.pathname != "/Auth") {
+            if (Token == "Logout") {
+                SessionEnd();
+            }
+        }
+        function SessionEnd() {
+            window.location = "/Auth/Logout";
+        }
+        sessionStorage.setItem("LoginUserId","@LoginUserId");
+        sessionStorage.setItem("LoginRole", "@LoginRole");
+        sessionStorage.setItem("LoginName","@LoginName" );
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
     <title>Document</title>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/bootstrap5/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
+
 
 </head>
 <body>
@@ -42,7 +75,7 @@
                     });
                 });
             </script>
-            <script  src="~/js/site.js"></script>
+            <script src="~/js/site.js"></script>
             @RenderSection("Scripts", required: false)
 </body>
 </html>

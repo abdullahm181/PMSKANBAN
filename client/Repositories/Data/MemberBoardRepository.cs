@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace client.Repositories.Data
 {
@@ -25,7 +26,7 @@ namespace client.Repositories.Data
                 BaseAddress = new Uri(address)
             };
 
-            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
         }
         public IEnumerable<MemberBoard> GetByBoardId(int BoardId)
         {
@@ -49,6 +50,27 @@ namespace client.Repositories.Data
                 memberBoards = Enumerable.Empty<MemberBoard>();
             }
             return memberBoards;
+        }
+        public MemberBoard GetOwnerByBoardId(int BoardId)
+        {
+            MemberBoard memberBoard = null;
+
+            var responseTask = httpClient.GetAsync(request + "GetOwnerByBoardId?BoardId=" + BoardId.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                memberBoard = JsonConvert.DeserializeObject<MemberBoard>(JsonConvert.SerializeObject(data));
+            }
+
+            return memberBoard;
+
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿import Card from "../view/Card.js";
 import Comment from "../view/Comment.js";
-
+import ImageProfile from "../view/ImageProfile.js";
+import Task from "../view/Task.js";
+import Dashboard from "../view/Dashboard.js";
 export default class KanbanAPI {
     static Methode(TypeMethode, requestUri, BodyData = null, callback) {
         var data;
@@ -104,10 +106,16 @@ export default class KanbanAPI {
         var data = {};
         data["CardId"] = newCard.Id;
         KanbanAPI.Methode("GET", "list/GetCard", data, function (d) {
-            targetCard.querySelector("#CardTitle").textContent = newCard.Name;
+            targetCard.querySelector("#CardTitle").textContent = newCard.Name ? newCard.Name : d.name;
             targetCard.querySelector("#CardTaskItem").textContent = d.numberTaskItem;
             targetCard.querySelector("#CardComment").textContent = d.numbercomment;
-            targetCard.querySelector("#CardPerson").textContent = newCard.PersonInCharge;
+            var data = {};
+            data["id"] = newCard.PersonInCharge ? newCard.PersonInCharge : d.personIncharge;
+            KanbanAPI.Methode("GET", "memberBoard/Get", data, function (d) {
+                //processing the data
+                var imageProfileInitial = KanbanAPI.putImageName(d.user.employees.firstName + " " + d.user.employees.lastName);
+                targetCard.querySelector("#CardPersonImg").textContent = imageProfileInitial;
+            });
         });
     }
     static EditList(ListId) {
@@ -417,6 +425,23 @@ export default class KanbanAPI {
         </div>
         <div class="row">
           <div class="col">
+            <h5 class="" >sub-Task :</h5>
+            <div class="actionBox">
+              
+              <ul id="task-container" class="" data-card_id_task=${CardId}>
+              </ul>
+              <form class="form-inline item" role="form" id="AddTask" method="POST" action="javascript:void(0);">
+                   <div class="hstack gap-3">
+                      <input type="text" class="form-control" placeholder="Add new sub task" aria-label="Text" name="Text" required></textarea>
+                      <button type="submit" class="btn btn-secondary">Add</button>
+                    </div>
+              </form>
+          </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h5 class="" >Comments :</h5>
             <div class="actionBox">
               <ul class="commentList" data-card_id_comment=${CardId}>
               </ul>
@@ -438,7 +463,35 @@ export default class KanbanAPI {
             $("#DeadLineCard").text(d.deadLine);
             $("#DescriptionCard").text(d.description);
             const CommentContainer = document.querySelector(`[data-card_id_comment="${CardId}"]`);
-            console.log(CommentContainer);
+            const TaskContainer = document.querySelector(`[data-card_id_task="${CardId}"]`);
+            console.log(TaskContainer);
+            //belom task
+            var dataTask = {};
+            dataTask["CardId"] = CardId;
+            KanbanAPI.Methode("GET", "taskcard/GetByCardId", dataTask, function (d) {
+                console.log(d, data);
+                d.forEach(task => {
+                    KanbanAPI.renderTask(TaskContainer, task);
+                });
+                $("#AddTask").on("submit", () => {
+                    var dataPostTask = {};
+                    $('#AddTask').serializeArray().map(function (x) { dataPostTask[x.name] = x.value; });
+                    dataPostTask["Card_Id"] = CardId;
+                    dataPostTask["Status"] = false;
+                    KanbanAPI.Methode("POST", "taskcard/Post", dataPostTask, function (d) {
+                        KanbanAPI.renderTask(TaskContainer, d);
+                        KanbanAPI.Methode("GET", "list/GetCard", dataComments, function (d) {
+                            console.log(d);
+                            var update = {};
+                            update["Id"] = CardId;
+                            KanbanAPI.UpdateCard(update);
+                        });
+                        document.getElementById("AddTask").reset();
+                    });
+                    event.preventDefault();
+
+                });
+            });
             var dataComments = {};
             dataComments["CardId"] = CardId;
             KanbanAPI.Methode("GET", "comments/GetByCardId", dataComments, function (d) {
@@ -452,10 +505,17 @@ export default class KanbanAPI {
                     var dataPost = {};
                     $('#AddComment').serializeArray().map(function (x) { dataPost[x.name] = x.value; });
                     dataPost["Card_Id"] = CardId;
-                    dataPost["User_Id"] = 2;//"SesisonUser sakrang";
-                    console.log(dataPost);
+                    dataPost["User_Id"] = 2;//"SesisonUser sakrang
                     KanbanAPI.Methode("POST", "comments/Post", dataPost, function (d) {
                         KanbanAPI.renderComment(CommentContainer, d);
+                        KanbanAPI.Methode("GET", "list/GetCard", dataComments, function (d) {
+                            console.log(d);
+                            var update = {};
+                            update["Id"] =d.id;
+                            update["Name"] =d.name;
+                            update["PersonInCharge"] = d.personIncharge;
+                            KanbanAPI.UpdateCard(update);
+                        });
                         document.getElementById("AddComment").reset();
                     });
                     event.preventDefault();
@@ -466,14 +526,14 @@ export default class KanbanAPI {
     }
     static renderComment(root, objNewComment) {
         console.log(objNewComment);
-        const commentView = new Comment(objNewComment.id, objNewComment.text, objNewComment.user_Id, objNewComment.card_Id);
+        const commentView = new Comment(objNewComment.id, objNewComment.text, objNewComment.user.employees.firstName + " " + objNewComment.user.employees.lastName, objNewComment.card_Id);
 
         root.appendChild(commentView.elements.root);
     }
     static deleteComment(id, CardId, UserId) {
-        console.log(id, "---", CardId, "---", UserId);
-        //CurrenntLoginUserId = sessionStorage.getItem("CurrentUserId");
-        const CurrenntLoginUserId = 2;
+        //console.log(id, "---", CardId, "---", UserId);
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        //const CurrenntLoginUserId = 2;
         if (UserId == CurrenntLoginUserId) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -498,6 +558,16 @@ export default class KanbanAPI {
                     KanbanAPI.Methode("DELETE", "comments/DeleteEntity", data, function (d) {
                         const CommentContainer = document.querySelector(`[data-card_id_comment="${CardId}"]`);
                         CommentContainer.removeChild(CommentContainer.querySelector(`[data-comment_id="${id}"]`));
+                        var dataCard = {};
+                        dataCard["CardId"] = CardId;
+                        KanbanAPI.Methode("GET", "list/GetCard", dataCard, function (d) {
+                            console.log(d);
+                            var update = {};
+                            update["Id"] = d.id;
+                            update["Name"] = d.name;
+                            update["PersonInCharge"] = d.personIncharge;
+                            KanbanAPI.UpdateCard(update);
+                        });
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'Your card has been deleted.',
@@ -523,5 +593,267 @@ export default class KanbanAPI {
             );
         }
         
+    }
+    static putImageName(Name) {
+        var ProfilName =Name;
+        const myArray = ProfilName.split(" ");
+        var intials = "";
+        if (myArray.length > 2) {
+            for (let index = 0; index < 2; index++) {
+                intials += myArray[index].charAt(0);
+
+            }
+        } else {
+            myArray.forEach(element => {
+                intials += element.charAt(0);
+
+            });
+        }
+        return intials;
+    }
+    static renderMemberBoard(root,newProps) {
+        const imageMemberView = new ImageProfile(newProps.id, newProps.status, newProps.fullname);
+
+        root.appendChild(imageMemberView.elements.root);
+    }
+    static addMemberBoard(BoardId) {
+        let text = "";
+        text = `<form id="AddMemberBoard" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="inviteColaborator" name="User_Id" id="inviteColaborator" required>
+                                <option value="0" selected>Please select new Member</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Add Colaborator");
+        $("#ModalBody").html(text);
+        var dataMember = {};
+        dataMember["BoardId"] = BoardId;
+        KanbanAPI.Methode("GET", "user/GetUserLeftByBoardId", dataMember, function (d) {
+            
+            $.each(d, function () {
+                $("#inviteColaborator").append($("<option />").val(this.id).text(`${this.employees.firstName} ${this.employees.lastName} --- ${this.employees.jobs.jobTitle}`));
+
+            });
+        });
+        $("#inviteColaborator").empty()
+    }
+    static renderTask(root, todo) {
+        const taskView = new Task(todo);
+
+        root.appendChild(taskView.elements.root);
+        //root.appendChild(dummy.children[0]);
+
+
+    }
+    static deleteTask(id, CardId) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure delete this sub Task?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = {};
+                data["id"] = id;
+                KanbanAPI.Methode("DELETE", "taskcard/DeleteEntity", data, function (d) {
+                    const TaskContainer = document.querySelector(`[data-card_id_task="${CardId}"]`);
+                    TaskContainer.removeChild(TaskContainer.querySelector(`[data-task_id="${id}"]`));
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        'Your card has been deleted.',
+                        'success'
+                    )
+                });
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your card is safe :)',
+                    'error'
+                )
+            }
+        });
+    }
+    static createBoard() {
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        let text = "";
+        text = `<form id="AddBoardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required></textarea>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Add Board");
+        $("#ModalBody").html(text);
+        document.getElementById("AddBoardKanban").reset();
+        $("#AddBoardKanban").on("submit", function () {
+            //id,Name,description,create date
+            /*var root = document.querySelector(`[data-list_id="${ListId}"]`);
+            var rootCardContainer = root.querySelector(".board__conatiner");
+            const cardContainer = Array.from(root.querySelectorAll(".board__boxes"));*/
+            var root=document.querySelector("#ListOfBoardUser")
+            //dari form baru dapet Name + description , kurang User_Id,CreateDate,Status
+            var data = {};
+            data["User_Id"] = CurrenntLoginUserId;
+            data["CreateDate"] = new Date(Date.now()).toISOString().slice(0, 10);
+            data["Status"] = "owner";
+            $('#AddBoardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
+            console.log(data);
+            KanbanAPI.Methode("POST", "home/Create", data, function (d) {
+                console.log(d);
+                if (d.result == 200) {
+                    const boardView = new Dashboard(d.data.id, d.data.name, d.data.description);
+                    root.appendChild(boardView.elements.root);
+                    $('#ModalData').modal('hide');
+                    Swal.fire(
+                        'Succes create board!',
+                        d.message,
+                        'success'
+                    );
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: d.result,
+                        text: d.message,
+                    });
+                }
+                
+            });
+            event.preventDefault();
+        });
+    }
+    static deleteBoard(id) {
+        //console.log(id, "---", CardId, "---", UserId);
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        var data = {};
+        data["BoardId"] = id;
+        //dapetin owner
+        KanbanAPI.Methode("GET", "memberboard/GetOwnerByBoardId", data, function (d) {
+            console.log(d, " ", CurrenntLoginUserId)
+            if (d.user_Id == CurrenntLoginUserId) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure delete this Board?',
+                    text: "You won't be able to revert this, and data that related to this board will be delete too!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var data = {};
+                        data["BoardId"] = id;
+                        KanbanAPI.Methode("DELETE", "home/DeleteBoard", data, function (d) {
+                            const boardUserContainer = document.querySelector("#ListOfBoardUser");
+                            boardUserContainer.removeChild(boardUserContainer.querySelector(`[data-board_id="${id}"]`));
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                'Your Board has been deleted.',
+                                'success'
+                            )
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your Board is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'you are not the creator of this Board!',
+                    'error'
+                );
+            }
+        });
+        //const CurrenntLoginUserId = 2;
+        
+
+    }
+    static EditBoard(BoardId) {
+        var data = {};
+        data["id"] = BoardId;
+        let text = "";
+        text = `<form id="EditBoardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input id="NameBoard" type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea id="DescriptionBoard" type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required></textarea>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Edit List");
+        $("#ModalBody").html(text);
+
+        //$('#EditListModal').modal('show');
+
+        document.getElementById("EditBoardKanban").reset();
+        KanbanAPI.Methode("GET", "home/Get", data, function (d) {
+            console.log(d)
+            document.getElementById("NameBoard").value = d.name;
+            document.getElementById("DescriptionBoard").value = d.description;
+            var newBoard = {
+                "Id": d.id,
+                "Owner_Id": d.owner_Id
+            };
+            $("#EditBoardKanban").on("submit", function () {
+                $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
+                console.log(newBoard);
+                KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
+                    console.log(d);
+                    const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
+                    targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
+                    targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
+                    $('#ModalData').modal('hide');
+                });
+            });
+        });
+
     }
 }
