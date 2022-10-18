@@ -454,12 +454,14 @@ export default class KanbanAPI {
           </div>
           </div>
         </div>`;
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
         var data = {};
         data["id"] = CardId;
         KanbanAPI.Methode("GET", "card/Get", data, function (d) {
+            console.log(d);
             $("#ModalTitle").text(d.name);
             $("#ModalBody").html(text);
-            $("#PersonCard").text(d.personInCharge);
+            $("#PersonCard").text(d.memberBoard.user.employees.firstName + " "+d.memberBoard.user.employees.lastName);
             $("#DeadLineCard").text(d.deadLine);
             $("#DescriptionCard").text(d.description);
             const CommentContainer = document.querySelector(`[data-card_id_comment="${CardId}"]`);
@@ -505,18 +507,24 @@ export default class KanbanAPI {
                     var dataPost = {};
                     $('#AddComment').serializeArray().map(function (x) { dataPost[x.name] = x.value; });
                     dataPost["Card_Id"] = CardId;
-                    dataPost["User_Id"] = 2;//"SesisonUser sakrang
+                    dataPost["User_Id"] = CurrenntLoginUserId;//"SesisonUser sakrang
                     KanbanAPI.Methode("POST", "comments/Post", dataPost, function (d) {
-                        KanbanAPI.renderComment(CommentContainer, d);
-                        KanbanAPI.Methode("GET", "list/GetCard", dataComments, function (d) {
-                            console.log(d);
-                            var update = {};
-                            update["Id"] =d.id;
-                            update["Name"] =d.name;
-                            update["PersonInCharge"] = d.personIncharge;
-                            KanbanAPI.UpdateCard(update);
+                        var dataGet = {
+                            "Id":d.id
+                        };
+                        KanbanAPI.Methode("GET", "comments/Get", dataGet, function (d) {
+                            KanbanAPI.renderComment(CommentContainer, d);
+                            KanbanAPI.Methode("GET", "list/GetCard", dataComments, function (d) {
+                                console.log(d);
+                                var update = {};
+                                update["Id"] = d.id;
+                                update["Name"] = d.name;
+                                update["PersonInCharge"] = d.personIncharge;
+                                KanbanAPI.UpdateCard(update);
+                            });
+                            document.getElementById("AddComment").reset();
                         });
-                        document.getElementById("AddComment").reset();
+                        
                     });
                     event.preventDefault();
 
@@ -526,7 +534,7 @@ export default class KanbanAPI {
     }
     static renderComment(root, objNewComment) {
         console.log(objNewComment);
-        const commentView = new Comment(objNewComment.id, objNewComment.text, objNewComment.user.employees.firstName + " " + objNewComment.user.employees.lastName, objNewComment.card_Id);
+        const commentView = new Comment(objNewComment.id, objNewComment.text, objNewComment.user.employees.firstName + " " + objNewComment.user.employees.lastName, objNewComment.card_Id, objNewComment.user_Id);
 
         root.appendChild(commentView.elements.root);
     }

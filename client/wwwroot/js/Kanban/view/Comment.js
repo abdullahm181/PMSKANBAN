@@ -1,6 +1,6 @@
 ﻿import KanbanAPI from "../api/KanbanApi.js";
 export default class Comment {
-	constructor(id, text,fullname,CardId) {
+	constructor(id, text, fullname, CardId, UserId) {
 
 		this.elements = {};
 		this.elements.root = Comment.createRoot();
