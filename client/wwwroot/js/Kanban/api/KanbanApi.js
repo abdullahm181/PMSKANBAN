@@ -636,10 +636,10 @@ export default class KanbanAPI {
         $("#ModalBody").html(text);
         var dataMember = {};
         dataMember["BoardId"] = BoardId;
-        KanbanAPI.Methode("GET", "memberBoard/getbyboardid", dataMember, function (d) {
+        KanbanAPI.Methode("GET", "user/GetUserLeftByBoardId", dataMember, function (d) {
             
             $.each(d, function () {
-                $("#inviteColaborator").append($("<option />").val(this.id).text(`${this.user.employees.firstName} ${this.user.employees.lastName} --- ${this.user.employees.jobs.jobTitle}`));
+                $("#inviteColaborator").append($("<option />").val(this.id).text(`${this.employees.firstName} ${this.employees.lastName} --- ${this.employees.jobs.jobTitle}`));
 
             });
         });

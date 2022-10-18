@@ -105,6 +105,23 @@ namespace API.Repositories.Data
                 var resultCreateMemberBoard = myContext.SaveChanges();
                 if (resultCreateMemberBoard > 0)
                 {
+                    //buat list todo + done"To-do" && Name != "Done"
+                    //Id,Name,Order,Board_Id
+                    List newListTodo = new List {
+                        Name = "To-do",
+                        Order = 0,
+                        Board_Id= createdBoardId
+                    };
+                    myContext.List.Add(newListTodo);
+                    myContext.SaveChanges();
+                    List newListDone = new List
+                    {
+                        Name = "Done",
+                        Order = 1,
+                        Board_Id = createdBoardId
+                    };
+                    myContext.List.Add(newListDone);
+                    myContext.SaveChanges();
                     return (resultCreateMemberBoard, boards);
                 }
                 else
