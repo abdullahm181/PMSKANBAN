@@ -15,3 +15,7 @@ document.querySelector("#CreateBoardBtn").addEventListener("click", () => {
 	KanbanAPI.createBoard();
 });
 
+var imageProfileDashboardInitial = KanbanAPI.putImageName(sessionStorage.getItem("LoginName"));
+document.querySelector("#profileImageDashboard").textContent = imageProfileDashboardInitial;
+document.querySelector("#profileImageTopNav").textContent = imageProfileDashboardInitial;
+document.querySelector("#titleHome").textContent = sessionStorage.getItem("LoginName")+"'s Workspace";

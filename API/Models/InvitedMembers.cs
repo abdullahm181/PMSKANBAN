@@ -14,7 +14,7 @@ namespace API.Models
         public int Id { get; set; }
         public DateTime InvitedDate { get; set; }
 
-        public bool Status { get; set; }
+        public string Status { get; set; }
         public virtual Boards Boards { get; set; }
         [ForeignKey("Board")]
         public int Board_Id { get; set; }
