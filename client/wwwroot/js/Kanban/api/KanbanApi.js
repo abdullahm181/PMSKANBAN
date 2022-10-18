@@ -621,7 +621,7 @@ export default class KanbanAPI {
         text = `<form id="AddMemberBoard" method="POST" action="javascript:void(0);">
                     <div class="form-outline mb-4">
                         <div class="input-group mb-3">
-                            <select class="form-select" placeholder="inviteColaborator" name="User_Id" id="inviteColaborator" required>
+                            <select class="form-select" placeholder="inviteColaborator" name="User_Id" id="inviteColaborator" >
                                 <option value="0" selected>Please select new Member</option>
                             </select>
                             <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
@@ -629,21 +629,68 @@ export default class KanbanAPI {
                         <div class="invalid-feedback">Please chosee.</div>
                     </div>
                     <div class="mb-3">
-                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <input id="AddMember" type="submit" value="Save" class="btn btn-primary" />
                     </div>
-                </form>`;
+                </form>
+                `;
         $("#ModalTitle").text("Add Colaborator");
         $("#ModalBody").html(text);
+        var dataReq = {}
         var dataMember = {};
-        dataMember["BoardId"] = BoardId;
+        dataMember["BoardId"] = BoardId
+
         KanbanAPI.Methode("GET", "user/GetUserLeftByBoardId", dataMember, function (d) {
-            
+            $("#inviteColaborator").empty()
             $.each(d, function () {
                 $("#inviteColaborator").append($("<option />").val(this.id).text(`${this.employees.firstName} ${this.employees.lastName} --- ${this.employees.jobs.jobTitle}`));
 
             });
+            dataReq = {
+                "InvitedDate": new Date(Date.now()).toISOString().slice(0, 10),
+                "Status": "request",
+                "Board_Id": BoardId
+            };
+            console.log(dataReq);
+            document.querySelector("#AddMember").addEventListener("click", () => {
+                dataReq["User_Id"] = parseFloat($("#inviteColaborator").find(":selected").val());
+                console.log(dataReq);
+                KanbanAPI.Methode("POST", "invitedmembers/Post", dataReq, function (d) {
+                    console.log(d);
+                    if (d != null) {
+                        if (d.id !== undefined && d.id != null) {
+                            $('#ModalData').modal('hide');
+                            Swal.fire(
+                                'Succes !',
+                                'Succes send colaborator request !',
+                                'success'
+                            );
+                        }
+                    } else {
+                        Swal.fire(
+                            'Error !',
+                            'Error send colaborator request !',
+                            'error'
+                        );
+                    }
+                });
+            });
         });
-        $("#inviteColaborator").empty()
+        /*$("#AddMemberBoard").on("submit", function () {
+            //IdX , InvitedDate,Status="request",Board_Id,User_Id
+            $('#AddMemberBoard').serializeArray().map(function (x) { dataReq[x.name] = x.value; });
+            console.log(dataReq);
+            KanbanAPI.Methode("POST", "invitedmembers/Post", newBoard, function (d) {
+                console.log(d);
+                if (d.id !== undefined && d.id != null) {
+                    $('#ModalData').modal('hide');
+                    Swal.fire(
+                        'Succes !',
+                        'Succes send colaborator request to  ' + d.user.employees.firstName + ' ' + d.user.employees.lastName + '! Wait user response.. ',
+                        'success'
+                    );
+                }
+            });
+        });*/
     }
     static renderTask(root, todo) {
         const taskView = new Task(todo);

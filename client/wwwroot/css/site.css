@@ -220,7 +220,18 @@
     width: calc(100% - 50px);
     margin-left: 50px;
 }
-
+#profileImageTopNav {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 20px;
+    color: var(--white);
+    text-align: center;
+    line-height: 40px;
+    margin: 20px 0;
+    cursor: pointer;
+}
 #profileImage {
     width: 40px;
     height: 40px;
