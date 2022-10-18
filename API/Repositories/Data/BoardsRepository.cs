@@ -30,11 +30,11 @@ namespace API.Repositories.Data
             }
             return boards;
         }
-        public int Create(CreateBoardVM createBoard) 
+        public (int,Boards) Create(CreateBoardVM createBoard) 
         {
             //check if Name already exist in user scope 
             if (myContext.Boards.Any(x => (x.Name == createBoard.Name && x.Owner_Id == createBoard.User_Id)))
-                return -2;
+                return (-2,null);
             Boards boards = new Boards
             {
                 Name = createBoard.Name,
@@ -58,7 +58,7 @@ namespace API.Repositories.Data
                 var resultCreateMemberBoard = myContext.SaveChanges();
                 if (resultCreateMemberBoard > 0)
                 {
-                    return resultCreateMemberBoard;
+                    return (resultCreateMemberBoard, boards);
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace API.Repositories.Data
                     myContext.SaveChanges();
                 }
             }
-            return 0;
+            return (0,null);
         }
 
     }

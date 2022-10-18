@@ -3,6 +3,8 @@ using API.Models;
 using API.Repositories.Data;
 using API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -18,19 +20,20 @@ namespace API.Controllers
         [HttpPost("Create")]
         public IActionResult Create(CreateBoardVM createBoard)
         {
+            Boards boards = null;
             if (ModelState.IsValid)
             {
-                var resultCreateBoard = boardsRepository.Create(createBoard);
+                var (resultCreateBoard,data) = boardsRepository.Create(createBoard);
                 if (resultCreateBoard > 0)
                 {
-                    return Ok(new { result = 200, message = "successfully inserted" });
+                    return Ok(new { result = 200, message = "successfully inserted",data= data });
                 }
                 else if(resultCreateBoard == -2) {
-                    return BadRequest(new { result = 400, message = "Error Duplicate Name of Board" });
+                    return BadRequest(new { result = 400, message = "Error Duplicate Name of Board", data = boards });
                 }
                 
             }
-            return BadRequest(new { result = 400, message = "Error" });
+            return BadRequest(new { result = 400, message = "Error", data = boards });
 
         }
         [HttpGet("GetbyOwner")]

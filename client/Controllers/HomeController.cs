@@ -1,4 +1,5 @@
-﻿using client.Models;
+﻿using client.Base;
+using client.Models;
 using client.Repositories.Data;
 using client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace client.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController<Boards, BoardsRepository>
     {
         private readonly ILogger<HomeController> _logger;
-        BoardsRepository boardsRepository;
-        public HomeController(ILogger<HomeController> logger, BoardsRepository boardsRepository)
+        readonly BoardsRepository boardsRepository;
+        public HomeController(ILogger<HomeController> logger, BoardsRepository boardsRepository):base(boardsRepository)
         {
             _logger = logger;
             this.boardsRepository = boardsRepository;

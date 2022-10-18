@@ -2,6 +2,7 @@
 import Comment from "../view/Comment.js";
 import ImageProfile from "../view/ImageProfile.js";
 import Task from "../view/Task.js";
+import Dashboard from "../view/Dashboard.js";
 export default class KanbanAPI {
     static Methode(TypeMethode, requestUri, BodyData = null, callback) {
         var data;
@@ -692,6 +693,61 @@ export default class KanbanAPI {
                     'error'
                 )
             }
+        });
+    }
+    static createBoard() {
+        const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+        let text = "";
+        text = `<form id="AddBoardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required></textarea>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>`;
+        $("#ModalTitle").text("Add Card");
+        $("#ModalBody").html(text);
+        document.getElementById("AddBoardKanban").reset();
+        $("#AddBoardKanban").on("submit", function () {
+            //id,Name,description,create date
+            /*var root = document.querySelector(`[data-list_id="${ListId}"]`);
+            var rootCardContainer = root.querySelector(".board__conatiner");
+            const cardContainer = Array.from(root.querySelectorAll(".board__boxes"));*/
+            var root=document.querySelector("#ListOfBoardUser")
+            //dari form baru dapet Name + description , kurang User_Id,CreateDate,Status
+            var data = {};
+            data["User_Id"] = CurrenntLoginUserId;
+            data["CreateDate"] = new Date(Date.now()).toISOString().slice(0, 10);
+            data["Status"] = "owner";
+            $('#AddBoardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
+            console.log(data);
+            KanbanAPI.Methode("POST", "home/Create", data, function (d) {
+                console.log(d);
+                if (d.result == 200) {
+                    const boardView = new Dashboard(d.data.id, d.data.name, d.data.description);
+                    root.appendChild(boardView.elements.root);
+                    $('#ModalData').modal('hide');
+                    Swal.fire(
+                        'Succes create board!',
+                        d.message,
+                        'success'
+                    );
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: d.result,
+                        text: d.message,
+                    });
+                }
+                
+            });
+            event.preventDefault();
         });
     }
 }

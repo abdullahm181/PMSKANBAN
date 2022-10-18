@@ -30,14 +30,22 @@ namespace client.Repositories.Data
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Session.GetString("Token"));
         }
-        public HttpStatusCode Create(CreateBoardVM createBoardVM)
+        public CreateBoardResponses Create(CreateBoardVM createBoardVM)
         {
             //HTTP POST
-            var postTask = httpClient.PostAsJsonAsync<CreateBoardVM>(request+ "Create", createBoardVM);
+            CreateBoardResponses createBoardResponses = null;
+            var postTask = httpClient.PostAsJsonAsync(request+ "Create", createBoardVM);
             postTask.Wait();
 
             var result = postTask.Result;
-            return result.StatusCode;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                createBoardResponses = JsonConvert.DeserializeObject<CreateBoardResponses>(ResultJsonString.Result);
+            }
+            return createBoardResponses;
         }
         public IEnumerable<Boards> GetbyOwner(int OwnerId)
         {
