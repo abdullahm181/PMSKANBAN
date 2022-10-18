@@ -19,9 +19,15 @@ function SideBarUnSetCollapse() {
         SideBarCollapse.forEach((l) => l.classList.add("collapse"));
     }
 }
+//Topnav function
+const topNav = document.querySelectorAll(".menu .right_menu ul li a");
+topNav.forEach((l) => l.addEventListener("click", function () {
+    GoToUri(this.dataset.link)
+}));
 
+//Sidebar function
 const linkColor = document.querySelectorAll(".sidebar__inner li a");
-console.log(linkColor);
+
 function GoToUri(uri) {
     window.location = uri;
 }
@@ -61,24 +67,6 @@ $(document).ready(function () {
         colorLink(boardChossen);
     }
    
-    // var ProfilName = $('#ProfilName').text();
-    var ProfilName = "Muhammad Amin Abdullah";
-    const myArray = ProfilName.split(" ");
-
-    var intials = "";
-    if (myArray.length > 2) {
-        for (let index = 0; index < 2; index++) {
-            intials += myArray[index].charAt(0);
-
-        }
-    } else {
-        myArray.forEach(element => {
-            intials += element.charAt(0);
-
-        });
-    }
-    var profileImage = $('#profileImage').text(intials);
-    var profileImageMember = $('#profileImageMember').text(intials);
     // ------- popover-----
 
     $(".hamburger .hamburger__inner").click(function () {
