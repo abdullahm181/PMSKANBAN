@@ -37,11 +37,13 @@ namespace API.Repositories
             return data;
         }
 
-        public int Post(ObjectName objectName)
+        public ObjectName Post(ObjectName objectName)
         {
+
             myContext.Set<ObjectName>().Add(objectName);
             var result = myContext.SaveChanges();
-            return result;
+            var NewObject = objectName;
+            return NewObject;
         }
 
         public int Put(int id, ObjectName objectName)

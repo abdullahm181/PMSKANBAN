@@ -8,7 +8,7 @@ namespace client.Repositories.Interface
     {
         public IEnumerable<Entity> Get();
         public Entity Get(int? id);
-        public HttpStatusCode Post(Entity entity);
+        public Entity Post(Entity entity);
         public HttpStatusCode Put(Entity entity);
         public HttpStatusCode Delete(int id);
     }

@@ -1,0 +1,146 @@
+﻿<!-- Modal -->
+
+<div class="modal fade" id="ModalData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalTitle">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="ModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addListModalLabel">New List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddColumnKanban" method="POST" action="javascript:void(0);">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="NameList" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="modal fade" id="EditListModal" tabindex="-1" aria-labelledby="EditListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addListModalLabel">Edit List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="EditColumnKanban" method="POST" action="javascript:void(0);">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="NameList" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>*@
+@*
+<div class="modal fade" id="EditCardModal" tabindex="-1" aria-labelledby="EditCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addListModalLabel">Edit Card</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="EditCardKanban" method="POST" action="javascript:void(0);">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Name" aria-label="Name" id="NameCard" name="Name" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" placeholder="Description" aria-label="Description" id="DescriptionCard" name="Description" required>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group date " id="datepickerEditCard">
+                            <input type="text" class="form-control" placeholder="DeadLine" aria-label="DeadLine" id="DeadLineCard" name="DeadLine" required>
+                            <span class="input-group-append">
+                            </span>
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="PersonInCharge" name="PersonInCharge" id="PersonCardEdit" required>
+                                <option value="0" selected>Please select Person</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+*@
+    @*<div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">New Card - task</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="AddCardKanban" method="POST" action="javascript:void(0);">
+                        <div class="form-outline mb-4">
+                            <input type="text" class="form-control" placeholder="Name" aria-label="Name" name="Name" required>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="text" class="form-control" placeholder="Description" aria-label="Description" name="Description" required>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <div class="input-group date " id="datepicker">
+                                <input type="text" class="form-control" placeholder="DeadLine" aria-label="DeadLine" name="DeadLine" required>
+                                <span class="input-group-append">
+                                </span>
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <div class="input-group mb-3">
+                                <select class="form-select" placeholder="PersonInCharge" name="PersonInCharge" id="PersonCardCreate" required>
+                                    <option value="0" selected>Please select Person</option>
+                                </select>
+                                <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                            </div>
+                            <div class="invalid-feedback">Please chosee.</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>*@

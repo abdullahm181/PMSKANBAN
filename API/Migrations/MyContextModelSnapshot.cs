@@ -58,7 +58,12 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Owner_Id")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Owner_Id");
 
                     b.ToTable("Boards");
                 });
@@ -291,10 +296,10 @@ namespace API.Migrations
                     b.Property<int?>("BoardsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("User_Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("status")
+                    b.Property<int>("User_Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -414,6 +419,15 @@ namespace API.Migrations
                     b.HasOne("API.Models.Boards", "Boards")
                         .WithMany()
                         .HasForeignKey("Board_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Models.Boards", b =>
+                {
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Owner_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

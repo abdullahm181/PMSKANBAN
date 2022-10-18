@@ -48,9 +48,9 @@ namespace client.Base
         }
 
         [HttpDelete]
-        public JsonResult DeleteEntity(TEntity entity)
+        public JsonResult DeleteEntity(int id)
         {
-            var result = repository.Delete(entity.Id);
+            var result = repository.Delete(id);
             return Json(result);
         }
 

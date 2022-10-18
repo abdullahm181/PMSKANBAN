@@ -12,9 +12,23 @@ namespace API.Controllers
 {
     public class CommentsController : BaseController<Comments, CommentsRepository>
     {
+        CommentsRepository commentsRepository;
         public CommentsController(CommentsRepository commentsRepository) : base(commentsRepository)
         {
+            this.commentsRepository = commentsRepository;
+        }
+        [HttpGet("GetByCardId")]
+        public IActionResult GetByCardId(int CardId)
+        {
+            if (string.IsNullOrWhiteSpace(CardId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = commentsRepository.GetByCardId(CardId);
+
+            return Ok(new { result = 200, data = data });
         }
 
-        }
     }
+}

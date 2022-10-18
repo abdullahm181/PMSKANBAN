@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace client.ViewModels
+namespace API.ViewModel
 {
-    public class Register
+    public class RegisterVM
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

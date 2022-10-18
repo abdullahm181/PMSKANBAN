@@ -56,7 +56,7 @@ namespace API
             services.AddScoped<UserRepository>();
             services.AddScoped<UserRoleRepository>();
             services.AddControllers();
-
+            services.JWTConfigure(Configuration);
 
             services.AddSwaggerGen(config =>
             {
@@ -71,7 +71,7 @@ namespace API
                     BearerFormat = "JWT"
                 });
 
-                services.JWTConfigure(Configuration);
+                
                 config.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -106,7 +106,12 @@ namespace API
 
             });
 
-
+            services.AddCors(option => option.AddPolicy("DefaultPolicy", builder => {
+                builder.WithOrigins("https://localhost:44358", "http://127.0.0.1:5500").WithMethods("GET", "POST", "PUT", "DELETE");
+            }));
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
         }
 
@@ -128,7 +133,7 @@ namespace API
 
             app.UseRouting();
 
-            //app.UseCors("DefaultPolicy");
+            app.UseCors("DefaultPolicy");
 
             //app.UseSession();
 

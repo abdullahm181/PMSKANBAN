@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace client.Controllers
 {
+    [Route("Auth")]
     public class AuthController : Controller
     {
         AuthRepository authRepository;
@@ -20,17 +21,19 @@ namespace client.Controllers
         }
         [Route("login")]
         [HttpPost]
-        public JsonResult Login(Login login)
+        public JsonResult Login(LoginVM login)
         {
             var result = authRepository.Auth(login);
             if (result.result == 200) {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 JwtSecurityToken DecodeToken = tokenHandler.ReadJwtToken(result.token);
                 var NameToken = DecodeToken.Claims.FirstOrDefault(claim => claim.Type.Equals("unique_name")).Value;
+                var IdToken = DecodeToken.Claims.FirstOrDefault(claim => claim.Type.Equals("nameid")).Value;
                 var RoleToken = DecodeToken.Claims.FirstOrDefault(claim => claim.Type.Equals("role")).Value;
                 var ExpToken = DecodeToken.Claims.FirstOrDefault(claim => claim.Type.Equals("exp")).Value;
                 HttpContext.Session.SetString("Token", result.token.ToString());
                 HttpContext.Session.SetString("Name", NameToken.ToString());
+                HttpContext.Session.SetString("Id", IdToken.ToString());
                 HttpContext.Session.SetString("Role", RoleToken.ToString());
                 HttpContext.Session.SetString("Exp", ExpToken.ToString());
             }
@@ -38,17 +41,18 @@ namespace client.Controllers
         }
         [Route("register")]
         [HttpPost]
-        public JsonResult Register(Register register)
+        public JsonResult Register(RegisterVM register)
         {
             var result = authRepository.Register(register);
             return Json(result);
         }
+
         [Route("logout")]
+        [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("Token");
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Index");
         }
     }
 }

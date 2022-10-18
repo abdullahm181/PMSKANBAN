@@ -1,8 +1,52 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<div class="py-4">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex flex-row mb-3 pb-2 border-bottom  border-3 border-dark" style="--bs-border-opacity: .5;">
+                <div id="profileImageDashboard" class="data-toggle rounded bg-danger" style="height: 50px;width:50px;line-height: 50px;"></div>
+                <h4 class="ps-2 m-0 my-auto" style="text-transform: uppercase;
+                  letter-spacing: 2px;">
+                    Muhammad Amin Abdullah's Workspace
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="d-flex flex-row pb-2 " ">
+                <span class="data-toggle" style="height: 50px;width:50px;line-height: 50px;text-align: center;font-size: 30px;">
+                    <i class="fas fa-user"></i>
+                </span>
+                <h6 class="ps-1 m-0 my-auto me-auto" style="letter-spacing: 2px;">Your board</h6>
+                <button id="CreateBoardBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalData" > <i class="fas fa-plus"></i> Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+            <div id="ListOfBoardUser" class="d-flex flex-row  pb-2 overflow-auto">
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="d-flex flex-row pb-2 " ">
+                <span class="data-toggle" style="height: 50px;width:50px;line-height: 50px;text-align: center;font-size: 30px;">
+                    <i class="fas fa-users"></i>
+                </span>
+                <h6 class="ps-1 m-0 my-auto" style="letter-spacing: 2px;">Colab Board</h6>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="ListOfBoardColab" class="d-flex flex-row pb-2 overflow-auto">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            </div>
+        </div>
+    </div>
 </div>
+@section Scripts
+{
+    <script type="module"  src="~/js/Kanban/Dashboard.js"></script>
+}
