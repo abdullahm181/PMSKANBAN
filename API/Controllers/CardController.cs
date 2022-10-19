@@ -28,6 +28,18 @@ namespace API.Controllers
 
             return Ok(new { result = 200, data = data });
         }
+        [HttpGet("GetByBoardId")]
+        public IActionResult GetByBoardId(int BoardId)
+        {
+            if (string.IsNullOrWhiteSpace(BoardId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = cardRepository.GetByBoardId(BoardId);
+
+            return Ok(new { result = 200, data = data });
+        }
         [HttpGet("GetCard")]
         public IActionResult GetCard(int CardId)
         {
