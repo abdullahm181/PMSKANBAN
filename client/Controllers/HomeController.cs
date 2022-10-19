@@ -26,16 +26,15 @@ namespace client.Controllers
         {
             return View();
         }
+        public IActionResult Chart()
+        {
+            return View();
+        }
         [HttpDelete]
         public JsonResult DeleteBoard(int BoardId)
         {
             var result = boardsRepository.DeleteBoard(BoardId);
             return Json(result);
-        }
-        public IActionResult KanbanBoard(int BoardId)
-        {
-            ViewBag.SomeScript = "alert('Anda memilih board id: "+ BoardId.ToString() + "');";
-            return View();
         }
 
         [HttpPost]
