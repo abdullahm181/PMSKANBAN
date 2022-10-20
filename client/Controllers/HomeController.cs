@@ -56,7 +56,12 @@ namespace client.Controllers
             var result = boardsRepository.GetbyMember(MemberId);
             return Json(result);
         }
-
+        [HttpGet]
+        public JsonResult GetDataDoughnutChart(int BoardId)
+        {
+            var result = boardsRepository.GetDataDoughnutChart(BoardId);
+            return Json(result);
+        }
         public IActionResult Privacy()
         {
             return View();

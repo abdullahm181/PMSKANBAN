@@ -1,5 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<div class="py-4">
+    <div class="container shadow bg-body rounded">
+        <div class="d-flex justify-content-start bg-white">
+            <div id="ChartPageTitle" class="rounded p-2 me-3 my-4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 test text-center">
+                <h4>Status</h4>
+                <div class="chart-container" style="position: relative; height:20px; width:40px">
+                    <canvas id="Doughnut"></canvas>
+                </div>
+            </div>
+            <div class="col-8 text-center">
+                <h4>Members</h4>
+                <div class="chart-container" style="position: relative; height:20px; width:40px">
+                    <canvas id="StackedBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    @section Scripts
+{
+        <script type="module" src="~/js/Kanban/Chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    }

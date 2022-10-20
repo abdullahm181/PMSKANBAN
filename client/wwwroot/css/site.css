@@ -637,7 +637,7 @@ body {
 
     .timer-section .timer-container {
         list-style: none;
-        padding: 50px 0 50px 0;
+        padding:0 0 20px 0;
     }
 
     .timer-section .timer {
@@ -744,3 +744,18 @@ body {
         border-radius: 50%;
         margin-left: 5px;
     }
+
+#ChartPageTitle {
+    color: var(--white);
+    background-color: var(--dark-grey);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+#TimelinePageTitle {
+    color: var(--white);
+    background-color: var(--dark-grey);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top:20px; 
+    margin-bottom:0!important; 
+}

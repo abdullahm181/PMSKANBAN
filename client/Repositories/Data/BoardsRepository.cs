@@ -98,7 +98,25 @@ namespace client.Repositories.Data
             }
             return boards;
         }
+        public DoughnutChartVM GetDataDoughnutChart(int BoardId)
+        {
+            //HTTP POST
+            DoughnutChartVM doughnutChartVM = null;
+            var responseTask = httpClient.GetAsync(request + "GetDataDoughnutChart" + "?BoardId=" + BoardId.ToString());
+            responseTask.Wait();
 
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                doughnutChartVM = JsonConvert.DeserializeObject<DoughnutChartVM>(JsonConvert.SerializeObject(data));
+            }
+            return doughnutChartVM;
+        }
 
     }
 }

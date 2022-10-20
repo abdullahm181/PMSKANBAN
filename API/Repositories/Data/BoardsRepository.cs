@@ -136,6 +136,25 @@ namespace API.Repositories.Data
             }
             return (0,null);
         }
+        public DoughnutChartVM GetDataDoughnutChart(int BoardId)
+        {
+           
+            List<string> labelName = new List<string>();
+            List<int> NumberCards = new List<int>();
+
+            var Lists = myContext.List.Where(a => a.Board_Id == BoardId).ToList();
+            foreach (var list in Lists)
+            {
+                var card = myContext.Card.Where(a => a.List_Id == list.Id).ToList();
+                NumberCards.Add(card.Count());
+                labelName.Add(list.Name);
+            }
+            DoughnutChartVM doughnutChartVM = new DoughnutChartVM() { 
+                LabelName=labelName,
+                NumberCards=NumberCards
+            };
+            return doughnutChartVM;
+        }
 
     }
 }

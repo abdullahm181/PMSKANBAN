@@ -23,6 +23,11 @@ export default class KanbanAPI {
             },
         }).fail((error) => {
             console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: error.status,
+                text: error.statusText,
+            });
         });
         return data;
     }
