@@ -27,4 +27,10 @@ KanbanAPI.Methode("GET", "user/Get", dataUser, function (d) {
     document.querySelector("#profileEditPage").addEventListener("click", () => {
         KanbanAPI.EditProfile(d.id);
     });
+    document.querySelector("#accountEdit").addEventListener("click", () => {
+        KanbanAPI.EditUserName(d.id);
+    });
+    document.querySelector("#ChangePWProfile").addEventListener("click", () => {
+        KanbanAPI.ChangePassword(d.id);
+    });
 });

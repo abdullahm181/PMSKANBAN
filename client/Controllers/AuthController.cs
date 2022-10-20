@@ -1,4 +1,5 @@
-﻿using client.Repositories.Data;
+﻿using client.Models;
+using client.Repositories.Data;
 using client.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,5 +55,13 @@ namespace client.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
+        [Route("ChangePassword")]
+        [HttpPut]
+        public JsonResult ChangePassword(User user)
+        {
+            var result = authRepository.ChangePassword(user);
+            return Json(result);
+        }
+
     }
 }

@@ -1102,4 +1102,96 @@ export default class KanbanAPI {
         });
         
     }
+    static EditUserName(id) {
+        KanbanAPI.Methode("GET", "user/Get", { "id": id }, async function (user) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Rewrite your Username',
+                html:
+                    `<input id="swal-input1" class="swal2-input" value="${user.userName}" >`,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        user.password,
+                        user.id
+                    ]
+                }
+            })
+
+            if (formValues) {
+                var userNew = formValues;
+                var dataPut = {};
+                dataPut["Id"] = userNew[2];
+                dataPut["UserName"] = userNew[0];
+                dataPut["Password"] = userNew[1];
+                KanbanAPI.Methode("PUT", "user/Put", dataPut, function (d) {
+                    console.log(d);
+                    console.log(userNew);
+                    console.log(dataPut);
+                    if (d == 200) {
+                        document.querySelector("#profilUsername").textContent = dataPut.UserName;
+                        Swal.fire(
+                            'Succes!',
+                            'Succes edit Username !',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Please reach out the web owner!',
+                            'error'
+                        );
+                    }
+                    
+                });
+                    
+            }
+        });
+        
+    }
+    static ChangePassword(id) {
+        KanbanAPI.Methode("GET", "user/Get", { "id": id }, async function (user) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Write new password your Password!',
+                html:
+                    `<input id="swal-input1" class="swal2-input"" >`,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        user.userName,
+                    ]
+                }
+            })
+
+            if (formValues) {
+                var userNew = formValues;
+                var dataPut = {};
+                dataPut["UserName"] = userNew[1];
+                dataPut["Password"] = userNew[0];
+                KanbanAPI.Methode("PUT", "auth/ChangePassword", dataPut, function (d) {
+                    console.log(d);
+                    console.log(userNew);
+                    console.log(dataPut);
+                    if (d == 200) {
+                        document.querySelector("#profilUsername").textContent = dataPut.UserName;
+                        Swal.fire(
+                            'Succes!',
+                            'Succes edit Password !',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Please reach out the web owner!',
+                            'error'
+                        );
+                    }
+
+                });
+
+            }
+        });
+
+    }
 }
