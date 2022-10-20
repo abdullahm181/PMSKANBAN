@@ -45,14 +45,11 @@ namespace API.Base
         {
             if (!string.IsNullOrWhiteSpace(id.ToString()))
             {
-                if (ModelState.IsValid)
-                {
-                    var result = repository.Put(id, objectName);
-                    if (result > 0)
-                        return Ok(new { result = 200, message = "successfully updated" });
-                    else if (result == -1)
-                        return NotFound();
-                }
+                var result = repository.Put(id, objectName);
+                if (result > 0)
+                    return Ok(new { result = 200, message = "successfully updated" });
+                else if (result == -1)
+                    return NotFound();
             }
             return BadRequest();
         }

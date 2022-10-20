@@ -249,6 +249,18 @@ body {
     margin: 20px 0;
     cursor: pointer;
 }
+#profileImagePage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 80px;
+    color: var(--white);
+    text-align: center;
+    line-height: 150px;
+    margin: 20px 0;
+    cursor: pointer;
+}
 #PeekProfileImage {
     width: 60px;
     height: 60px;
