@@ -798,7 +798,7 @@ export default class KanbanAPI {
             //dari form baru dapet Name + description , kurang User_Id,CreateDate,Status
             var data = {};
             data["User_Id"] = CurrenntLoginUserId;
-            data["CreateDate"] = new Date(Date.now()).toISOString().slice(0, 10);
+            data["CreateDate"] = new Date().toISOString().slice(0, 10);;
             data["Status"] = "owner";
             $('#AddBoardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
             console.log(data);

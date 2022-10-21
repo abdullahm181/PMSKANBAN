@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,6 +56,17 @@ namespace client.Controllers
         {
             var result = boardsRepository.GetbyMember(MemberId);
             return Json(result);
+        }
+        [HttpGet]
+        public JsonResult GetByManager(int ManagerId)
+        {
+            (var resultBoard, var resultUser) = boardsRepository.GetByManager(ManagerId);
+            dynamic myobject = new ExpandoObject();
+            IDictionary<string, object> myUnderlyingObject = myobject;
+
+            myUnderlyingObject.Add("Boards", resultBoard); // Adding dynamically named property
+            myUnderlyingObject.Add("Users", resultUser); // Adding dynamically named property
+            return Json(myobject);
         }
         [HttpGet]
         public JsonResult GetDataDoughnutChart(int BoardId)

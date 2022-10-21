@@ -79,6 +79,20 @@ namespace API.Repositories.Data
             }
             return boards;
         }
+        public (List<Boards>,List<User>) GetByManager(int ManagerId)
+        {
+            List<Boards> boards = new List<Boards>();
+
+            var departementTarget = myContext.User.Find(ManagerId).Employees.Department_Id;//UserId
+            //nampilin user diseluruh seluruh department
+            var userDepartments = myContext.User.Where(a => a.Employees.Department_Id == departementTarget).ToList();
+            foreach (var user in userDepartments)
+            {
+                var board = myContext.Boards.Where(a => (a.Owner_Id == user.Id)).ToList();
+                boards.AddRange(board);
+            }
+            return (boards, userDepartments);
+        }
         public (int,Boards) Create(CreateBoardVM createBoard) 
         {
             //check if Name already exist in user scope 

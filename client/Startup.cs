@@ -129,6 +129,8 @@ namespace client
                 await next();
 
             });
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -81,25 +81,33 @@ $(document).ready(function () {
         boardChossen = document.querySelector("#GoToChart");
         boardChossen.setAttribute('data-link', `/home/chart`)
         colorLink(boardChossen);
-    }else if (window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) {
+    } else if (window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) {
         boardChossen = document.querySelector("#GoToHome");
         boardChossen.setAttribute('data-link', `/home/index`)
         colorLink(boardChossen);
-    }else if (window.location.pathname.includes("/list") || window.location.pathname.includes("/List")) {
+    } else if (window.location.pathname.includes("/list") || window.location.pathname.includes("/List")) {
         boardChossen = document.querySelector("#GoToBoard");
         boardChossen.setAttribute('data-link', `/list`)
         colorLink(boardChossen);
-    }else if (window.location.pathname.includes("/invitedmembers") || window.location.pathname.includes("/InvitedMembers")) {
+    } else if (window.location.pathname.includes("/invitedmembers") || window.location.pathname.includes("/InvitedMembers")) {
         boardChossen = document.querySelector("#GoToInvitation");
         boardChossen.setAttribute('data-link', `/invitedmembers/index`)
         colorLink(boardChossen);
-    }else if (window.location.pathname.includes("/Card") || window.location.pathname.includes("/card")) {
+    } else if (window.location.pathname.includes("/Card") || window.location.pathname.includes("/card")) {
         boardChossen = document.querySelector("#GoToTimeline");
         boardChossen.setAttribute('data-link', `/card`)
         colorLink(boardChossen);
-    }else if (window.location.pathname.includes("/user") || window.location.pathname.includes("/User")) {
+    } else if ((window.location.pathname.includes("/user") || window.location.pathname.includes("/User")) && (window.location.pathname.includes("/Managers") || window.location.pathname.includes("/managers"))) {
+        boardChossen = document.querySelector("#GoManagers");
+        boardChossen.setAttribute('data-link', `/user/managers`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/user") || window.location.pathname.includes("/User")) {
         boardChossen = document.querySelector("#GoToProfile");
         boardChossen.setAttribute('data-link', `/user/index`)
+        colorLink(boardChossen);
+    } else {
+        boardChossen = document.querySelector("#GoToHome");
+        boardChossen.setAttribute('data-link', `/home/index`)
         colorLink(boardChossen);
     }
    
