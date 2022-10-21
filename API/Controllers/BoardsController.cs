@@ -4,6 +4,7 @@ using API.Repositories.Data;
 using API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 namespace API.Controllers
@@ -74,6 +75,41 @@ namespace API.Controllers
             }
 
             var data = boardsRepository.GetbyMember(MemberId);
+
+            return Ok(new { result = 200, data = data });
+
+        }
+        [HttpGet("GetByManager")]
+        public IActionResult GetByManager(int ManagerId)
+        {
+            if (string.IsNullOrWhiteSpace(ManagerId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            (var dataBoards, var dataUsers) = boardsRepository.GetByManager(ManagerId);
+            dynamic myobject = new ExpandoObject();
+
+            IDictionary<string, object> myUnderlyingObject = myobject;
+
+            myUnderlyingObject.Add("Boards", dataBoards); // Adding dynamically named property
+            myUnderlyingObject.Add("Users", dataUsers); // Adding dynamically named property
+
+            //Console.WriteLine(myobject.IsDynamic); // Accessing the property the usual way
+
+            return Ok(new { result = 200, data = myobject });
+
+        }
+
+        [HttpGet("GetDataDoughnutChart")]
+        public IActionResult GetDataDoughnutChart(int BoardId)
+        {
+            if (string.IsNullOrWhiteSpace(BoardId.ToString()))
+            {
+                return BadRequest();
+            }
+
+            var data = boardsRepository.GetDataDoughnutChart(BoardId);
 
             return Ok(new { result = 200, data = data });
 

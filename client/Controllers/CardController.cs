@@ -11,13 +11,20 @@ namespace client.Controllers
 {
     public class CardController : BaseController<Card, CardRepository>
     {
+        CardRepository cardRepository;
         public CardController(CardRepository cardRepository):base(cardRepository)
         {
-
+            this.cardRepository = cardRepository;
         }
         public IActionResult Index()
         {
             return View();
+        }
+        [HttpGet]
+        public JsonResult GetByBoardId(int BoardId)
+        {
+            var result = cardRepository.GetByBoardId(BoardId);
+            return Json(result);
         }
     }
 }

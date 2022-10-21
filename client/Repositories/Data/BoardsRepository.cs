@@ -98,7 +98,51 @@ namespace client.Repositories.Data
             }
             return boards;
         }
+        public (IEnumerable<Boards>, IEnumerable<User>) GetByManager(int ManagerId)
+        {
+            IEnumerable<Boards> boards = null;
+            IEnumerable<User> users = null;
+            //HTTP GET
+            var responseTask = httpClient.GetAsync(request + "GetByManager" + "?ManagerId=" + ManagerId.ToString());
+            responseTask.Wait();
 
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                boards = JsonConvert.DeserializeObject<List<Boards>>(JsonConvert.SerializeObject(data["Boards"]));
+                users = JsonConvert.DeserializeObject<List<User>>(JsonConvert.SerializeObject(data["Users"]));
+            }
+            else //web api sent error response 
+            {
+                boards = Enumerable.Empty<Boards>();
+                users = Enumerable.Empty<User>();
+            }
+            return (boards,users);
+        }
+        public DoughnutChartVM GetDataDoughnutChart(int BoardId)
+        {
+            //HTTP POST
+            DoughnutChartVM doughnutChartVM = null;
+            var responseTask = httpClient.GetAsync(request + "GetDataDoughnutChart" + "?BoardId=" + BoardId.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JObject data = (JObject)rss["data"];
+                doughnutChartVM = JsonConvert.DeserializeObject<DoughnutChartVM>(JsonConvert.SerializeObject(data));
+            }
+            return doughnutChartVM;
+        }
 
     }
 }

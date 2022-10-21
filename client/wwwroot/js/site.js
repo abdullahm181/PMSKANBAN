@@ -1,5 +1,20 @@
-﻿
-// ------- Enable Popover-----
+﻿function putImageName(Name) {
+    var ProfilName = Name;
+    const myArray = ProfilName.split(" ");
+    var intials = "";
+    if (myArray.length > 2) {
+        for (let index = 0; index < 2; index++) {
+            intials += myArray[index].charAt(0);
+
+        }
+    } else {
+        myArray.forEach(element => {
+            intials += element.charAt(0);
+
+        });
+    }
+    return intials;
+}
 
 
 // ------- Enable tooltip-----
@@ -49,6 +64,7 @@ linkColor.forEach((l) => l.addEventListener("click", function () {
 
 
 $(document).ready(function () {
+    document.querySelector("#profileImageTopNav").textContent = putImageName(sessionStorage.getItem("LoginName"));
     const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     list.map((el) => {
         let opts = {
@@ -61,9 +77,37 @@ $(document).ready(function () {
         new bootstrap.Popover(el, opts);
     });
     console.log(window.location.pathname);
-    if (window.location.pathname =="/list") {
+    if ((window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) && (window.location.pathname.includes("/chart") || window.location.pathname.includes("/Chart"))) {
+        boardChossen = document.querySelector("#GoToChart");
+        boardChossen.setAttribute('data-link', `/home/chart`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) {
+        boardChossen = document.querySelector("#GoToHome");
+        boardChossen.setAttribute('data-link', `/home/index`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/list") || window.location.pathname.includes("/List")) {
         boardChossen = document.querySelector("#GoToBoard");
         boardChossen.setAttribute('data-link', `/list`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/invitedmembers") || window.location.pathname.includes("/InvitedMembers")) {
+        boardChossen = document.querySelector("#GoToInvitation");
+        boardChossen.setAttribute('data-link', `/invitedmembers/index`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/Card") || window.location.pathname.includes("/card")) {
+        boardChossen = document.querySelector("#GoToTimeline");
+        boardChossen.setAttribute('data-link', `/card`)
+        colorLink(boardChossen);
+    } else if ((window.location.pathname.includes("/user") || window.location.pathname.includes("/User")) && (window.location.pathname.includes("/Managers") || window.location.pathname.includes("/managers"))) {
+        boardChossen = document.querySelector("#GoManagers");
+        boardChossen.setAttribute('data-link', `/user/managers`)
+        colorLink(boardChossen);
+    } else if (window.location.pathname.includes("/user") || window.location.pathname.includes("/User")) {
+        boardChossen = document.querySelector("#GoToProfile");
+        boardChossen.setAttribute('data-link', `/user/index`)
+        colorLink(boardChossen);
+    } else {
+        boardChossen = document.querySelector("#GoToHome");
+        boardChossen.setAttribute('data-link', `/home/index`)
         colorLink(boardChossen);
     }
    

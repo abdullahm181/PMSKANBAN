@@ -13,6 +13,7 @@ namespace client.ViewModels
         public int numberTaskItem { get; set; }
         public int numbercomment { get; set; }
         public int personIncharge { get; set; }
+        public string List_Name { get; set; }
         public int List_Id { get; set; }
     }
 }

@@ -10,12 +10,32 @@ export default class KanbanAPI {
             type: `${TypeMethode}`,
             url: `/${requestUri}`,
             data: BodyData ? BodyData : null,
+            beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+                $('#loader').removeClass('hidden')
+            },
             success: function (resp) {
+
+                if (/<[a-z]+\d?(\s+[\w-]+=("[^"]*"|'[^']*'))*\s*\/?>|&#?\w+;/i.test(resp)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error read the response',
+                        text: 'Pless reach out the web owner!',
+                    });
+                }
                 data = resp;
                 callback(data);
-            }
+            },
+            complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+                setTimeout(function () { $('#loader').addClass('hidden') }, 300)
+                
+            },
         }).fail((error) => {
             console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: error.status,
+                text: error.statusText,
+            });
         });
         return data;
     }
@@ -778,7 +798,7 @@ export default class KanbanAPI {
             //dari form baru dapet Name + description , kurang User_Id,CreateDate,Status
             var data = {};
             data["User_Id"] = CurrenntLoginUserId;
-            data["CreateDate"] = new Date(Date.now()).toISOString().slice(0, 10);
+            data["CreateDate"] = new Date().toISOString().slice(0, 10);;
             data["Status"] = "owner";
             $('#AddBoardKanban').serializeArray().map(function (x) { data[x.name] = x.value; });
             console.log(data);
@@ -883,7 +903,7 @@ export default class KanbanAPI {
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </form>`;
-        $("#ModalTitle").text("Edit List");
+        $("#ModalTitle").text("Edit Board");
         $("#ModalBody").html(text);
 
         //$('#EditListModal').modal('show');
@@ -908,6 +928,269 @@ export default class KanbanAPI {
                     $('#ModalData').modal('hide');
                 });
             });
+        });
+
+    }
+    static EditProfile(id) {
+        let text = "";
+        KanbanAPI.Methode("GET", "user/Get", { "id": id }, function (d) {
+            console.log(d);
+            text += `
+            <form id="EditProfile" method="POST" action="javascript:void(0);">
+                <div class="text-center mb-3">
+                    <!-- Name input -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <input type="text" class="form-control" placeholder="First Name" aria-label="FirstName" name="FirstName" value="${d.employees.firstName}" required />
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <input type="text" class="form-control" placeholder="Last Name" aria-label="LastName" name="LastName" value="${d.employees.lastName}" required />
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="PhoneNumber" aria-label="PhoneNumber" name="PhoneNumber" value="${d.employees.phoneNumber}" required />
+                                    <span class="input-group-text"><i class="fas fa-solid fa-phone"></i></span>
+                                </div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <div class="input-group date mb-3" id="datepicker">
+                                    <input type="text" class="form-control" placeholder="HireDate" aria-label="HireDate" name="HireDate" value="${d.employees.hireDate.split('T')[0]}" required />
+                                    <span class="input-group-append">
+                                    </span>
+                                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Email" aria-label="Email" name="Email" value="${d.employees.email}" required />
+                                    <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                </div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Salary" aria-label="Salary" name="Salary" value="${d.employees.salary}" required />
+                                    <span class="input-group-text"><i class="far fa-money-bill-alt"></i></span>
+                                </div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="Jobs" name="Job_Id" id="JobEditProfile" required />
+                            <option selected>Please select jobs</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <div class="input-group mb-3">
+                            <select class="form-select" placeholder="Departments" name="Department_Id" id="DepartmentsEditProfile" required />
+                            <option selected>Please select departments</option>
+                            </select>
+                            <span class="input-group-text"><i class="fas fa-building"></i></i></span>
+                        </div>
+                        <div class="invalid-feedback">Please chosee.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block mb-3 opacity-75">Save</button>
+                    </div>
+
+            </form>`;
+            $("#ModalTitle").text("Edit Profile");
+            $("#ModalBody").html(text);
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+            document.getElementById("EditProfile").reset();
+            KanbanAPI.Methode("GET", "jobs/GetAll", {}, function (jobs) {
+                $("#JobEditProfile").empty()
+                $.each(jobs, function () {
+                    if (this.id == d.employees.job_Id) {
+                        $("#JobEditProfile").append($("<option selected='selected'/>").val(this.id).text(`${this.jobTitle}`));
+                    } else {
+                        $("#JobEditProfile").append($("<option />").val(this.id).text(`${this.jobTitle}`));
+                    }
+                });
+                KanbanAPI.Methode("GET", "departments/GetAll", {}, function (departments) {
+                    $("#DepartmentsEditProfile").empty()
+                    $.each(departments, function () {
+                        if (this.id == d.employees.department_Id) {
+                            $("#DepartmentsEditProfile").append($("<option selected='selected'/>").val(this.id).text(`${this.name}`));
+                        } else {
+                            $("#DepartmentsEditProfile").append($("<option />").val(this.id).text(`${this.name}`));
+                        }
+                    });
+                    $("#EditProfile").on("submit", function () {
+                        //PUT Employees
+                        var newProfile = {
+                            "Id": d.employees.id
+                        };
+                        $('#EditProfile').serializeArray().map(function (x) { newProfile[x.name] = x.value; });
+                        newProfile["Department_Id"] = parseInt(newProfile["Department_Id"]);
+                        newProfile["Job_Id"] = parseInt(newProfile["Job_Id"]);
+                        newProfile["Salary"] = parseInt(newProfile["Salary"]);
+                        console.log(newProfile);
+                        KanbanAPI.Methode("PUT", "Employees/Put", newProfile, function (d) {
+                            console.log(d);
+                            if (d == 200) {
+                                KanbanAPI.UpdateProfileHTML(newProfile);
+                                $('#ModalData').modal('hide');
+                                Swal.fire(
+                                    'Succes !',
+                                    'Succes edit profile !',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Pless reach out the web owner!',
+                                });
+                            }
+                        });
+                    });
+                });
+            });
+        });
+    }
+    static UpdateProfileHTML(newProp) {
+        
+        KanbanAPI.Methode("GET", "jobs/Get", { "id": newProp.Job_Id}, function (jobs) {
+            KanbanAPI.Methode("GET", "departments/Get", { "id": newProp.Department_Id }, function (departments) {
+                var imageProfileInitial = KanbanAPI.putImageName(newProp.FirstName + " " + newProp.LastName);
+                document.querySelector("#profileImagePage").textContent = imageProfileInitial;
+                document.querySelector("#profilFullname").textContent = newProp.FirstName + " " + newProp.LastName;
+                document.querySelector("#profilPhonenumber").textContent = newProp.PhoneNumber;
+                document.querySelector("#profilHiredate").textContent = String(moment(newProp.HireDate.split("T")[0]).format('MMMM Do YYYY'));
+                document.querySelector("#profilEmail").textContent = newProp.Email;
+                //salary
+                var bilangan = newProp.Salary;
+
+                var reverse = bilangan.toString().split('').reverse().join(''),
+                    ribuan = reverse.match(/\d{1,3}/g);
+                ribuan = ribuan.join('.').split('').reverse().join('');
+
+                document.querySelector("#profilSalary").textContent = "Rp. " + ribuan;
+                document.querySelector("#profilJob").textContent = jobs.jobTitle;
+                document.querySelector("#profilDepartment").textContent = departments.name;
+            });
+        });
+        
+    }
+    static EditUserName(id) {
+        KanbanAPI.Methode("GET", "user/Get", { "id": id }, async function (user) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Rewrite your Username',
+                html:
+                    `<input id="swal-input1" class="swal2-input" value="${user.userName}" >`,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        user.password,
+                        user.id
+                    ]
+                }
+            })
+
+            if (formValues) {
+                var userNew = formValues;
+                var dataPut = {};
+                dataPut["Id"] = userNew[2];
+                dataPut["UserName"] = userNew[0];
+                dataPut["Password"] = userNew[1];
+                KanbanAPI.Methode("PUT", "user/Put", dataPut, function (d) {
+                    console.log(d);
+                    console.log(userNew);
+                    console.log(dataPut);
+                    if (d == 200) {
+                        document.querySelector("#profilUsername").textContent = dataPut.UserName;
+                        Swal.fire(
+                            'Succes!',
+                            'Succes edit Username !',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Please reach out the web owner!',
+                            'error'
+                        );
+                    }
+                    
+                });
+                    
+            }
+        });
+        
+    }
+    static ChangePassword(id) {
+        KanbanAPI.Methode("GET", "user/Get", { "id": id }, async function (user) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Write new password your Password!',
+                html:
+                    `<input id="swal-input1" class="swal2-input"" >`,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        user.userName,
+                    ]
+                }
+            })
+
+            if (formValues) {
+                var userNew = formValues;
+                var dataPut = {};
+                dataPut["UserName"] = userNew[1];
+                dataPut["Password"] = userNew[0];
+                KanbanAPI.Methode("PUT", "auth/ChangePassword", dataPut, function (d) {
+                    console.log(d);
+                    console.log(userNew);
+                    console.log(dataPut);
+                    if (d == 200) {
+                        document.querySelector("#profilUsername").textContent = dataPut.UserName;
+                        Swal.fire(
+                            'Succes!',
+                            'Succes edit Password !',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Please reach out the web owner!',
+                            'error'
+                        );
+                    }
+
+                });
+
+            }
         });
 
     }

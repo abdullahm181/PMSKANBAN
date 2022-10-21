@@ -33,7 +33,9 @@ namespace API.Controllers
             }
 
             var data = memberBoardRepository.GetOwnerByBoardId(BoardId);
-
+            if (data == null) {
+                return Ok(new { result = 200, data = new MemberBoard() });
+            }
             return Ok(new { result = 200, data = data });
         }
     }

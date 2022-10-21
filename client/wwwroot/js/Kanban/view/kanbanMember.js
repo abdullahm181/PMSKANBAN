@@ -19,9 +19,12 @@ export default class kanbanMember {
 			//processing the data
 			console.log(d);
 			d.forEach(board => {
-				const boardView = new Dashboard(board.id, board.name, board.description);
+				if (board != null) {
+					const boardView = new Dashboard(board.id, board.name, board.description);
 
-				root.appendChild(boardView.elements.root);
+					root.appendChild(boardView.elements.root);
+				}
+				
 			});
 		});
 	}

@@ -52,6 +52,29 @@ namespace client.Repositories.Data
             }
             return card;
         }
+        public IEnumerable<CardDisplayVM> GetByBoardId(int BoardId)
+        {
+            IEnumerable<CardDisplayVM> card = null;
+            //HTTP GET
+            var responseTask = httpClient.GetAsync(request + "GetByBoardId" + "?BoardId=" + BoardId.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                // Get the response
+                var ResultJsonString = result.Content.ReadAsStringAsync();
+                ResultJsonString.Wait();
+                JObject rss = JObject.Parse(ResultJsonString.Result);
+                JArray data = (JArray)rss["data"];
+                card = JsonConvert.DeserializeObject<List<CardDisplayVM>>(JsonConvert.SerializeObject(data));
+            }
+            else //web api sent error response 
+            {
+                card = Enumerable.Empty<CardDisplayVM>();
+            }
+            return card;
+        }
         public CardDisplayVM GetCard(int CardId)
         {
             CardDisplayVM cardDisplayVM = null;

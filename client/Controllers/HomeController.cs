@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,16 +27,15 @@ namespace client.Controllers
         {
             return View();
         }
+        public IActionResult Chart()
+        {
+            return View();
+        }
         [HttpDelete]
         public JsonResult DeleteBoard(int BoardId)
         {
             var result = boardsRepository.DeleteBoard(BoardId);
             return Json(result);
-        }
-        public IActionResult KanbanBoard(int BoardId)
-        {
-            ViewBag.SomeScript = "alert('Anda memilih board id: "+ BoardId.ToString() + "');";
-            return View();
         }
 
         [HttpPost]
@@ -57,7 +57,23 @@ namespace client.Controllers
             var result = boardsRepository.GetbyMember(MemberId);
             return Json(result);
         }
+        [HttpGet]
+        public JsonResult GetByManager(int ManagerId)
+        {
+            (var resultBoard, var resultUser) = boardsRepository.GetByManager(ManagerId);
+            dynamic myobject = new ExpandoObject();
+            IDictionary<string, object> myUnderlyingObject = myobject;
 
+            myUnderlyingObject.Add("Boards", resultBoard); // Adding dynamically named property
+            myUnderlyingObject.Add("Users", resultUser); // Adding dynamically named property
+            return Json(myobject);
+        }
+        [HttpGet]
+        public JsonResult GetDataDoughnutChart(int BoardId)
+        {
+            var result = boardsRepository.GetDataDoughnutChart(BoardId);
+            return Json(result);
+        }
         public IActionResult Privacy()
         {
             return View();

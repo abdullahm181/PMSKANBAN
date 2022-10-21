@@ -24,6 +24,9 @@
     font-family: "Roboto Condensed", sans-serif;
 }
 
+body {
+    background: var(--light-grey);
+}
 
 .wrapper {
     width: 100%;
@@ -38,6 +41,7 @@
     position: fixed;
     width: 100%;
     top: 0;
+    z-index: 3;
 }
 
     .top_navbar .hamburger {
@@ -127,6 +131,7 @@
         margin-left: 225px;
         padding: 0px 20px;
         transition: all 0.3s ease;
+        background: var(--light-grey);
     }
 
         .main_container .main_content .content .item {
@@ -241,6 +246,18 @@
     color: var(--white);
     text-align: center;
     line-height: 40px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+#profileImagePage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--text-grey-color);
+    font-size: 80px;
+    color: var(--white);
+    text-align: center;
+    line-height: 150px;
     margin: 20px 0;
     cursor: pointer;
 }
@@ -571,4 +588,186 @@
 .actionBox {
     border-top: 1px dotted #bbb;
     padding: 10px;
+}
+/*Hidden class for adding and removing*/
+.lds-dual-ring.hidden {
+    display: none;
+}
+
+/*Add an overlay to the entire page blocking any further presses to buttons or other elements.*/
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,.8);
+    z-index: 999;
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+/*Spinner Styles*/
+.lds-dual-ring {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    z-index:99999;
+}
+
+    .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 5% auto;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/*timeline css*/
+.timer-section {
+    min-height: 100vh;
+}
+
+    .timer-section .container {
+        padding :0;
+    }
+
+    .timer-section .timer-container {
+        list-style: none;
+        padding:0 0 20px 0;
+    }
+
+    .timer-section .timer {
+        list-style: none;
+        position: relative;
+        max-width: 750px;
+        margin: auto;
+        padding:0;
+    }
+
+        .timer-section .timer::before {
+            /* content: ''; */
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background-color: #F2F2F2;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timer-section .timer .step {
+            width: 50%;
+            padding: 20px 15px;
+            position: relative;
+            background-color: var(--white);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .04);
+        }
+            
+            .timer-section .timer .step:not(:first-child),
+            .timer-section .timer .step:not(:last-child) {
+                margin: 90px 0 60px 0;
+            }
+            .timer-section .timer .step:first-child {
+                margin: 40px 0 60px 0;
+            }
+
+            .timer-section .timer .step:nth-child(odd) {
+                transform: translateX(100%);
+                border-left: 2px solid lightblue;
+                border-radius: 0 3px 3px 0;
+            }
+
+            .timer-section .timer .step:nth-child(even) {
+                border-right: 2px solid lightsalmon;
+                border-radius: 3px 0 0 3px;
+            }
+
+            .timer-section .timer .step > span {
+                position: absolute;
+                height: 26px;
+                width: 25px;
+                color: #333;
+                background-color: var(--white);
+                text-align: center;
+                line-height: 22px;
+                border-radius: 3px;
+                font-size: .8rem;
+            }
+
+            .timer-section .timer .step:nth-child(odd) > span {
+                top: -40px;
+                left: -13px;
+                border: 2px solid lightblue;
+            }
+
+            .timer-section .timer .step:nth-child(even) > span {
+                top: -40px;
+                right: -13px;
+                border: 2px solid lightsalmon;
+            }
+
+            .timer-section .timer .step h3 {
+                margin-bottom: 15px;
+            }
+
+            .timer-section .timer .step p {
+                font-weight: 300;
+                font-size: .85rem;
+                color: #555;
+            }
+.step .step_info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+    .step .step_info i,
+    .step .step_info span {
+        color: var(--dark-grey);
+        font-size: 12px;
+    }
+
+    .step .step_info span {
+        margin-left: 10px;
+        margin-right: 20px;
+    }
+
+    .step .step_info > span:last-of-type {
+        margin-right: auto;
+        margin-left: 10px;
+    }
+
+    .step .step_info img {
+        border-radius: 50%;
+        margin-left: 5px;
+    }
+
+#ChartPageTitle {
+    color: var(--white);
+    background-color: var(--dark-grey);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+#TimelinePageTitle {
+    color: var(--white);
+    background-color: var(--dark-grey);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top:20px; 
+    margin-bottom:0!important; 
 }

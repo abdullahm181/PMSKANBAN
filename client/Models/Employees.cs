@@ -17,18 +17,18 @@ namespace client.Models
         public DateTime HireDate { get; set; }
         public int Salary { get; set; }
 
-        #nullable enable
-        public virtual Employees Manager { get; set; }
-        [ForeignKey("Manager")]
-        public int? Manager_Id { get; set; }
-        public virtual Departments Departments { get; set; }
-        [ForeignKey("Departments")]
-        public int? Department_Id { get; set; }
-        #nullable disable
-
         public virtual Jobs Jobs { get; set; }
+
         [ForeignKey("Jobs")]
         public int Job_Id { get; set; }
-  
-      }
+
+        public virtual Employees Manager { get; set; }
+#nullable enable
+        [ForeignKey("Manager")]
+        public int? Manager_Id { get; set; }
+#nullable disable
+        public virtual Departments Departments { get; set; }
+        [ForeignKey("Departments")]
+        public int Department_Id { get; set; }
+    }
 }

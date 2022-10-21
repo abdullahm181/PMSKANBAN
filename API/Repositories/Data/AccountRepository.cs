@@ -139,6 +139,20 @@ namespace API.Repositories.Data
             return user;
 
         }
+        public int ChangePassword(User userParam)
+        {
+            var user = myContext.User.SingleOrDefault(x => x.UserName == userParam.UserName);
+            if (user == null)
+                return -1;
+            if (!string.IsNullOrWhiteSpace(userParam.Password) && userParam.Password != user.Password)
+            {
+                //Create Bcrypt hasing ppaswrod
+                var passwordHash = Cryptograph.HashPassword(userParam.Password);
+                user.Password = passwordHash;
+            }
+            var result = myContext.SaveChanges();
+            return result;
+        }
 
     }
 }

@@ -20,5 +20,17 @@ namespace client.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public JsonResult GetRequestByUserId(int UserId)
+        {
+            var result = invitedMembersRepository.GetRequestByUserId(UserId);
+            return Json(result);
+        }
+        [HttpGet]
+        public JsonResult GetHistoryByUserId(int UserId)
+        {
+            var result = invitedMembersRepository.GetHistoryByUserId(UserId);
+            return Json(result);
+        }
     }
 }

@@ -11,6 +11,10 @@ namespace API.Repositories.Data
     public class BoardsRepository : GeneralRepository<Boards, MyContext>
     {
         MyContext myContext;
+        public BoardsRepository(MyContext myContext) : base(myContext)
+        {
+            this.myContext = myContext;
+        }
         public int DeleteBoard(int BoardId)
         {
             var data = Get(BoardId);
@@ -24,16 +28,18 @@ namespace API.Repositories.Data
             {
                 //delete this list + save
                 //colect card in this list
-                var dataCard= myContext.Card.Where(a => a.List_Id == list.Id).ToList();
+                var dataCard = myContext.Card.Where(a => a.List_Id == list.Id).ToList();
                 foreach (var card in dataCard)
                 {
                     var dataComment = myContext.Comments.Where(a => a.Card_Id == card.Id).ToList();
                     var dataTask = myContext.TaskCard.Where(a => a.Card_Id == card.Id).ToList();
-                    foreach (var comments in dataComment) {
+                    foreach (var comments in dataComment)
+                    {
                         myContext.Comments.Remove(comments);
                         myContext.SaveChanges();
                     }
-                    foreach (var task in dataTask) {
+                    foreach (var task in dataTask)
+                    {
                         myContext.TaskCard.Remove(task);
                         myContext.SaveChanges();
                     }
@@ -58,10 +64,6 @@ namespace API.Repositories.Data
             var result = myContext.SaveChanges();
             return result;
         }
-        public BoardsRepository(MyContext myContext) : base(myContext)
-        {
-            this.myContext = myContext;
-        }
         public List<Boards> GetbyOwner (int OwnerId){
             var data = myContext.Boards.Where(a => a.Owner_Id == OwnerId).ToList();
             return data;
@@ -76,6 +78,20 @@ namespace API.Repositories.Data
                 boards.Add(board);
             }
             return boards;
+        }
+        public (List<Boards>,List<User>) GetByManager(int ManagerId)
+        {
+            List<Boards> boards = new List<Boards>();
+
+            var departementTarget = myContext.User.Find(ManagerId).Employees.Department_Id;//UserId
+            //nampilin user diseluruh seluruh department
+            var userDepartments = myContext.User.Where(a => a.Employees.Department_Id == departementTarget).ToList();
+            foreach (var user in userDepartments)
+            {
+                var board = myContext.Boards.Where(a => (a.Owner_Id == user.Id)).ToList();
+                boards.AddRange(board);
+            }
+            return (boards, userDepartments);
         }
         public (int,Boards) Create(CreateBoardVM createBoard) 
         {
@@ -133,6 +149,25 @@ namespace API.Repositories.Data
                 }
             }
             return (0,null);
+        }
+        public DoughnutChartVM GetDataDoughnutChart(int BoardId)
+        {
+           
+            List<string> labelName = new List<string>();
+            List<int> NumberCards = new List<int>();
+
+            var Lists = myContext.List.Where(a => a.Board_Id == BoardId).ToList();
+            foreach (var list in Lists)
+            {
+                var card = myContext.Card.Where(a => a.List_Id == list.Id).ToList();
+                NumberCards.Add(card.Count());
+                labelName.Add(list.Name);
+            }
+            DoughnutChartVM doughnutChartVM = new DoughnutChartVM() { 
+                LabelName=labelName,
+                NumberCards=NumberCards
+            };
+            return doughnutChartVM;
         }
 
     }

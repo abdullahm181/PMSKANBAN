@@ -63,6 +63,22 @@ namespace API.Controllers
             }
             return BadRequest(new { result = 400, message = "Error" });
         }
+        [HttpPut("ChangePassword")]
+        public IActionResult ChangePassword([FromBody] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = accountRepository.ChangePassword(user);
+                if (result > 0)
+                    return Ok(new { result = 200, message = "successfully Updated" });
+                else if (result == -1)
+                    return NotFound(new { result = 404, message = "Username not registered" });
+                /*else if (result == -2)
+                    return BadRequest(new { result = 400, message = "UserName sudah digunakan" });*/
+            }
+            return BadRequest();
+        }
+
 
     }
 }
