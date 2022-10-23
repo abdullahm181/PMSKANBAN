@@ -62,20 +62,18 @@ linkColor.forEach((l) => l.addEventListener("click", function () {
     GoToUri(this.dataset.link)
 } ));
 
-
+$(function () {
+    $("[data-toggle=popover]").popover({
+        html: true,
+        content: function () {
+            console.log("test");
+            var content = $(this).attr("data-bs-content-id");
+            return $(content).children(".popover-body").html();
+        }
+    });
+});
 $(document).ready(function () {
     document.querySelector("#profileImageTopNav").textContent = putImageName(sessionStorage.getItem("LoginName"));
-    const list = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    list.map((el) => {
-        let opts = {
-            animation: false,
-        }
-        if (el.hasAttribute('data-bs-content-id')) {
-            opts.content = document.getElementById(el.getAttribute('data-bs-content-id')).innerHTML;
-            opts.html = true;
-        }
-        new bootstrap.Popover(el, opts);
-    });
     console.log(window.location.pathname);
     if ((window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) && (window.location.pathname.includes("/chart") || window.location.pathname.includes("/Chart"))) {
         boardChossen = document.querySelector("#GoToChart");

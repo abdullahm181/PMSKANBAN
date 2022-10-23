@@ -10,22 +10,33 @@ export default class Item {
 		this.elements.taskItem = this.elements.root.querySelector("#CardTaskItem");
 		this.elements.comment = this.elements.root.querySelector("#CardComment");
 		this.elements.profilImage = this.elements.root.querySelector("#CardPersonImg");
+		this.elements.ContainerInfo = this.elements.root.querySelector(".board__boxes__info");
 
 		this.elements.root.dataset.card_id = id;
 		this.elements.title.textContent = name;
 		this.elements.taskItem.textContent = numberTaskItem;
 		this.elements.comment.textContent = numbercomment;
-		this.elements.profilImage.dataset.user_profile_id = personIncharge;
+		//this.elements.profilImage.dataset.user_profile_id = personIncharge;
 		//memberBoard/getbyboardid?BoardId=3
 		const containerProfilImage = this.elements.profilImage
+		const infoContainer = this.elements.ContainerInfo;
 		var data = {};
 		data["id"] = personIncharge;
 		KanbanAPI.Methode("GET", "memberBoard/Get", data, function (d) {
+			const node = document.createElement("div");
+			node.setAttribute("id", "CardPersonImg");
+			node.setAttribute("data-bs-toggle", "tooltip");
+			node.setAttribute("data-bs-placement", "bottom");
+			node.setAttribute("data-bs-title", `${d.user.employees.firstName + " " + d.user.employees.lastName}`);
+			infoContainer.appendChild(node);
 			//processing the data
 			var imageProfileInitial = KanbanAPI.putImageName(d.user.employees.firstName + " " + d.user.employees.lastName);
-			containerProfilImage.textContent = imageProfileInitial;
+			node.textContent = imageProfileInitial;
+			$(function () {
+				$('[data-bs-toggle="tooltip"]').tooltip();
+			})
 		});
-		
+
 		this.elements.root.appendChild(bottomDropZone);
 		
 		//$(`[data-user_profile_id="${personIncharge}"]`).text(imageProfileInitial);
@@ -47,6 +58,7 @@ export default class Item {
 		this.elements.title.addEventListener("drop", e => {
 			e.preventDefault();
 		});
+		
 	}
 
 	static createRoot() {
@@ -72,7 +84,6 @@ export default class Item {
                 <span id="CardTaskItem">3</span>
                 <i class="fas fa-comment-dots"></i>
                 <span id="CardComment">3</span>
-				<div id="CardPersonImg" class="" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content-id="popover-content-userPeek" ></div>
               </div>
             </div>
 		`).children[0];

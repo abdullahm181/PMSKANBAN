@@ -39,9 +39,9 @@ export default class BoardList {
 		data["BoardId"] = BoardId;
 		KanbanAPI.Methode("GET", "list/GetByBoardId", data, function (d) {
 			//processing the data
-			console.log(d);
+			//console.log(d);
 			d.forEach(list => {
-				console.log(list);
+				//console.log(list);
 				const ListView = new List(list.id, list.name, list.board_Id);
 
 				root.appendChild(ListView.elements.root);

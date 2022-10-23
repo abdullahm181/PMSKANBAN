@@ -273,6 +273,7 @@ export default class KanbanAPI {
                 console.log(d);
                 newData["CardId"] = d.id;
                 KanbanAPI.Methode("GET", "list/GetCard", newData, function (d) {
+                    console.log(d);
                     const cardView = new Card(d.id, d.name, d.numberTaskItem, d.numbercomment, d.personIncharge, d.list_Id, boardId);
                     rootCardContainer.appendChild(cardView.elements.root);
                     $('#ModalData').modal('hide');
@@ -660,6 +661,25 @@ export default class KanbanAPI {
                         <input id="AddMember" type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </form>
+
+    <table class="table table-borderless table-responsive card-1 p-4">
+  <thead>
+    <tr class="border-bottom">
+      
+      <th>
+          <span class="ml-2">Name</span>
+      </th>
+      <th class="text-center">
+          <span class="ml-2">Status</span>
+      </th>
+      
+     
+    </tr>
+  </thead>
+  <tbody id="ListMemberTable">
+  </tbody>
+</table>
+
                 `;
         $("#ModalTitle").text("Add Colaborator");
         $("#ModalBody").html(text);
@@ -678,7 +698,6 @@ export default class KanbanAPI {
                 "Status": "request",
                 "Board_Id": BoardId
             };
-            console.log(dataReq);
             document.querySelector("#AddMember").addEventListener("click", () => {
                 dataReq["User_Id"] = parseFloat($("#inviteColaborator").find(":selected").val());
                 console.log(dataReq);
@@ -703,22 +722,31 @@ export default class KanbanAPI {
                 });
             });
         });
-        /*$("#AddMemberBoard").on("submit", function () {
-            //IdX , InvitedDate,Status="request",Board_Id,User_Id
-            $('#AddMemberBoard').serializeArray().map(function (x) { dataReq[x.name] = x.value; });
-            console.log(dataReq);
-            KanbanAPI.Methode("POST", "invitedmembers/Post", newBoard, function (d) {
-                console.log(d);
-                if (d.id !== undefined && d.id != null) {
-                    $('#ModalData').modal('hide');
-                    Swal.fire(
-                        'Succes !',
-                        'Succes send colaborator request to  ' + d.user.employees.firstName + ' ' + d.user.employees.lastName + '! Wait user response.. ',
-                        'success'
-                    );
-                }
+        KanbanAPI.Methode("GET", "MemberBoard/GetByBoardId", { "BoardId": BoardId }, function (d) {
+            console.log(d);
+            $.each(d, function () {
+                var newTr = `<tr class="border-bottom">
+                              <td>
+                                   <div class="p-2 d-flex flex-row align-items-center">
+                                      <div id="profileImageMember" class="me-4">${KanbanAPI.putImageName(this.user.employees.firstName + " " + this.user.employees.lastName )}</div>
+                                      <div class="d-flex flex-column ml-2">
+                                          <span class="d-block font-weight-bold">${this.user.employees.firstName + " " + this.user.employees.lastName }</span>
+                                          <small class="text-muted">${this.user.employees.jobs.jobTitle}</small>
+                                      </div>
+                                  </div>
+
+                              </td>
+                              <td class="">
+                                  <div class="p-2 justify-content-center text-center m-auto">
+                                      <p class="font-weight-bold m-0" style="text-transform: uppercase;">${this.status}</p>
+                                  </div>
+                              </td>
+
+                            </tr>`;
+                $("#ListMemberTable").append(newTr);
+
             });
-        });*/
+        });
     }
     static renderTask(root, todo) {
         const taskView = new Task(todo);
@@ -1193,5 +1221,18 @@ export default class KanbanAPI {
             }
         });
 
+    }
+    static shortProfile(target) {
+        var options = {
+            html: true,
+            title: "Optional: HELLO(Will overide the default-the inline title)",
+            //html element
+            //content: $("#popover-content")
+            content: $('[data-name="popover-content"]')
+            //Doing below won't work. Shows title only
+            //content: $("#popover-content").html()
+
+        }
+        var popover = new bootstrap.Popover(target, options)
     }
 }

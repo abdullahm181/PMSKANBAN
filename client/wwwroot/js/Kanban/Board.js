@@ -19,20 +19,22 @@ if (sessionStorage.getItem("CurrentBoardId") === undefined || sessionStorage.get
 	const memberImgContainer = document.querySelector("#MemberBoard");
 	var data = {};
 	data["BoardId"] = sessionStorage.getItem("CurrentBoardId");
-	KanbanAPI.Methode("GET", "MemberBoard/GetByBoardId", data, function (d) {
-		console.log(d);
-		d.forEach(member => {
-			var newMember = {
-				id: member.id,
-				status: member.status,
-				fullname: member.user.employees.firstName + " " + member.user.employees.lastName
-			};
-			KanbanAPI.renderMemberBoard(memberImgContainer, newMember);
-			/*const imageMemberView = new ImageProfile(member.id, member.status, member.user.employees.firstName + " " + member.user.employees.lastName);
-	
-			memberImgContainer.appendChild(imageMemberView.elements.root);*/
+	KanbanAPI.Methode("GET", "home/Get", { "Id": parseInt(sessionStorage.getItem("CurrentBoardId")) }, function (d) {
+		document.querySelector("#BoardPageTitle").textContent = d.name;
+		KanbanAPI.Methode("GET", "MemberBoard/GetByBoardId", data, function (d) {
+			d.forEach(member => {
+				var newMember = {
+					id: member.id,
+					status: member.status,
+					fullname: member.user.employees.firstName + " " + member.user.employees.lastName
+				};
+				KanbanAPI.renderMemberBoard(memberImgContainer, newMember);
+				/*const imageMemberView = new ImageProfile(member.id, member.status, member.user.employees.firstName + " " + member.user.employees.lastName);
+		
+				memberImgContainer.appendChild(imageMemberView.elements.root);*/
+			});
 		});
 	});
+	
 }
-
 
