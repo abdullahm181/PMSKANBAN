@@ -32,7 +32,7 @@ export default class DropZone {
 			const itemId = Number(e.dataTransfer.getData("text/plain"));
 			const droppedItemElement = document.querySelector(`[data-card_id="${itemId}"]`);
 			const insertAfter = dropZone.parentElement.classList.contains("board__boxes") ? dropZone.parentElement : dropZone;
-			console.log(itemId);
+			//console.log(itemId);
 			if (droppedItemElement.contains(dropZone)) {
 				return;
 			}

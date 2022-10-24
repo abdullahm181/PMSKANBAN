@@ -99,10 +99,16 @@ async function showAvatar(id) {
 			"BoardId": parseInt(sessionStorage.getItem("CurrentBoardId"))
 		};
 		KanbanAPI.Methode("GET", "home/GetDataDoughnutChart", Doughnut, async function (d) {
+			var totalCard = 0;
+			d.numberCards.forEach(card => {
+				//console.log(list);
+				totalCard += card;
+			});
+			console.log(totalCard);
 			const dataDoughnut = {
 				labels: d.labelName,
 				datasets: [{
-					label: 'My First Dataset',
+					label: 'status',
 					data: d.numberCards,
 					backgroundColor: coloR,
 					hoverOffset: 4
@@ -111,6 +117,33 @@ async function showAvatar(id) {
 			const configDoughnut = {
 				type: 'doughnut',
 				data: dataDoughnut,
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							display: true
+						}
+					}
+				},
+				plugins: [{
+					id: 'text',
+					beforeDraw: function (chart, a, b) {
+						var width = chart.width,
+							height = chart.height,
+							ctx = chart.ctx;
+						ctx.restore();
+						var fontSize = (height / 200).toFixed(2);
+						ctx.font = fontSize + "em sans-serif";
+						ctx.textBaseline = "middle";
+
+						var text = "Total : " + totalCard,
+							textX = Math.round((width - ctx.measureText(text).width) / 2),
+							textY = height / 1.8;
+
+						ctx.fillText(text, textX, textY);
+						ctx.save();
+					}
+				}]
 			};
 			var myChartDoughnut = new Chart(document.getElementById('Doughnut'), configDoughnut)
 

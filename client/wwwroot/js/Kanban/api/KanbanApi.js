@@ -47,8 +47,8 @@ export default class KanbanAPI {
             const currentColumn = document.querySelector(`[data-list_id="${d.list_Id}"]`);
 
             const AllcardCC = currentColumn.getElementsByClassName("board__boxes");
-            console.log(currentColumn);
-            console.log(AllcardCC);
+            //console.log(currentColumn);
+            //console.log(AllcardCC);
             if (AllcardCC.length != 0)
             {
                 for (let index = 0; index < AllcardCC.length; index++) {
@@ -165,12 +165,57 @@ export default class KanbanAPI {
                 "Order": d.order
             };
             $("#EditColumnKanban").on("submit", function () {
-                $('#EditColumnKanban').serializeArray().map(function (x) { newList[x.name] = x.value; });
-                KanbanAPI.Methode("PUT", "list/Put", newList, function (d) {
-                    //processing the data
-                    KanbanAPI.UpdateList(newList);
-                    $('#ModalData').modal('hide');
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure Edit this List?',
+                    text: "",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText: 'No!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#EditColumnKanban').serializeArray().map(function (x) { newList[x.name] = x.value; });
+                        KanbanAPI.Methode("PUT", "list/Put", newList, function (d) {
+                            $('#ModalData').modal('hide');
+                            if (d == 200) {
+                                //processing the data
+                                KanbanAPI.UpdateList(newList);
+                                Swal.fire(
+                                    'Succes!',
+                                    'succes Edit list!',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'please reach out the web owner!',
+                                    'error'
+                                );
+                            }
+                           
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        $('#ModalData').modal('hide');
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            '',
+                            'error'
+                        )
+                    }
                 });
+                
             });
         });
         
@@ -181,22 +226,66 @@ export default class KanbanAPI {
         
         console.log(AllcardTC);
         if (AllcardTC.length == 0) {
-            KanbanAPI.Methode("DELETE", "list/DeleteEntity", { "id": ListId }, function (d) {
-                const ListElements = document.getElementsByClassName("board");
-                const listContainer = document.querySelector("#main__kanban");
-                listContainer.removeChild(document.querySelector(`[data-list_id="${ListId}"]`));
-                for (let index = 0; index < ListElements.length; index++) {
-                    console.log(ListElements[index].dataset.list_id);
-                    var data = {};
-                    data["id"] = ListElements[index].dataset.list_id;
-                    KanbanAPI.Methode("GET", "list/Get", data, function (d) {
-                        d.order = index;
-                        KanbanAPI.Methode("PUT", "list/Put", d, function (d) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
 
-                        });
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure delete this List?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    KanbanAPI.Methode("DELETE", "list/DeleteEntity", { "id": ListId }, function (d) {
+                        if (d == 200) {
+                            const ListElements = document.getElementsByClassName("board");
+                            const listContainer = document.querySelector("#main__kanban");
+                            listContainer.removeChild(document.querySelector(`[data-list_id="${ListId}"]`));
+                            for (let index = 0; index < ListElements.length; index++) {
+                                console.log(ListElements[index].dataset.list_id);
+                                var data = {};
+                                data["id"] = ListElements[index].dataset.list_id;
+                                KanbanAPI.Methode("GET", "list/Get", data, function (d) {
+                                    d.order = index;
+                                    KanbanAPI.Methode("PUT", "list/Put", d, function (d) {
+
+                                    });
+                                });
+                            }
+                            Swal.fire(
+                                'Succes!',
+                                'succes delete list!',
+                                'success'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'please reach out the web owner!',
+                                'error'
+                            );
+                        }
+                        
                     });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your Board is safe :)',
+                        'error'
+                    )
                 }
             });
+            
         } else {
             Swal.fire(
                 'Error!',
@@ -359,7 +448,7 @@ export default class KanbanAPI {
     }
     static deleteCard(CardId, ListId) {
 
-        console.log(CardId, "---", ListId);
+        //console.log(CardId, "---", ListId);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -689,6 +778,10 @@ export default class KanbanAPI {
 
         KanbanAPI.Methode("GET", "user/GetUserLeftByBoardId", dataMember, function (d) {
             $("#inviteColaborator").empty()
+            if (d.length == 0) {
+                $("#inviteColaborator").append($("<option />").val(0).text(`No users left to invite`));
+            }
+            
             $.each(d, function () {
                 $("#inviteColaborator").append($("<option />").val(this.id).text(`${this.employees.firstName} ${this.employees.lastName} --- ${this.employees.jobs.jobTitle}`));
 
@@ -946,15 +1039,60 @@ export default class KanbanAPI {
                 "Owner_Id": d.owner_Id
             };
             $("#EditBoardKanban").on("submit", function () {
-                $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
-                console.log(newBoard);
-                KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
-                    console.log(d);
-                    const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
-                    targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
-                    targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
-                    $('#ModalData').modal('hide');
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure edit this Board?',
+                    text: "",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText: 'No!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
+                        //console.log(newBoard);
+                        KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
+                            console.log(d);
+                            $('#ModalData').modal('hide');
+                            if (d == 200) {
+                                const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
+                                targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
+                                targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
+                                Swal.fire(
+                                    'Succes edit board!',
+                                    "",
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error read the response',
+                                    text: 'Pless reach out the web owner!',
+                                });
+                            }
+                            
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        $('#ModalData').modal('hide');
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            '',
+                            'error'
+                        )
+                    }
                 });
+                
             });
         });
 

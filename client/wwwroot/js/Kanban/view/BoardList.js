@@ -14,17 +14,31 @@ export default class BoardList {
 			data["Board_Id"] = BoardId;
 			//kalau pake create data order donenya langsung berubah
 			KanbanAPI.Methode("POST", "list/Create", data, function (d) {
+				//console.log(d);
 				var getdata = {};
-				getdata["ListName"] = data.Name;
-				getdata["BoardId"] = data.Board_Id;
-				console.log(getdata);
-				$('#addListModal').modal('hide');
-				KanbanAPI.Methode("Get", "list/GetByName", getdata, function (d) {
-					console.log(d);
-					const addListView = new List(d.id, d.name, d.board_Id);
-					root.insertBefore(addListView.elements.root, ListContainer[ListContainer.length - 1]);
+				if (d == 200) {
+					getdata["ListName"] = data.Name;
+					getdata["BoardId"] = data.Board_Id;
+					console.log(getdata);
+					$('#addListModal').modal('hide');
+					KanbanAPI.Methode("Get", "list/GetByName", getdata, function (d) {
+						const addListView = new List(d.id, d.name, d.board_Id);
+						root.insertBefore(addListView.elements.root, ListContainer[ListContainer.length - 1]);
+						Swal.fire(
+							'Succes !',
+							'Succes create list !',
+							'success'
+						);
+					});
 					
-				});
+				} else {
+					Swal.fire(
+						'Error !',
+						'Error create list ! Please reach out owner web',
+						'error'
+					);
+				}
+				
 			});
 			
 			event.preventDefault();
