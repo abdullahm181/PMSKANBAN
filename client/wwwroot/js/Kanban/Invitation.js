@@ -78,6 +78,11 @@ $(document).ready(function () {
             + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
         //dom: 'lBfrtip'
         ,
+        fnInitComplete: function () {
+            $("[data-bs-toggle='tooltip']").tooltip({
+                container: 'body'
+            });
+        },
         buttons: [
 
             {
@@ -85,7 +90,8 @@ $(document).ready(function () {
                 name: 'excel',
                 title: 'invitatioBoard',
                 sheetName: 'invitatioBoard',
-                text: 'download',
+                text: '<i class="fas fa-download"></i>',
+                titleAttr: 'Download',
                 className: 'btn-default',
                 filename: 'invitatioBoard',
                 autoFilter: true,
@@ -158,8 +164,8 @@ $(document).ready(function () {
             {
                 "data": "",
                 "render": function (data, type, row) {
-                    return `<button id="btnAccept" type="button" class="btn btn-success me-2">Accept</button>
-                                    <button id="btnReject" type="button" class="btn btn-danger">Reject</button>
+                    return `<button id="btnAccept" type="button" class="btn btn-success me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Accept"><i class="fas fa-check"></i></button>
+                                    <button id="btnReject" type="button" class="btn btn-danger"data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Reject"><i class="fas fa-times"></i></button>
                                     `;
                 }
             }

@@ -104,7 +104,7 @@ async function showAvatar(id) {
 				//console.log(list);
 				totalCard += card;
 			});
-			//console.log(totalCard);
+			//console.log(d);
 			const dataDoughnut = {
 				labels: d.labelName,
 				datasets: [{
@@ -148,7 +148,7 @@ async function showAvatar(id) {
 			var myChartDoughnut = new Chart(document.getElementById('Doughnut'), configDoughnut);
 			let indexDone = d.labelName.indexOf("Done");
 			const progress = document.querySelector('.progress-done');
-			console.log(d.numberCards[indexDone]);
+			//console.log(d.numberCards[indexDone]);
 			progress.style.width = (d.numberCards[indexDone] / totalCard)*100+ '%';
 			progress.textContent = (d.numberCards[indexDone] / totalCard) * 100 + '%';
 			progress.style.opacity = 1;

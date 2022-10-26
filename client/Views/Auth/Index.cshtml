@@ -1,6 +1,17 @@
 ﻿@{
     Layout = null;
 }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var token = @HttpContextAccessor.HttpContext.Session.GetString("Token");
+    if (token != null)
+    {
+        Context.Response.Redirect("/home");
+    }
+    //
+
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,7 +142,7 @@
                                         <div class="form-outline mb-4">
                                             <div class="input-group mb-3">
                                                 <select class="form-select" placeholder="Jobs" name="Job_Id" id="JobRegister" required />
-                                                    <option selected>Please select jobs</option>
+                                                <option selected>Please select jobs</option>
                                                 </select>
                                                 <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
                                             </div>
@@ -140,7 +151,7 @@
                                         <div class="form-outline mb-4">
                                             <div class="input-group mb-3">
                                                 <select class="form-select" placeholder="Departments" name="Department_Id" id="DepartmentsRegister" required />
-                                                    <option selected>Please select departments</option>
+                                                <option selected>Please select departments</option>
                                                 </select>
                                                 <span class="input-group-text"><i class="fas fa-building"></i></span>
                                             </div>

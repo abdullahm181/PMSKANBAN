@@ -90,7 +90,7 @@ $(document).ready(function () {
                     text: 'Pless reach out the web owner!',
                 });
             }
-            console.log(resp);
+            //console.log(resp);
             if (resp.length > 0) {
                 let text = "";
                 text = ` <span id="notifInvitation"class="position-absolute top-10 start-0 badge rounded-pill ">${resp.length}</span>`;
