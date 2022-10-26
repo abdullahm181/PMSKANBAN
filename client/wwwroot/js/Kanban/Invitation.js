@@ -90,7 +90,7 @@ $(document).ready(function () {
                 filename: 'invitatioBoard',
                 autoFilter: true,
                 exportOptions: {
-                    columns: [0, 1]
+                    columns: [0, 1,2,3,4]
                 }
             }
         ],

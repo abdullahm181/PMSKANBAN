@@ -17,14 +17,14 @@ $(document).ready(function () {
                 {
                     extend: 'excelHtml5',
                     name: 'excel',
-                    title: 'invitatioBoard',
-                    sheetName: 'invitatioBoard',
+                    title: 'DepartmentBoard',
+                    sheetName: 'DepartmentBoard',
                     text: 'download',
                     className: 'btn-default',
-                    filename: 'invitatioBoard',
+                    filename: 'DepartmentBoard',
                     autoFilter: true,
                     exportOptions: {
-                        columns: [0, 1]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 }
             ],

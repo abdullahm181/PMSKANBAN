@@ -1,6 +1,7 @@
 ﻿using client.Base;
 using client.Models;
 using client.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace client.Controllers
 {
+    [Authorize]
     public class TaskCardController : BaseController<TaskCard, TaskCardRepository>
     {
         TaskCardRepository taskCardRepository;

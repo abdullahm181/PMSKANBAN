@@ -40,7 +40,7 @@ export default class BoardList {
 				}
 				
 			});
-			
+			document.getElementById("AddColumnKanban").reset();
 			event.preventDefault();
 
 		});

@@ -7,9 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Base;
 using API.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class CommentsController : BaseController<Comments, CommentsRepository>
     {
         CommentsRepository commentsRepository;

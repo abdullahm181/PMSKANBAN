@@ -1,4 +1,5 @@
-﻿function putImageName(Name) {
+﻿
+function putImageName(Name) {
     var ProfilName = Name;
     const myArray = ProfilName.split(" ");
     var intials = "";
@@ -73,8 +74,46 @@ $(function () {
     });
 });
 $(document).ready(function () {
+    $.ajax({
+        type: `GET`,
+        url: `/invitedMembers/GetRequestByUserId`,
+        data: { "UserId": parseInt(sessionStorage.getItem("LoginUserId")) },
+        beforeSend: function () { // Before we send the request, remove the .hidden class from the spinner and default to inline-block.
+            $('#loader').removeClass('hidden')
+        },
+        success: function (resp) {
+
+            if (/<[a-z]+\d?(\s+[\w-]+=("[^"]*"|'[^']*'))*\s*\/?>|&#?\w+;/i.test(resp)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error read the response',
+                    text: 'Pless reach out the web owner!',
+                });
+            }
+            console.log(resp);
+            if (resp.length > 0) {
+                let text = "";
+                text = ` <span id="notifInvitation"class="position-absolute top-10 start-0 badge rounded-pill ">${resp.length}</span>`;
+                $("#GoToInvitation .icon").append(text);
+            }
+            
+        },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            setTimeout(function () { $('#loader').addClass('hidden') }, 300)
+
+        },
+    }).fail((error) => {
+        console.log(error);
+        Swal.fire({
+            icon: 'error',
+            title: error.status,
+            text: error.statusText,
+        });
+    });
+
     document.querySelector("#profileImageTopNav").textContent = putImageName(sessionStorage.getItem("LoginName"));
     console.log(window.location.pathname);
+    var boardChossen;
     if ((window.location.pathname.includes("/Home") || window.location.pathname.includes("/home")) && (window.location.pathname.includes("/chart") || window.location.pathname.includes("/Chart"))) {
         boardChossen = document.querySelector("#GoToChart");
         boardChossen.setAttribute('data-link', `/home/chart`)
@@ -118,5 +157,23 @@ $(document).ready(function () {
     $(".top_navbar .fas").click(function () {
         $(".profile_dd").toggleClass("active");
     });
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
 })
 

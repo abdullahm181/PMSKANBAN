@@ -1,10 +1,12 @@
 ﻿using API.Base;
 using API.Models;
 using API.Repositories.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class ListController : BaseController<List, ListRepository>
     {
         ListRepository listRepository;

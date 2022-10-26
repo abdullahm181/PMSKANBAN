@@ -189,11 +189,7 @@ export default class KanbanAPI {
                             if (d == 200) {
                                 //processing the data
                                 KanbanAPI.UpdateList(newList);
-                                Swal.fire(
-                                    'Succes!',
-                                    'succes Edit list!',
-                                    'success'
-                                );
+                               
                             } else {
                                 Swal.fire(
                                     'Error!',
@@ -873,6 +869,9 @@ export default class KanbanAPI {
                 KanbanAPI.Methode("DELETE", "taskcard/DeleteEntity", data, function (d) {
                     const TaskContainer = document.querySelector(`[data-card_id_task="${CardId}"]`);
                     TaskContainer.removeChild(TaskContainer.querySelector(`[data-task_id="${id}"]`));
+                    var update = {};
+                    update["Id"] = CardId;
+                    KanbanAPI.UpdateCard(update);
                     swalWithBootstrapButtons.fire(
                         'Deleted!',
                         'Your card has been deleted.',
@@ -1008,6 +1007,7 @@ export default class KanbanAPI {
 
     }
     static EditBoard(BoardId) {
+
         var data = {};
         data["id"] = BoardId;
         let text = "";
@@ -1032,68 +1032,74 @@ export default class KanbanAPI {
         document.getElementById("EditBoardKanban").reset();
         KanbanAPI.Methode("GET", "home/Get", data, function (d) {
             console.log(d)
-            document.getElementById("NameBoard").value = d.name;
-            document.getElementById("DescriptionBoard").value = d.description;
-            var newBoard = {
-                "Id": d.id,
-                "Owner_Id": d.owner_Id
-            };
-            $("#EditBoardKanban").on("submit", function () {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
+            const CurrenntLoginUserId = parseInt(sessionStorage.getItem("LoginUserId"));
+            if (d.owner_Id == CurrenntLoginUserId) {
+                document.getElementById("NameBoard").value = d.name;
+                document.getElementById("DescriptionBoard").value = d.description;
+                var newBoard = {
+                    "Id": d.id,
+                    "Owner_Id": d.owner_Id
+                };
+                $("#EditBoardKanban").on("submit", function () {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
 
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure edit this Board?',
-                    text: "",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes!',
-                    cancelButtonText: 'No!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
-                        //console.log(newBoard);
-                        KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
-                            console.log(d);
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure edit this Board?',
+                        text: "",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes!',
+                        cancelButtonText: 'No!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#EditBoardKanban').serializeArray().map(function (x) { newBoard[x.name] = x.value; });
+                            //console.log(newBoard);
+                            KanbanAPI.Methode("PUT", "home/Put", newBoard, function (d) {
+                                console.log(d);
+                                $('#ModalData').modal('hide');
+                                if (d == 200) {
+                                    const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
+                                    targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
+                                    targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error read the response',
+                                        text: 'Pless reach out the web owner!',
+                                    });
+                                }
+
+                            });
+                        } else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
                             $('#ModalData').modal('hide');
-                            if (d == 200) {
-                                const targetBoard = document.querySelector(`[data-board_id="${BoardId}"]`);
-                                targetBoard.querySelector("#BoardTitle").textContent = newBoard.Name;
-                                targetBoard.querySelector("#BoardDescription").textContent = newBoard.Description;
-                                Swal.fire(
-                                    'Succes edit board!',
-                                    "",
-                                    'success'
-                                );
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error read the response',
-                                    text: 'Pless reach out the web owner!',
-                                });
-                            }
-                            
-                        });
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        $('#ModalData').modal('hide');
-                        swalWithBootstrapButtons.fire(
-                            'Cancelled',
-                            '',
-                            'error'
-                        )
-                    }
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+
                 });
-                
-            });
+            } else {
+                $('#ModalData').modal('hide');
+                Swal.fire(
+                    'Error!',
+                    'you are not the creator of this Board!',
+                    'error'
+                );
+            }
+            
         });
 
     }
@@ -1226,11 +1232,6 @@ export default class KanbanAPI {
                             if (d == 200) {
                                 KanbanAPI.UpdateProfileHTML(newProfile);
                                 $('#ModalData').modal('hide');
-                                Swal.fire(
-                                    'Succes !',
-                                    'Succes edit profile !',
-                                    'success'
-                                );
                             } else {
                                 Swal.fire({
                                     icon: 'error',

@@ -50,8 +50,8 @@ export default class Time {
 					<span id="CardTaskItem">3</span>
 					<i class="fas fa-comment-dots"></i>
 					<span id="CardComment">3</span>
-					<span id="numberDeadline" class="badge text-bg-warning"></span>
-					<span id="numberListName" class="badge text-bg-info"></span>
+					<span id="numberDeadline" class="badge text-bg-warning ms-0 me-1"></span>
+					<span id="numberListName" class="badge text-bg-info ms-0"></span>
 				</div>
             </li>
 		`).children[0];

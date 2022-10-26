@@ -2,6 +2,7 @@
 using API.Models;
 using API.Repositories.Data;
 using API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace API.Controllers
 {
-
+    [Authorize]
     public class BoardsController : BaseController<Boards,BoardsRepository>
     {
         BoardsRepository boardsRepository;

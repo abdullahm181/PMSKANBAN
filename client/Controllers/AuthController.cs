@@ -1,6 +1,7 @@
 ﻿using client.Models;
 using client.Repositories.Data;
 using client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -55,6 +56,7 @@ namespace client.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
+        [Authorize]
         [Route("ChangePassword")]
         [HttpPut]
         public JsonResult ChangePassword(User user)

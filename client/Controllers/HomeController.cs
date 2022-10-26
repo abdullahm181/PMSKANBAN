@@ -2,6 +2,7 @@
 using client.Models;
 using client.Repositories.Data;
 using client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace client.Controllers
 {
+    [Authorize]
     public class HomeController : BaseController<Boards, BoardsRepository>
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,7 +24,7 @@ namespace client.Controllers
             _logger = logger;
             this.boardsRepository = boardsRepository;
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -74,18 +76,22 @@ namespace client.Controllers
             var result = boardsRepository.GetDataDoughnutChart(BoardId);
             return Json(result);
         }
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Forbidden()
         {
             return View("forbidden");
         }
+        [AllowAnonymous]
         public IActionResult Unauth()
         {
             return View("Unauth");
         }
+        [AllowAnonymous]
         public IActionResult NotFound404()
         {
             return View("NotFound404");
